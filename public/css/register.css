@@ -1,0 +1,54 @@
+.password-strength {
+            margin-top: 5px;
+            height: 5px;
+            background: #eee;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s, background 0.3s;
+        }
+        .strength-weak { background: #ff4d4d; width: 25%; }
+        .strength-fair { background: #ffcc00; width: 50%; }
+        .strength-good { background: #66cc66; width: 75%; }
+        .strength-strong { background: #00b300; width: 100%; }
+        .requirement-list {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        .requirement {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .requirement.valid {
+            color: #2ecc71;
+        }
+        .requirement.invalid {
+            color: #e74c3c;
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        /* En register.css */
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-group select:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+/* Transición suave para cambios */
+select {
+    transition: all 0.3s ease;
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas de Seguridad - LIANZE</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <a href="index.html" class="logo">LIANZE</a>
+                <h1>Preguntas de Seguridad</h1>
+                <p>Por favor responde estas preguntas para mayor seguridad</p>
+            </div>
+
+            <form id="securityQuestionsForm" class="auth-form">
+                <input type="hidden" id="userId" name="userId">
+                
+                <div class="form-group">
+                    <label for="petName">Nombre de tu primera mascota:</label>
+                    <input type="text" id="petName" name="petName" class="input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="favoriteColor">Color favorito:</label>
+                    <input type="text" id="favoriteColor" name="favoriteColor" class="input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="favoritePlace">Lugar favorito:</label>
+                    <input type="text" id="favoritePlace" name="favoritePlace" class="input" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Guardar Respuestas</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Obtener el ID de usuario de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userId');
+        const userType = urlParams.get('userType');
+        
+        if (!userId) {
+            alert('Usuario no identificado. Serás redirigido al inicio.');
+            window.location.href = 'index.html';
+        }
+        
+        document.getElementById('userId').value = userId;
+
+        document.getElementById('securityQuestionsForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const petName = document.getElementById('petName').value;
+            const favoriteColor = document.getElementById('favoriteColor').value;
+            const favoritePlace = document.getElementById('favoritePlace').value;
+            
+            try {
+                const response = await fetch('/api/security-questions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId,
+                        petName,
+                        favoriteColor,
+                        favoritePlace
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Redirigir según el tipo de usuario
+                    if (userType === 'patient') {
+                        window.location.href = 'dashboard-patient.html';
+                    } else if (userType === 'psychologist') {
+                        window.location.href = 'dashboard-psychologist.html';
+                    }
+                } else {
+                    alert(data.message || 'Error al guardar las preguntas de seguridad');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Ocurrió un error al guardar las respuestas. Por favor, inténtalo más tarde.');
+            }
+        });
+    </script>
+</body>
+</html>

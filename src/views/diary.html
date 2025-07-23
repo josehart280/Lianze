@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Diario - LIANZE</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">LIANZE</a>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="dashboard-patient.html">Dashboard</a></li>
+                <li><a href="appointments.html">Mis Citas</a></li>
+                <li><a href="psychologists.html">Psicólogos</a></li>
+                <li><a href="diary.html" class="active">Mi Diario</a></li>
+                <li><a href="calendar.html">Calendario</a></li>
+                <li><a href="profile.html">Mi Perfil</a></li>
+                <li><a href="settings.html">Configuración</a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" class="logout-btn">Cerrar Sesión</a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="page-header">
+            <h1>Mi Diario Personal</h1>
+            <button class="btn btn-primary">Nueva Entrada</button>
+        </header>
+
+        <!-- Mood Tracker -->
+        <section class="mood-tracker">
+            <h2>¿Cómo te sientes hoy?</h2>
+            <div class="mood-options">
+                <div class="mood-option">
+                    <div class="mood-emoji">😊</div>
+                    <span>Muy bien</span>
+                </div>
+                <div class="mood-option">
+                    <div class="mood-emoji">🙂</div>
+                    <span>Bien</span>
+                </div>
+                <div class="mood-option active">
+                    <div class="mood-emoji">😐</div>
+                    <span>Normal</span>
+                </div>
+                <div class="mood-option">
+                    <div class="mood-emoji">😔</div>
+                    <span>Triste</span>
+                </div>
+                <div class="mood-option">
+                    <div class="mood-emoji">😰</div>
+                    <span>Ansioso</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Entry Form -->
+        <section class="new-entry">
+            <h2>Nueva Entrada</h2>
+            <form class="diary-form">
+                <div class="form-group">
+                    <label for="title">Título</label>
+                    <input type="text" id="title" class="input" placeholder="¿Qué pasó hoy?">
+                </div>
+                <div class="form-group">
+                    <label for="content">Contenido</label>
+                    <textarea id="content" class="textarea" rows="6" placeholder="Escribe tus pensamientos, sentimientos o experiencias del día..."></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tags">Etiquetas</label>
+                        <input type="text" id="tags" class="input" placeholder="trabajo, familia, salud...">
+                    </div>
+                    <div class="form-group">
+                        <label for="privacy">Privacidad</label>
+                        <select id="privacy" class="input">
+                            <option value="private">Solo yo</option>
+                            <option value="therapist">Compartir con terapeuta</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline">Guardar Borrador</button>
+                    <button type="submit" class="btn btn-primary">Publicar Entrada</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Previous Entries -->
+        <section class="diary-entries">
+            <h2>Entradas Anteriores</h2>
+            
+            <div class="diary-entry">
+                <div class="entry-header">
+                    <div class="entry-date">
+                        <div class="date-day">14</div>
+                        <div class="date-month">Mar</div>
+                    </div>
+                    <div class="entry-info">
+                        <h3>Día productivo en el trabajo</h3>
+                        <div class="entry-meta">
+                            <span class="mood-indicator">😊</span>
+                            <span class="entry-time">6:30 PM</span>
+                            <div class="entry-tags">
+                                <span class="tag">trabajo</span>
+                                <span class="tag">logros</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="entry-content">
+                    <p>Hoy fue un día especialmente bueno en el trabajo. Logré completar el proyecto que tenía pendiente y recibí comentarios muy positivos de mi jefe. Me siento orgullosa de mi progreso y más confiada en mis habilidades...</p>
+                </div>
+                <div class="entry-actions">
+                    <button class="btn btn-sm btn-outline">Editar</button>
+                    <button class="btn btn-sm btn-outline">Compartir</button>
+                </div>
+            </div>
+
+            <div class="diary-entry">
+                <div class="entry-header">
+                    <div class="entry-date">
+                        <div class="date-day">12</div>
+                        <div class="date-month">Mar</div>
+                    </div>
+                    <div class="entry-info">
+                        <h3>Reflexiones sobre la terapia</h3>
+                        <div class="entry-meta">
+                            <span class="mood-indicator">🙂</span>
+                            <span class="entry-time">8:15 PM</span>
+                            <div class="entry-tags">
+                                <span class="tag">terapia</span>
+                                <span class="tag">crecimiento</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="entry-content">
+                    <p>Después de mi sesión con el Dr. García, he estado reflexionando sobre las técnicas de respiración que me enseñó. Realmente funcionan cuando siento que la ansiedad comienza a aparecer...</p>
+                </div>
+                <div class="entry-actions">
+                    <button class="btn btn-sm btn-outline">Editar</button>
+                    <button class="btn btn-sm btn-primary">Compartido con terapeuta</button>
+                </div>
+            </div>
+
+            <div class="diary-entry">
+                <div class="entry-header">
+                    <div class="entry-date">
+                        <div class="date-day">10</div>
+                        <div class="date-month">Mar</div>
+                    </div>
+                    <div class="entry-info">
+                        <h3>Día difícil</h3>
+                        <div class="entry-meta">
+                            <span class="mood-indicator">😔</span>
+                            <span class="entry-time">10:45 PM</span>
+                            <div class="entry-tags">
+                                <span class="tag">ansiedad</span>
+                                <span class="tag">estrés</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="entry-content">
+                    <p>Hoy fue uno de esos días donde todo parecía ir mal. Me desperté sintiéndome abrumada y esa sensación no me dejó en todo el día. Necesito recordar usar las técnicas que estoy aprendiendo...</p>
+                </div>
+                <div class="entry-actions">
+                    <button class="btn btn-sm btn-outline">Editar</button>
+                    <button class="btn btn-sm btn-outline">Compartir</button>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

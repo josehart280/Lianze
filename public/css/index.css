@@ -1,0 +1,175 @@
+    :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+      font-family: 'Inter', sans-serif;
+      }
+      .hero-section {
+      background-image: url('https://readdy.ai/api/search-image?query=A%20calming%20and%20professional%20therapy%20office%20setting%20with%20soft%20natural%20light%2C%20a%20comfortable%20couch%2C%20plants%2C%20and%20minimal%20decor.%20The%20left%20side%20has%20a%20gradient%20fade%20to%20white%20for%20text%20placement.%20Modern%2C%20clean%20aesthetic%20with%20soothing%20colors.%20Professional%20looking%2C%20high%20quality%20photorealistic%20image.&width=1600&height=800&seq=hero123&orientation=landscape');
+      background-size: cover;
+      background-position: center;
+      }
+      .custom-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 2px solid #d1d5db;
+      border-radius: 4px;
+      background-color: white;
+      display: inline-block;
+      position: relative;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+      cursor: pointer;
+      }
+      .custom-checkbox:checked {
+      background-color: #4F46E5;
+      border-color: #4F46E5;
+      }
+      .custom-checkbox:checked::after {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      }
+      .custom-switch {
+      position: relative;
+      display: inline-block;
+      width: 3.5rem;
+      height: 1.75rem;
+      }
+      .custom-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      }
+      .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #e5e7eb;
+      transition: .4s;
+      border-radius: 34px;
+      }
+      .slider:before {
+      position: absolute;
+      content: "";
+      height: 1.25rem;
+      width: 1.25rem;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+      }
+      input:checked + .slider {
+      background-color: #4F46E5;
+      }
+      input:checked + .slider:before {
+      transform: translateX(1.75rem);
+      }
+      .custom-radio {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 2px solid #d1d5db;
+      border-radius: 50%;
+      background-color: white;
+      display: inline-block;
+      position: relative;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+      cursor: pointer;
+      }
+      .custom-radio:checked {
+      border-color: #4F46E5;
+      }
+      .custom-radio:checked::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 0.625rem;
+      height: 0.625rem;
+      border-radius: 50%;
+      background-color: #4F46E5;
+      }
+      .range-slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 5px;
+      background: #e5e7eb;
+      outline: none;
+      }
+      .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #4F46E5;
+      cursor: pointer;
+      }
+      .range-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #4F46E5;
+      cursor: pointer;
+      border: none;
+      }
+
+      .logo{
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #3182ce;
+        text-decoration: none;
+        letter-spacing: -0.025em;
+      }
+
+      body {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.container {
+  width: 100%;
+  padding: 0 15px;
+}
+
+.header {
+  padding: 1rem;
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .header {
+    padding: 1.5rem;
+  }
+  
+  .hero-section {
+    padding: 3rem 0;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  
+  .header {
+    padding: 2rem;
+  }
+}

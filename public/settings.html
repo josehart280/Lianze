@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - LIANZE</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <style>
+        /* Estilos para los selects de ubicación */
+        .location-selects {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        /* Estilos para modales */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        /* Estilos para códigos de respaldo */
+        .backup-codes-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .backup-code-item {
+            font-family: monospace;
+            padding: 0.5rem;
+            background: #f5f5f5;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        /* Animaciones para alertas */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">LIANZE</a>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="dashboard-patient.html">Dashboard</a></li>
+                <li><a href="appointments.html">Mis Citas</a></li>
+                <li><a href="psychologists.html">Psicólogos</a></li>
+                <li><a href="diary.html">Mi Diario</a></li>
+                <li><a href="calendar.html">Calendario</a></li>
+                <li><a href="profile.html">Mi Perfil</a></li>
+                <li><a href="settings.html" class="active">Configuración</a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" class="logout-btn">Cerrar Sesión</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="page-header">
+            <h1>Configuración de la Cuenta</h1>
+            <p>Administra tus preferencias y seguridad</p>
+        </header>
+
+        <!-- Sección de Seguridad -->
+        <section class="settings-section">
+            <h2>Seguridad</h2>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h3>Autenticación de Dos Factores (MFA)</h3>
+                    <p>Protege tu cuenta incluso si roban tu contraseña</p>
+                    
+                    <div class="mfa-options">
+                        <div class="mfa-option">
+                            <input type="radio" id="mfa-email" name="mfa" value="email" disabled>
+                            <label for="mfa-email">Token de 6 dígitos vía email</label>
+                        </div>
+                        <div class="mfa-option">
+                            <input type="radio" id="mfa-google" name="mfa" value="google" disabled>
+                            <label for="mfa-google">Google Authenticator</label>
+                        </div>
+                    </div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="mfa-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h3>Cambiar Preguntas de Seguridad</h3>
+                    <p>Actualiza tus respuestas para recuperación de cuenta</p>
+                    
+                    <div class="security-questions-list">
+                        <div class="security-question-item">
+                            <label for="petName">Nombre de tu primera mascota:</label>
+                            <input type="text" id="petName" name="petName">
+                        </div>
+                        <div class="security-question-item">
+                            <label for="favoriteColor">Color favorito:</label>
+                            <input type="text" id="favoriteColor" name="favoriteColor">
+                        </div>
+                        <div class="security-question-item">
+                            <label for="favoritePlace">Lugar favorito:</label>
+                            <input type="text" id="favoritePlace" name="favoritePlace">
+                        </div>
+                    </div>
+                </div>
+                <button id="update-questions-btn" class="btn-primary">Actualizar</button>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h3>Códigos de Respaldo MFA</h3>
+                    <p>Códigos de un solo uso para autenticación</p>
+                </div>
+                <button id="view-backup-codes-btn" class="btn-primary">Ver Códigos</button>
+                <button id="regenerate-codes-btn" class="btn-primary">Regenerar</button>
+            </div>
+        </section>
+
+        <!-- Sección de Cuenta -->
+        <section class="settings-section">
+            <h2>Cuenta</h2>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h3>Cambiar Correo Electrónico</h3>
+                    <p>Actualiza el correo asociado a tu cuenta</p>
+                    <input type="email" id="new-email" placeholder="Nuevo correo electrónico" style="margin-top: 0.5rem; width: 100%;">
+                </div>
+                <button id="update-email-btn" class="btn-primary">Actualizar</button>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h3>Cambiar Contraseña</h3>
+                    <p>Establece una nueva contraseña segura</p>
+                </div>
+                <button id="change-password-btn" class="btn-primary">Cambiar</button>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h3>Cambiar Ubicación</h3>
+                    <p>Actualiza tu país, provincia, cantón y distrito</p>
+                    
+                    <div class="location-selects">
+                        <div class="form-group">
+                            <label for="settings-country">País</label>
+                            <select id="settings-country" name="country" class="input" required>
+                                <option value="">Selecciona un país</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="settings-province">Provincia</label>
+                            <select id="settings-province" name="province" class="input" disabled required>
+                                <option value="">Primero selecciona un país</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="settings-canton">Cantón</label>
+                            <select id="settings-canton" name="canton" class="input" disabled required>
+                                <option value="">Primero selecciona una provincia</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="settings-district">Distrito</label>
+                            <select id="settings-district" name="district" class="input" disabled required>
+                                <option value="">Primero selecciona un cantón</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button id="update-location-btn" class="btn-primary">Actualizar Ubicación</button>
+            </div>
+        </section>
+
+        <!-- Sección Peligrosa -->
+        <section class="settings-section">
+            <h2 style="color: #e74c3c;">Zona Peligrosa</h2>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h3>Eliminar Cuenta</h3>
+                    <p>Esta acción es permanente y no se puede deshacer</p>
+                </div>
+                <button id="delete-account-btn" class="btn-danger">Eliminar Cuenta</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Confirmación para Eliminar Cuenta -->
+    <div id="delete-account-modal" class="modal">
+        <div class="modal-content">
+            <h2>¿Estás seguro que deseas eliminar tu cuenta?</h2>
+            <p>Esta acción eliminará permanentemente todos tus datos y no podrá deshacerse. Perderás acceso a:</p>
+            <ul>
+                <li>Tu historial de citas</li>
+                <li>Todas las entradas de tu diario</li>
+                <li>Tu progreso registrado</li>
+            </ul>
+            <p>Para confirmar, ingresa tu contraseña:</p>
+            <input type="password" id="confirm-password" placeholder="Ingresa tu contraseña" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;">
+            <div class="modal-actions">
+                <button id="cancel-delete-btn" class="btn-primary">Cancelar</button>
+                <button id="confirm-delete-btn" class="btn-danger">Eliminar Permanentemente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Códigos de Respaldo -->
+    <div id="backup-codes-modal" class="modal">
+        <div class="modal-content">
+            <h2>Tus Códigos de Respaldo MFA</h2>
+            <p>Ingresa tu contraseña para ver tus códigos de respaldo:</p>
+            <input type="password" id="password-for-codes" placeholder="Tu contraseña" style="width: 100%; padding: 0.5rem;">
+            <div id="codes-container" style="margin-top: 1rem; display: none;">
+                <div class="backup-codes-list"></div>
+                <button id="copy-codes-btn" class="btn-primary" style="margin-top: 1rem;">Copiar Códigos</button>
+            </div>
+            <div class="modal-actions">
+                <button id="cancel-codes-btn" class="btn-primary">Cancelar</button>
+                <button id="confirm-codes-btn" class="btn-primary">Ver Códigos</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para obtener usuario logueado
+        function getLoggedInUser() {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                window.location.href = 'login.html';
+                return null;
+            }
+            return JSON.parse(user);
+        }
+        
+        // Función para mostrar alertas
+        function showAlert(message, isSuccess = true) {
+            const alertDiv = document.createElement('div');
+            alertDiv.style.position = 'fixed';
+            alertDiv.style.top = '20px';
+            alertDiv.style.right = '20px';
+            alertDiv.style.padding = '15px 20px';
+            alertDiv.style.backgroundColor = isSuccess ? '#4CAF50' : '#e74c3c';
+            alertDiv.style.color = 'white';
+            alertDiv.style.borderRadius = '4px';
+            alertDiv.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            alertDiv.style.zIndex = '1000';
+            alertDiv.style.animation = 'fadeIn 0.3s';
+            alertDiv.textContent = message;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.style.animation = 'fadeOut 0.3s';
+                setTimeout(() => {
+                    document.body.removeChild(alertDiv);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Función para cargar datos del usuario
+        async function loadUserData() {
+            const user = getLoggedInUser();
+            if (!user) return;
+            
+            try {
+                const response = await fetch(`/api/user-profile/${user.id}`);
+                if (response.ok) {
+                    const userData = await response.json();
+                    
+                    // Cargar preguntas de seguridad
+                    const questionsResponse = await fetch(`/api/security-questions/${user.id}`);
+                    if (questionsResponse.ok) {
+                        const questionsData = await questionsResponse.json();
+                        if (questionsData.success) {
+                            document.getElementById('petName').value = questionsData.questions.petName || '';
+                            document.getElementById('favoriteColor').value = questionsData.questions.favoriteColor || '';
+                            document.getElementById('favoritePlace').value = questionsData.questions.favoritePlace || '';
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error cargando datos del usuario:', error);
+                showAlert('Error al cargar datos del usuario', false);
+            }
+        }
+        
+        // Función para cargar ubicación del usuario
+        async function loadUserLocation(userId) {
+    try {
+        // Cargar datos del usuario
+        const userResponse = await fetch(`/api/user-profile/${userId}`);
+        if (!userResponse.ok) throw new Error('Error al cargar perfil');
+        const userData = await userResponse.json();
+        
+        // Cargar países
+        const countriesResponse = await fetch('/api/locations/countries');
+        if (!countriesResponse.ok) throw new Error('Error al cargar países');
+        const countries = await countriesResponse.json();
+        
+        const countrySelect = document.getElementById('settings-country');
+        countrySelect.innerHTML = '<option value="">Selecciona un país</option>';
+        
+        countries.forEach(country => {
+            const option = document.createElement('option');
+            option.value = country.id;
+            option.textContent = country.description;
+            if (userData.country_id && country.id === userData.country_id) {
+                option.selected = true;
+            }
+            countrySelect.appendChild(option);
+        });
+        
+        countrySelect.disabled = false;
+        
+        // Si hay país seleccionado, cargar la jerarquía completa
+        if (userData.country_id) {
+            await loadProvinces(userData.country_id, userData.province_id);
+            
+            if (userData.province_id) {
+                await loadCantons(userData.province_id, userData.canton_id);
+                
+                if (userData.canton_id) {
+                    await loadDistricts(userData.canton_id, userData.district_id);
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error cargando ubicación:', error);
+        showAlert('Error al cargar ubicación', false);
+    }
+}
+
+async function loadProvinces(countryId, selectedProvinceId = null) {
+    try {
+        const provinceSelect = document.getElementById('settings-province');
+        provinceSelect.innerHTML = '<option value="">Cargando provincias...</option>';
+        provinceSelect.disabled = true;
+        
+        const response = await fetch(`/api/locations/provinces/${countryId}`);
+        if (!response.ok) throw new Error('Error al cargar provincias');
+        const provinces = await response.json();
+        
+        provinceSelect.innerHTML = '<option value="">Selecciona una provincia</option>';
+        provinces.forEach(province => {
+            const option = document.createElement('option');
+            option.value = province.id;
+            option.textContent = province.description;
+            if (selectedProvinceId && province.id === selectedProvinceId) {
+                option.selected = true;
+            }
+            provinceSelect.appendChild(option);
+        });
+        
+        provinceSelect.disabled = false;
+        
+        // Si hay provincia seleccionada, cargar cantones
+        if (selectedProvinceId) {
+            await loadCantons(selectedProvinceId);
+        }
+    } catch (error) {
+        console.error('Error cargando provincias:', error);
+        showAlert('Error al cargar provincias', false);
+    }
+}
+
+async function loadCantons(provinceId, selectedCantonId = null) {
+    try {
+        const cantonSelect = document.getElementById('settings-canton');
+        cantonSelect.innerHTML = '<option value="">Cargando cantones...</option>';
+        cantonSelect.disabled = true;
+
+        const response = await fetch(`/api/locations/cantons/${provinceId}`);
+        if (!response.ok) throw new Error('Error al cargar cantones');
+        const cantons = await response.json();
+
+        cantonSelect.innerHTML = '<option value="">Selecciona un cantón</option>';
+        cantons.forEach(canton => {
+            const option = document.createElement('option');
+            option.value = canton.id;
+            option.textContent = canton.description;
+            if (selectedCantonId && canton.id === selectedCantonId) {
+                option.selected = true;
+            }
+            cantonSelect.appendChild(option);
+        });
+
+        cantonSelect.disabled = false;
+
+        // Si hay cantón seleccionado, cargar distritos
+        if (selectedCantonId) {
+            await loadDistricts(selectedCantonId);
+        }
+    } catch (error) {
+        console.error('Error cargando cantones:', error);
+        showAlert('Error al cargar cantones', false);
+    }
+}
+
+async function loadDistricts(cantonId, selectedDistrictId = null) {
+    try {
+        const districtSelect = document.getElementById('settings-district');
+        districtSelect.innerHTML = '<option value="">Cargando distritos...</option>';
+        districtSelect.disabled = true;
+
+        const response = await fetch(`/api/locations/districts/${cantonId}`);
+        if (!response.ok) throw new Error('Error al cargar distritos');
+        const districts = await response.json();
+
+        districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+        districts.forEach(district => {
+            const option = document.createElement('option');
+            option.value = district.id;
+            option.textContent = district.description;
+            if (selectedDistrictId && district.id === selectedDistrictId) {
+                option.selected = true;
+            }
+            districtSelect.appendChild(option);
+        });
+
+        districtSelect.disabled = false;
+    } catch (error) {
+        console.error('Error cargando distritos:', error);
+        showAlert('Error al cargar distritos', false);
+    }
+}
+
+        
+        // Función para cargar configuración MFA
+        async function loadMFASettings() {
+            const user = getLoggedInUser();
+            if (!user) return;
+            
+            try {
+                const response = await fetch(`/api/user-profile/${user.id}`);
+                if (response.ok) {
+                    const userData = await response.json();
+                    document.getElementById('mfa-toggle').checked = userData.mfaEnabled || false;
+                }
+            } catch (error) {
+                console.error('Error cargando configuración MFA:', error);
+            }
+        }
+        
+        // Manejadores para los selects de ubicación
+        document.getElementById('settings-country').addEventListener('change', async function() {
+            const countryId = this.value;
+            const provinceSelect = document.getElementById('settings-province');
+            const cantonSelect = document.getElementById('settings-canton');
+            const districtSelect = document.getElementById('settings-district');
+            
+            // Resetear selects dependientes
+            provinceSelect.innerHTML = '<option value="">Selecciona una provincia</option>';
+            cantonSelect.innerHTML = '<option value="">Selecciona un cantón</option>';
+            districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+            
+            cantonSelect.disabled = true;
+            districtSelect.disabled = true;
+            
+            if (!countryId) {
+                provinceSelect.disabled = true;
+                return;
+            }
+            
+            try {
+                provinceSelect.disabled = true;
+                const response = await fetch(`/api/locations/provinces/${countryId}`);
+                const provinces = await response.json();
+                
+                provinceSelect.innerHTML = '<option value="">Selecciona una provincia</option>';
+                provinces.forEach(province => {
+                    const option = document.createElement('option');
+                    option.value = province.id;
+                    option.textContent = province.description;
+                    provinceSelect.appendChild(option);
+                });
+                
+                provinceSelect.disabled = false;
+            } catch (error) {
+                console.error('Error cargando provincias:', error);
+                showAlert('Error al cargar provincias', false);
+            }
+        });
+        
+        document.getElementById('settings-province').addEventListener('change', async function() {
+            const provinceId = this.value;
+            const cantonSelect = document.getElementById('settings-canton');
+            const districtSelect = document.getElementById('settings-district');
+            
+            // Resetear selects dependientes
+            cantonSelect.innerHTML = '<option value="">Selecciona un cantón</option>';
+            districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+            districtSelect.disabled = true;
+            
+            if (!provinceId) {
+                cantonSelect.disabled = true;
+                return;
+            }
+            
+            try {
+                cantonSelect.disabled = true;
+                const response = await fetch(`/api/locations/cantons/${provinceId}`);
+                const cantons = await response.json();
+                
+                cantonSelect.innerHTML = '<option value="">Selecciona un cantón</option>';
+                cantons.forEach(canton => {
+                    const option = document.createElement('option');
+                    option.value = canton.id;
+                    option.textContent = canton.description;
+                    cantonSelect.appendChild(option);
+                });
+                
+                cantonSelect.disabled = false;
+            } catch (error) {
+                console.error('Error cargando cantones:', error);
+                showAlert('Error al cargar cantones', false);
+            }
+        });
+        
+        document.getElementById('settings-canton').addEventListener('change', async function() {
+            const cantonId = this.value;
+            const districtSelect = document.getElementById('settings-district');
+            
+            // Resetear select dependiente
+            districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+            
+            if (!cantonId) {
+                districtSelect.disabled = true;
+                return;
+            }
+            
+            try {
+                districtSelect.disabled = true;
+                const response = await fetch(`/api/locations/districts/${cantonId}`);
+                const districts = await response.json();
+                
+                districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+                districts.forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district.id;
+                    option.textContent = district.description;
+                    districtSelect.appendChild(option);
+                });
+                
+                districtSelect.disabled = false;
+            } catch (error) {
+                console.error('Error cargando distritos:', error);
+                showAlert('Error al cargar distritos', false);
+            }
+        });
+        
+        // Inicialización cuando el DOM está listo
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = getLoggedInUser();
+            if (!user) return;
+            
+            // Cargar todos los datos del usuario
+            loadUserData();
+            loadMFASettings();
+            loadUserLocation(user.id);
+            
+            // Configurar MFA toggle
+            document.getElementById('mfa-toggle').addEventListener('change', async function() {
+                const enableMFA = this.checked;
+                
+                try {
+                    const response = await fetch('/api/update-mfa', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            userId: user.id,
+                            enable: enableMFA
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        showAlert(`MFA ${enableMFA ? 'activado' : 'desactivado'} correctamente`);
+                        // Actualizar estado en localStorage
+                        user.mfaEnabled = enableMFA;
+                        localStorage.setItem('user', JSON.stringify(user));
+                    } else {
+                        const data = await response.json();
+                        showAlert(data.message || 'Error actualizando MFA', false);
+                        // Revertir el toggle si falla
+                        this.checked = !enableMFA;
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showAlert('Error de conexión al actualizar MFA', false);
+                    this.checked = !enableMFA;
+                }
+            });
+            
+            // Actualizar preguntas de seguridad
+            document.getElementById('update-questions-btn').addEventListener('click', async function() {
+                const petName = document.getElementById('petName').value;
+                const favoriteColor = document.getElementById('favoriteColor').value;
+                const favoritePlace = document.getElementById('favoritePlace').value;
+                
+                if (!petName || !favoriteColor || !favoritePlace) {
+                    showAlert('Por favor responde todas las preguntas de seguridad', false);
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/api/security-questions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ 
+                            userId: user.id, 
+                            petName, 
+                            favoriteColor, 
+                            favoritePlace 
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        showAlert('Preguntas de seguridad actualizadas correctamente');
+                    } else {
+                        const data = await response.json();
+                        showAlert(data.message || 'Error actualizando preguntas de seguridad', false);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showAlert('Error al actualizar preguntas de seguridad', false);
+                }
+            });
+            
+            // Eliminar cuenta
+            document.getElementById('delete-account-btn').addEventListener('click', function() {
+                document.getElementById('delete-account-modal').style.display = 'block';
+            });
+            
+            document.getElementById('cancel-delete-btn').addEventListener('click', function() {
+                document.getElementById('delete-account-modal').style.display = 'none';
+            });
+            
+            document.getElementById('confirm-delete-btn').addEventListener('click', async function() {
+                const password = document.getElementById('confirm-password').value;
+                
+                if (!password) {
+                    showAlert('Por favor ingresa tu contraseña para confirmar', false);
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/api/delete-account', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ 
+                            userId: user.id, 
+                            password 
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        showAlert(data.message || 'Tu cuenta ha sido eliminada permanentemente');
+                        
+                        // Limpiar datos de sesión
+                        localStorage.removeItem('user');
+                        
+                        // Redirigir después de un breve retraso
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 2000);
+                    } else {
+                        showAlert(data.message || 'Error eliminando cuenta', false);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showAlert('Error de conexión al intentar eliminar la cuenta', false);
+                } finally {
+                    document.getElementById('delete-account-modal').style.display = 'none';
+                }
+            });
+            
+            // Cambiar correo electrónico
+            document.getElementById('update-email-btn').addEventListener('click', async function() {
+                const newEmail = document.getElementById('new-email').value;
+                
+                if (!newEmail) {
+                    showAlert('Por favor ingresa un nuevo correo electrónico', false);
+                    return;
+                }
+                
+                // Validar formato de email
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+                    showAlert('Por favor ingresa un correo electrónico válido', false);
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/api/update-email', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ 
+                            userId: user.id, 
+                            newEmail 
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        showAlert('Se ha enviado un correo de verificación a tu nueva dirección');
+                        // Actualizar email en localStorage
+                        user.email = newEmail;
+                        localStorage.setItem('user', JSON.stringify(user));
+                    } else {
+                        const data = await response.json();
+                        showAlert(data.message || 'Error actualizando correo electrónico', false);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showAlert('Error al actualizar correo electrónico', false);
+                }
+            });
+            
+            // Cambiar contraseña
+            document.getElementById('change-password-btn').addEventListener('click', function() {
+                // Mostrar modal para cambiar contraseña
+                const modal = document.createElement('div');
+                modal.className = 'modal';
+                modal.style.display = 'block';
+                
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <h2>Cambiar Contraseña</h2>
+                        <div class="form-group">
+                            <label for="current-password">Contraseña actual:</label>
+                            <input type="password" id="current-password" class="input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">Nueva contraseña:</label>
+                            <input type="password" id="new-password" class="input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-new-password">Confirmar nueva contraseña:</label>
+                            <input type="password" id="confirm-new-password" class="input" required>
+                        </div>
+                        <div class="modal-actions">
+                            <button id="cancel-password-btn" class="btn-primary">Cancelar</button>
+                            <button id="save-password-btn" class="btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                // Manejar botón cancelar
+                document.getElementById('cancel-password-btn').addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                });
+                
+                // Manejar botón guardar
+                document.getElementById('save-password-btn').addEventListener('click', async function() {
+                    const currentPassword = document.getElementById('current-password').value;
+                    const newPassword = document.getElementById('new-password').value;
+                    const confirmNewPassword = document.getElementById('confirm-new-password').value;
+                    
+                    if (!currentPassword || !newPassword || !confirmNewPassword) {
+                        showAlert('Todos los campos son requeridos', false);
+                        return;
+                    }
+                    
+                    if (newPassword !== confirmNewPassword) {
+                        showAlert('Las contraseñas no coinciden', false);
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/api/change-password', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ 
+                                userId: user.id, 
+                                currentPassword, 
+                                newPassword 
+                            })
+                        });
+                        
+                        if (response.ok) {
+                            showAlert('Contraseña cambiada correctamente');
+                            document.body.removeChild(modal);
+                        } else {
+                            const data = await response.json();
+                            showAlert(data.message || 'Error cambiando contraseña', false);
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        showAlert('Error al cambiar contraseña', false);
+                    }
+                });
+                
+                // Cerrar modal al hacer clic fuera
+                window.addEventListener('click', function(event) {
+                    if (event.target === modal) {
+                        document.body.removeChild(modal);
+                    }
+                });
+            });
+            
+            // Actualizar ubicación
+            document.getElementById('update-location-btn').addEventListener('click', async function() {
+    const countryId = document.getElementById('settings-country').value;
+    const provinceId = document.getElementById('settings-province').value;
+    const cantonId = document.getElementById('settings-canton').value;
+    const districtId = document.getElementById('settings-district').value;
+    
+    if (!countryId) {
+        showAlert('Por favor selecciona un país', false);
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/update-location', {  // Cambiado a update-location
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: user.id,
+                countryId,
+                provinceId: provinceId || null,  // Asegurar que sea null si está vacío
+                cantonId: cantonId || null,
+                districtId: districtId || null
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            showAlert('Ubicación actualizada correctamente');
+        } else {
+            showAlert(data.message || 'Error actualizando ubicación', false);
+        }
+    } catch (error) {
+        console.error('Error actualizando ubicación:', error);
+        showAlert('Error al actualizar ubicación', false);
+    }
+});
+
+            
+            // Ver códigos de respaldo MFA
+            document.getElementById('view-backup-codes-btn').addEventListener('click', function() {
+                document.getElementById('backup-codes-modal').style.display = 'block';
+            });
+            
+            document.getElementById('cancel-codes-btn').addEventListener('click', function() {
+                document.getElementById('backup-codes-modal').style.display = 'none';
+                document.getElementById('password-for-codes').value = '';
+                document.getElementById('codes-container').style.display = 'none';
+            });
+            
+            document.getElementById('confirm-codes-btn').addEventListener('click', async function() {
+                const password = document.getElementById('password-for-codes').value;
+                
+                if (!password) {
+                    showAlert('Por favor ingresa tu contraseña', false);
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/api/mfa/backup-codes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            userId: user.id,
+                            password
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        const codesList = document.querySelector('.backup-codes-list');
+                        codesList.innerHTML = data.codes.map(code => 
+                            `<div class="backup-code-item">${code}</div>`
+                        ).join('');
+                        
+                        document.getElementById('codes-container').style.display = 'block';
+                        
+                        // Copiar códigos al portapapeles
+                        document.getElementById('copy-codes-btn').addEventListener('click', function() {
+                            navigator.clipboard.writeText(data.codes.join('\n'));
+                            showAlert('Códigos copiados al portapapeles');
+                        });
+                    } else {
+                        showAlert(data.message || 'Error al obtener códigos', false);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showAlert('Error de conexión', false);
+                }
+            });
+            
+            // Regenerar códigos de respaldo
+            document.getElementById('regenerate-codes-btn').addEventListener('click', async function() {
+                const password = prompt('Ingresa tu contraseña para regenerar los códigos:');
+                if (!password) return;
+                
+                try {
+                    const response = await fetch('/api/mfa/regenerate-codes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            userId: user.id,
+                            password
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // Mostrar los nuevos códigos en un modal
+                        const modal = document.createElement('div');
+                        modal.className = 'modal';
+                        modal.style.display = 'block';
+                        modal.innerHTML = `
+                            <div class="modal-content">
+                                <h2>Tus Nuevos Códigos de Respaldo MFA</h2>
+                                <p>Guarda estos códigos en un lugar seguro. Los códigos anteriores ya no son válidos.</p>
+                                <div class="backup-codes-list">
+                                    ${data.codes.map(code => `<div class="backup-code-item">${code}</div>`).join('')}
+                                </div>
+                                <button id="copy-new-codes-btn" class="btn-primary" style="margin-top: 1rem;">Copiar Códigos</button>
+                                <button id="close-new-codes-btn" class="btn-primary">Cerrar</button>
+                            </div>
+                        `;
+                        
+                        document.body.appendChild(modal);
+                        
+                        // Copiar códigos al portapapeles
+                        document.getElementById('copy-new-codes-btn').addEventListener('click', function() {
+                            navigator.clipboard.writeText(data.codes.join('\n'));
+                            showAlert('Códigos copiados al portapapeles');
+                        });
+                        
+                        // Cerrar modal
+                        document.getElementById('close-new-codes-btn').addEventListener('click', function() {
+                            document.body.removeChild(modal);
+                        });
+                    } else {
+                        showAlert(data.message || 'Error al regenerar códigos', false);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showAlert('Error de conexión', false);
+                }
+            });
+            
+            // Cerrar modales al hacer clic fuera
+            window.addEventListener('click', function(event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

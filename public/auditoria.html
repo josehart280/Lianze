@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoría del Sistema - LIANZE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .audit-section {
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .timestamp {
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+        .success {
+            color: #27ae60;
+        }
+        .error {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Auditoría del Sistema LIANZE</h1>
+        
+        <div class="audit-section">
+            <h2>Resumen General</h2>
+            <p>Última actualización: <span id="last-update" class="timestamp"></span></p>
+            <div id="summary-stats"></div>
+        </div>
+        
+        <div class="audit-section">
+            <h2>Registro de Usuarios</h2>
+            <table id="user-registrations">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Tipo</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Datos se cargarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="audit-section">
+            <h2>Inicios de Sesión</h2>
+            <table id="login-audit">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Fecha/Hora</th>
+                        <th>IP</th>
+                        <th>MFA</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Datos se cargarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="audit-section">
+            <h2>Operaciones de Perfil</h2>
+            <table id="profile-changes">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Tipo</th>
+                        <th>Fecha</th>
+                        <th>Detalles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Datos se cargarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="audit-section">
+            <h2>Operaciones de Pago</h2>
+            <table id="payment-operations">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Tipo</th>
+                        <th>Fecha</th>
+                        <th>Monto</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Datos se cargarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="audit-section">
+            <h2>Recuperaciones de Contraseña</h2>
+            <table id="password-recoveries">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Fecha</th>
+                        <th>Método</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Datos se cargarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Función para formatear fechas
+        function formatDate(dateString) {
+            const options = { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return new Date(dateString).toLocaleDateString('es-ES', options);
+        }
+
+        // Función para cargar datos de auditoría (simulación)
+        // Reemplaza la función loadAuditData() en tu HTML con esta versión que usa los endpoints reales:
+
+async function loadAuditData() {
+    try {
+        // Cargar estadísticas
+        const statsResponse = await fetch('/api/audit/stats');
+        const statsData = await statsResponse.json();
+        
+        if (statsData.success) {
+            document.getElementById('summary-stats').innerHTML = `
+                <div style="display: flex; justify-content: space-around; margin-top: 20px;">
+                    <div style="text-align: center;">
+                        <h3>${statsData.stats.totalUsers}</h3>
+                        <p>Usuarios</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <h3>${statsData.stats.successfulLogins}</h3>
+                        <p>Logins exitosos</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <h3>${statsData.stats.totalAppointments}</h3>
+                        <p>Citas</p>
+                    </div>
+                </div>
+            `;
+            
+            // Mostrar última actividad
+            const lastUpdate = statsData.recentActivity[0]?.createdAt || new Date();
+            document.getElementById('last-update').textContent = formatDate(lastUpdate);
+        }
+        
+        // Cargar registros de usuarios
+        const regResponse = await fetch('/api/audit/logs?actionType=POST /api/register&limit=5');
+        const regData = await regResponse.json();
+        
+        if (regData.success) {
+            const regTable = document.querySelector('#user-registrations tbody');
+            regTable.innerHTML = ''; // Limpiar tabla
+            
+            regData.logs.forEach(log => {
+                const row = regTable.insertRow();
+                row.innerHTML = `
+                    <td>${log.userId || 'N/A'}</td>
+                    <td>${log.email || 'N/A'}</td>
+                    <td>${log.actionType.replace('POST /api/register', 'Registro')}</td>
+                    <td>${formatDate(log.createdAt)}</td>
+                    <td class="${log.status}">${log.status === 'success' ? 'Éxito' : 'Error'}</td>
+                `;
+            });
+        }
+        
+        // Cargar inicios de sesión
+        const loginResponse = await fetch('/api/audit/logins?limit=10');
+        const loginData = await loginResponse.json();
+        
+        if (loginData.success) {
+            const loginTable = document.querySelector('#login-audit tbody');
+            loginTable.innerHTML = ''; // Limpiar tabla
+            
+            loginData.logins.forEach(login => {
+                const row = loginTable.insertRow();
+                row.innerHTML = `
+                    <td>${login.email || 'N/A'}</td>
+                    <td>${formatDate(login.createdAt)}</td>
+                    <td>${login.ipAddress || 'N/A'}</td>
+                    <td>${login.mfaUsed ? 'Sí' : 'No'}</td>
+                    <td class="${login.status}">
+                        ${login.status === 'success' ? 'Éxito' : 
+                         login.status === 'failed' ? 'Fallido' : 
+                         login.status === 'mfa_required' ? 'MFA Requerido' : 'Error'}
+                    </td>
+                `;
+            });
+        }
+        
+    } catch (error) {
+        console.error('Error cargando datos de auditoría:', error);
+        alert('Error al cargar los datos de auditoría');
+    }
+}
+        // Cargar datos cuando la página esté lista
+        document.addEventListener('DOMContentLoaded', loadAuditData);
+        
+        // En una implementación real, podrías usar fetch para obtener datos reales de tu API:
+        /*
+        async function fetchAuditData() {
+            try {
+                const response = await fetch('/api/audit-logs');
+                const data = await response.json();
+                // Procesar datos y llenar tablas...
+            } catch (error) {
+                console.error('Error al cargar datos de auditoría:', error);
+            }
+        }
+        */
+    </script>
+</body>
+</html>
