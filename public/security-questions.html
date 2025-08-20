@@ -77,9 +77,9 @@
                 if (response.ok) {
                     // Redirigir según el tipo de usuario
                     if (userType === 'patient') {
-                        window.location.href = 'dashboard-patient.html';
+                        window.location.href = 'login.html';
                     } else if (userType === 'psychologist') {
-                        window.location.href = 'dashboard-psychologist.html';
+                        window.location.href = 'psychologist-profile-setup.html';
                     }
                 } else {
                     alert(data.message || 'Error al guardar las preguntas de seguridad');

@@ -55,11 +55,128 @@
         </div>
     </div>
 
+    <div id="onboardingModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="onboarding-steps">
+            <div class="step active" id="step-0">
+                <h2 class="step-title">Bienvenido a LIANZE</h2>
+                <div class="step-content">
+                    <p>¡Bienvenido! LIANZE es tu plataforma de salud mental donde podrás conectarte con profesionales calificados.</p>
+                    <img src="img/1ra.png" alt="Bienvenido" class="onboarding-img">
+                </div>
+            </div>
+            <div class="step" id="step-1">
+                <h2 class="step-title">Agenda tus citas</h2>
+                <div class="step-content">
+                    <p>Puedes programar citas con psicólogos según su disponibilidad y tus necesidades.</p>
+                    <img src="img/2da.png" alt="Agendar citas" class="onboarding-img">
+                </div>
+            </div>
+            <div class="step" id="step-2">
+                <h2 class="step-title">Diario emocional</h2>
+                <div class="step-content">
+                    <p>Lleva un registro de tus pensamientos y emociones en tu diario personal.</p>
+                    <img src="img/3ra.png" alt="Diario emocional" class="onboarding-img">
+                </div>
+            </div>
+            <div class="step" id="step-3">
+                <h2 class="step-title">Comienza ahora</h2>
+                <div class="step-content">
+                    <p>¡Estás listo! Ahora puedes comenzar a usar LIANZE. Recuerda que siempre puedes acceder a tutoriales desde tu perfil.</p>
+                    <img src="img/ready.avif" alt="Listo para comenzar" class="onboarding-img">
+                </div>
+            </div>
+        </div>
+        <div class="onboarding-controls">
+            <button id="prevBtn" class="btn-secondary" disabled>Anterior</button>
+            <button id="nextBtn" class="btn-primary">Siguiente</button>
+            <button id="skipBtn" class="btn-link">Saltar</button>
+        </div>
+    </div>
+</div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     const errorMessage = document.getElementById('errorMessage');
     const submitBtn = document.getElementById('submitBtn');
+    
+     const modal = document.getElementById('onboardingModal');
+    const closeBtn = document.querySelector('.close');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const skipBtn = document.getElementById('skipBtn');
+    const steps = document.querySelectorAll('.step');
+    
+    let currentStep = 0;
+
+    function showOnboarding() {
+        // Check if user is first-time (you might want to check this from server response)
+        const isFirstTime = true; // This should come from your API response
+        if (isFirstTime) {
+            modal.style.display = 'block';
+            updateStep();
+        }
+    }
+
+    // Update step display
+    function updateStep() {
+        steps.forEach((step, index) => {
+            step.classList.toggle('active', index === currentStep);
+        });
+        
+        prevBtn.disabled = currentStep === 0;
+        nextBtn.textContent = currentStep === steps.length - 1 ? 'Finalizar' : 'Siguiente';
+    }
+
+    // Next button click
+    nextBtn.addEventListener('click', function() {
+        if (currentStep < steps.length - 1) {
+            currentStep++;
+            updateStep();
+        } else {
+            modal.style.display = 'none';
+            // Mark onboarding as completed (you'll need to implement this)
+            markOnboardingCompleted();
+        }
+    });
+
+    // Previous button click
+    prevBtn.addEventListener('click', function() {
+        if (currentStep > 0) {
+            currentStep--;
+            updateStep();
+        }
+    });
+
+    // Skip button click
+    skipBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+        markOnboardingCompleted();
+    });
+
+    // Close button click
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+        markOnboardingCompleted();
+    });
+
+    // Close when clicking outside modal
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+            markOnboardingCompleted();
+        }
+    });
+
+     function markOnboardingCompleted() {
+        // Here you would call your API to mark the onboarding as completed
+        // For example:
+        // fetch('/api/complete-onboarding', { method: 'POST' })
+        console.log('Onboarding completed');
+    }
+
 
     function showError(message) {
         errorMessage.textContent = message;
@@ -184,16 +301,17 @@ function showMFAModal(tempToken) {
             const data = await response.json();
             
            if (response.ok) {
-            if (data.requiresMFA) {
-                // Mostrar modal para ingresar código MFA
-                showMFAModal(data.tempToken);
-                // No restablecer el botón aquí, el modal manejará eso
-            } else {
-                // Guardar información del usuario en localStorage
-                localStorage.setItem('user', JSON.stringify(data.user));
-                // Redirigir según el tipo de usuario
-                redirectUser(data.user.userType);
-            }
+    if (data.requiresMFA) {
+        showMFAModal(data.tempToken);
+    } else {
+        // Guardar token y datos del usuario
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        // Redirigir según tipo de usuario
+        redirectUser(data.user.userType);
+    }
+
         } else {
             showError(data.message || 'Credenciales incorrectas');
         }

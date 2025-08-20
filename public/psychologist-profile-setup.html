@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completar Perfil - Psicólogo</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/psychologist-form.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <a href="index.html" class="logo">LIANZE</a>
+                <h1>Completar Perfil de Psicólogo</h1>
+                <p>Por favor completa tu información profesional</p>
+            </div>
+
+            <form id="psychologistForm" class="auth-form">
+                <input type="hidden" id="userId" name="userId">
+                
+                <div class="form-group">
+                    <label for="licenseNumber">Número de Licencia</label>
+                    <input type="text" id="licenseNumber" name="licenseNumber" class="input" required>
+                    <div id="licenseNumberError" class="error-message"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="specialties">Especialidades (separadas por comas)</label>
+                    <input type="text" id="specialties" name="specialties" class="input" required>
+                    <div id="specialtiesError" class="error-message"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">Años de Experiencia</label>
+                    <input type="number" id="experience" name="experience" class="input" min="0" required>
+                    <div id="experienceError" class="error-message"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="education">Educación (separada por comas)</label>
+                    <textarea id="education" name="education" class="input" rows="3" required></textarea>
+                    <div id="educationError" class="error-message"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="languages">Idiomas (separados por comas)</label>
+                    <input type="text" id="languages" name="languages" class="input" required>
+                    <div id="languagesError" class="error-message"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="hourlyRate">Tarifa por Hora ($)</label>
+                    <input type="number" id="hourlyRate" name="hourlyRate" class="input" min="0" step="0.01" required>
+                    <div id="hourlyRateError" class="error-message"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Biografía Profesional</label>
+                    <textarea id="bio" name="bio" class="input" rows="5" required></textarea>
+                    <div id="bioError" class="error-message"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="availability">Disponibilidad (ej: Lunes-Viernes 9am-5pm)</label>
+                    <input type="text" id="availability" name="availability" class="input" required>
+                    <div id="availabilityError" class="error-message"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Completar Registro</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Obtener userId de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('userId');
+            
+            if (!userId) {
+                alert('No se encontró ID de usuario. Por favor regístrese nuevamente.');
+                window.location.href = 'register.html';
+                return;
+            }
+            
+            document.getElementById('userId').value = userId;
+
+            document.getElementById('psychologistForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Limpiar mensajes de error
+                document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+                
+
+document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+
+
+                // Validar campos
+                let isValid = true;
+                const requiredFields = ['licenseNumber', 'specialties', 'experience', 'education', 
+                                       'languages', 'hourlyRate', 'bio', 'availability'];
+                
+                requiredFields.forEach(field => {
+        if (!document.getElementById(field).value.trim()) {
+            document.getElementById(`${field}Error`).textContent = 'Este campo es requerido';
+            isValid = false;
+        }
+    });
+    
+    if (!isValid) return;
+                
+                try {
+        // Procesar especialidades e idiomas para guardar como arrays JSON
+        const specialties = document.getElementById('specialties').value
+            .split(',')
+            .map(s => s.trim())
+            .filter(s => s.length > 0);
+        
+        const languages = document.getElementById('languages').value
+            .split(',')
+            .map(l => l.trim())
+            .filter(l => l.length > 0);
+        
+        const education = document.getElementById('education').value
+            .split(',')
+            .map(e => e.trim())
+            .filter(e => e.length > 0);
+        
+        const response = await fetch('/api/psychologists', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: userId,
+                licenseNumber: document.getElementById('licenseNumber').value,
+                specialties: JSON.stringify(specialties),
+                experience: parseInt(document.getElementById('experience').value),
+                education: JSON.stringify(education),
+                languages: JSON.stringify(languages),
+                hourlyRate: parseFloat(document.getElementById('hourlyRate').value),
+                bio: document.getElementById('bio').value,
+                availability: document.getElementById('availability').value
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            window.location.href = 'dashboard-psychologist.html';
+        } else {
+            alert(data.error || 'Error al guardar el perfil');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Ocurrió un error al guardar el perfil. Por favor, inténtalo más tarde.');
+    }
+});
+        });
+   
+    </script>
+</body>
+</html>

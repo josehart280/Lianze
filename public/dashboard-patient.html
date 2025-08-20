@@ -4,13 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Paciente - LIANZE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/patient.css">
 </head>
 <body>
+     <nav class="mobile-nav">
+        <button class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a href="index.html" class="mobile-logo">LIANZE</a>
+    </nav>
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
             <a href="index.html" class="logo">LIANZE</a>
+            <button class="menu-toggle"><i class="fas fa-bars icon-black"></i></button>
+            
         </div>
         <nav class="sidebar-nav">
             <ul>
@@ -28,60 +38,62 @@
         </div>
     </aside>
 
+    <div class="overlay"></div>
     
     <main class="main-content">
         <header class="page-header">
-            <h1>Bienvenido, María</h1>
+            <h1>Bienvenido, Adrian</h1>
             <p>Aquí tienes un resumen de tu progreso</p>
         </header>
 
         
+        <!-- Stats Cards -->
         <div class="stats-grid">
-            <div class="stat-card">
+            <div class="stat-card fade-in">
                 <div class="stat-icon">📅</div>
                 <div class="stat-info">
-                    <div class="stat-number">12</div>
+                    <div class="stat-number">1</div>
                     <div class="stat-label">Sesiones Completadas</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card fade-in">
                 <div class="stat-icon">📝</div>
                 <div class="stat-info">
-                    <div class="stat-number">8</div>
+                    <div class="stat-number">0</div>
                     <div class="stat-label">Entradas de Diario</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card fade-in">
                 <div class="stat-icon">📈</div>
                 <div class="stat-info">
-                    <div class="stat-number">85%</div>
+                    <div class="stat-number">-%</div>
                     <div class="stat-label">Progreso General</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card fade-in">
                 <div class="stat-icon">⭐</div>
                 <div class="stat-info">
-                    <div class="stat-number">4.8</div>
+                    <div class="stat-number">5</div>
                     <div class="stat-label">Satisfacción</div>
                 </div>
             </div>
         </div>
 
-        
+        <!-- Quick Actions -->
         <section class="quick-actions">
             <h2>Acciones Rápidas</h2>
             <div class="actions-grid">
-                <a href="appointments.html" class="action-card">
+                <a href="appointments.html" class="action-card fade-in">
                     <div class="action-icon">📅</div>
                     <h3>Agendar Cita</h3>
                     <p>Programa tu próxima sesión</p>
                 </a>
-                <a href="diary.html" class="action-card">
+                <a href="diary.html" class="action-card fade-in">
                     <div class="action-icon">📝</div>
                     <h3>Escribir en Diario</h3>
                     <p>Registra tus pensamientos</p>
                 </a>
-                <a href="psychologists.html" class="action-card">
+                <a href="psychologists.html" class="action-card fade-in">
                     <div class="action-icon">👨‍⚕️</div>
                     <h3>Buscar Psicólogo</h3>
                     <p>Encuentra el profesional ideal</p>
@@ -89,11 +101,11 @@
             </div>
         </section>
 
-       
+        <!-- Recent Activity -->
         <section class="recent-activity">
             <h2>Actividad Reciente</h2>
             <div class="activity-list">
-                <div class="activity-item">
+                <div class="activity-item fade-in">
                     <div class="activity-icon">📅</div>
                     <div class="activity-content">
                         <h4>Sesión completada</h4>
@@ -101,7 +113,7 @@
                     </div>
                     <div class="activity-time">2d</div>
                 </div>
-                <div class="activity-item">
+                <div class="activity-item fade-in">
                     <div class="activity-icon">📝</div>
                     <div class="activity-content">
                         <h4>Nueva entrada en diario</h4>
@@ -109,7 +121,7 @@
                     </div>
                     <div class="activity-time">3d</div>
                 </div>
-                <div class="activity-item">
+                <div class="activity-item fade-in">
                     <div class="activity-icon">⭐</div>
                     <div class="activity-content">
                         <h4>Evaluación completada</h4>
@@ -123,5 +135,54 @@
 
     
     <div class="chat-bubble">💬</div>
+     <script>
+      const menuToggles = document.querySelectorAll('.menu-toggle');
+    
+    // Añadir evento a cada botón
+    menuToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.querySelector('.sidebar').classList.toggle('open');
+            document.querySelector('.overlay').classList.toggle('active');
+            
+            if (document.querySelector('.sidebar').classList.contains('open')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+    });
+
+    // Resto del script permanece igual...
+    document.querySelector('.overlay').addEventListener('click', function() {
+        document.querySelector('.sidebar').classList.remove('open');
+        this.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+
+    document.addEventListener('click', function(e) {
+        const sidebar = document.querySelector('.sidebar');
+        const menuToggles = document.querySelectorAll('.menu-toggle');
+        let isToggle = false;
+        
+        menuToggles.forEach(toggle => {
+            if (e.target === toggle || toggle.contains(e.target)) {
+                isToggle = true;
+            }
+        });
+        
+        if (window.innerWidth < 768 && 
+            sidebar.classList.contains('open') && 
+            !sidebar.contains(e.target) && 
+            !isToggle) {
+            sidebar.classList.remove('open');
+            document.querySelector('.overlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+    </script>
 </body>
+
+
+
 </html>

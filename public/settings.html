@@ -6,6 +6,7 @@
     <title>Configuración - LIANZE</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* Estilos para los selects de ubicación */
         .location-selects {
@@ -73,32 +74,51 @@
     </style>
 </head>
 <body>
+
+    <nav class="mobile-nav md:hidden">
+        <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <a href="index.html" class="mobile-logo">LIANZE</a>
+    </nav>
     
     <aside class="sidebar">
         <div class="sidebar-header">
-            <a href="index.html" class="logo">LIANZE</a>
+            <a href="index.html" class="logo">
+                <span class="logo-text">LIANZE</span>
+                <span class="logo-icon"><i class="fas fa-heart"></i></span>
+            </a>
+            <button class="close-sidebar" onclick="toggleSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
+        
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="dashboard-patient.html">Dashboard</a></li>
-                <li><a href="appointments.html">Mis Citas</a></li>
-                <li><a href="psychologists.html">Psicólogos</a></li>
-                <li><a href="diary.html">Mi Diario</a></li>
-                <li><a href="calendar.html">Calendario</a></li>
-                <li><a href="profile.html">Mi Perfil</a></li>
-                <li><a href="settings.html" class="active">Configuración</a></li>
+                <li><a href="dashboard-patient.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="appointments.html"><i class="fas fa-calendar-check"></i> Mis Citas</a></li>
+                <li><a href="psychologists.html"><i class="fas fa-user-md"></i> Psicólogos</a></li>
+                <li><a href="diary.html"><i class="fas fa-book"></i> Mi Diario</a></li>
+                <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendario</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i> Mi Perfil</a></li>
+                <li class="active"><a href="settings.html"><i class="fas fa-cog"></i> Configuración</a></li>
             </ul>
         </nav>
+        
         <div class="sidebar-footer">
-            <a href="index.html" class="logout-btn">Cerrar Sesión</a>
+            <a href="index.html" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Cerrar Sesión</span>
+            </a>
         </div>
     </aside>
+    <div class="overlay" onclick="toggleSidebar()"></div>
 
     <main class="main-content">
         <header class="page-header">
             <h1>Configuración de la Cuenta</h1>
             <p>Administra tus preferencias y seguridad</p>
         </header>
+
+        
 
         <!-- Sección de Seguridad -->
         <section class="settings-section">
@@ -267,6 +287,45 @@
     </div>
 
     <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            // Bloquear scroll del body cuando el menú está abierto
+            document.body.classList.toggle('no-scroll');
+        }
+
+        // Cerrar sidebar al hacer clic en un enlace en móviles
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 768) {
+                    toggleSidebar();
+                }
+            });
+        });
+
+        // Cerrar sidebar al hacer clic fuera en móviles
+        document.addEventListener('click', function(e) {
+            const sidebar = document.querySelector('.sidebar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (window.innerWidth < 768 && 
+                sidebar.classList.contains('active') && 
+                !sidebar.contains(e.target) && 
+                e.target !== menuToggle && 
+                !e.target.closest('.menu-toggle')) {
+                toggleSidebar();
+            }
+        });
+
+
+
+
+
+
         // Función para obtener usuario logueado
         function getLoggedInUser() {
             const user = localStorage.getItem('user');
@@ -276,6 +335,74 @@
             }
             return JSON.parse(user);
         }
+
+        // Modal para verificar contraseña
+function showPasswordModal(actionCallback) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'block';
+    
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h2>Verificar Contraseña</h2>
+            <p>Por favor ingresa tu contraseña para continuar:</p>
+            <input type="password" id="verify-password" placeholder="Tu contraseña" style="width: 100%; padding: 0.5rem; margin: 0.5rem 0;">
+            <div class="modal-actions">
+                <button id="cancel-verify-btn" class="btn-primary">Cancelar</button>
+                <button id="confirm-verify-btn" class="btn-primary">Verificar</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    document.getElementById('cancel-verify-btn').addEventListener('click', function() {
+        document.body.removeChild(modal);
+    });
+    
+    document.getElementById('confirm-verify-btn').addEventListener('click', async function() {
+        const password = document.getElementById('verify-password').value;
+        
+        if (!password) {
+            showAlert('Por favor ingresa tu contraseña', false);
+            return;
+        }
+        
+        try {
+            const user = getLoggedInUser();
+            const response = await fetch('/api/verify-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: user.id,
+                    password: password
+                })
+            });
+            
+            if (response.ok) {
+                document.body.removeChild(modal);
+                actionCallback(); // Ejecutar la acción después de verificación
+            } else {
+                const data = await response.json();
+                showAlert(data.message || 'Contraseña incorrecta', false);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showAlert('Error de conexión', false);
+        }
+    });
+    
+    // Cerrar modal al hacer clic fuera
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            document.body.removeChild(modal);
+        }
+    });
+}
+
+
         
         // Función para mostrar alertas
         function showAlert(message, isSuccess = true) {
@@ -304,30 +431,40 @@
         
         // Función para cargar datos del usuario
         async function loadUserData() {
-            const user = getLoggedInUser();
-            if (!user) return;
-            
-            try {
-                const response = await fetch(`/api/user-profile/${user.id}`);
-                if (response.ok) {
-                    const userData = await response.json();
-                    
-                    // Cargar preguntas de seguridad
-                    const questionsResponse = await fetch(`/api/security-questions/${user.id}`);
-                    if (questionsResponse.ok) {
-                        const questionsData = await questionsResponse.json();
-                        if (questionsData.success) {
-                            document.getElementById('petName').value = questionsData.questions.petName || '';
-                            document.getElementById('favoriteColor').value = questionsData.questions.favoriteColor || '';
-                            document.getElementById('favoritePlace').value = questionsData.questions.favoritePlace || '';
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Error cargando datos del usuario:', error);
-                showAlert('Error al cargar datos del usuario', false);
+    const user = getLoggedInUser();
+    if (!user) return;
+    
+    try {
+        // Cargar datos básicos del usuario
+        const response = await fetch(`/api/user-profile/${user.id}`);
+        if (!response.ok) throw new Error('Error al cargar perfil');
+        
+        const userData = await response.json();
+        
+        // Actualizar campos del formulario
+        document.getElementById('new-email').value = userData.email || '';
+        
+        // Cargar ubicación
+        if (userData.country_id) {
+            await loadUserLocation(user.id);
+        }
+        
+        // Cargar preguntas de seguridad (solo estructura, no valores)
+        const questionsResponse = await fetch(`/api/security-questions/${user.id}`);
+        if (questionsResponse.ok) {
+            const questionsData = await questionsResponse.json();
+            if (questionsData.success) {
+                // Solo mostramos las preguntas, no las respuestas
+                document.getElementById('petName').placeholder = 'Ingresa nueva respuesta';
+                document.getElementById('favoriteColor').placeholder = 'Ingresa nueva respuesta';
+                document.getElementById('favoritePlace').placeholder = 'Ingresa nueva respuesta';
             }
         }
+    } catch (error) {
+        console.error('Error cargando datos del usuario:', error);
+        showAlert('Error al cargar datos del usuario', false);
+    }
+}
         
         // Función para cargar ubicación del usuario
         async function loadUserLocation(userId) {
@@ -638,41 +775,44 @@ async function loadDistricts(cantonId, selectedDistrictId = null) {
             });
             
             // Actualizar preguntas de seguridad
-            document.getElementById('update-questions-btn').addEventListener('click', async function() {
-                const petName = document.getElementById('petName').value;
-                const favoriteColor = document.getElementById('favoriteColor').value;
-                const favoritePlace = document.getElementById('favoritePlace').value;
-                
-                if (!petName || !favoriteColor || !favoritePlace) {
-                    showAlert('Por favor responde todas las preguntas de seguridad', false);
-                    return;
-                }
-                
-                try {
-                    const response = await fetch('/api/security-questions', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ 
-                            userId: user.id, 
-                            petName, 
-                            favoriteColor, 
-                            favoritePlace 
-                        })
-                    });
-                    
-                    if (response.ok) {
-                        showAlert('Preguntas de seguridad actualizadas correctamente');
-                    } else {
-                        const data = await response.json();
-                        showAlert(data.message || 'Error actualizando preguntas de seguridad', false);
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    showAlert('Error al actualizar preguntas de seguridad', false);
-                }
+            document.getElementById('update-questions-btn').addEventListener('click', function() {
+    showPasswordModal(async function() {
+        const petName = document.getElementById('petName').value;
+        const favoriteColor = document.getElementById('favoriteColor').value;
+        const favoritePlace = document.getElementById('favoritePlace').value;
+        
+        if (!petName || !favoriteColor || !favoritePlace) {
+            showAlert('Por favor responde todas las preguntas de seguridad', false);
+            return;
+        }
+        
+        try {
+            const user = getLoggedInUser();
+            const response = await fetch('/api/security-questions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    userId: user.id, 
+                    petName, 
+                    favoriteColor, 
+                    favoritePlace 
+                })
             });
+            
+            if (response.ok) {
+                showAlert('Preguntas de seguridad actualizadas correctamente');
+            } else {
+                const data = await response.json();
+                showAlert(data.message || 'Error actualizando preguntas de seguridad', false);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showAlert('Error al actualizar preguntas de seguridad', false);
+        }
+    });
+});
             
             // Eliminar cuenta
             document.getElementById('delete-account-btn').addEventListener('click', function() {

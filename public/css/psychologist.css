@@ -707,3 +707,87 @@ body.modal-open {
     position: fixed;
     width: 100%;
 }
+
+/* Ajustes específicos para psychologists.html */
+
+/* Sidebar en móviles */
+@media (max-width: 767px) {
+    .sidebar {
+        top: 60px;
+        height: calc(100% - 60px);
+    }
+    
+    .main-content {
+        margin-top: 60px;
+    }
+}
+
+/* Ajustes para las cards de psicólogos */
+.psychologist-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.psychologist-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Mejoras para el modal en móviles */
+@media (max-width: 640px) {
+    #psychologistModal .relative {
+        width: 95%;
+        max-height: 90vh;
+    }
+}
+
+/* Ajustes para los filtros en móviles */
+@media (max-width: 767px) {
+    .filters-section {
+        padding: 1rem;
+    }
+    
+    .filter-group {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Asegurar que las imágenes de avatar mantengan proporción */
+.psychologist-avatar {
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+/* Asegúrate que estas reglas estén presentes */
+.sidebar {
+    transition: transform 0.3s ease;
+    transform: translateX(-100%);
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 30;
+    display: none;
+}
+
+.overlay.active {
+    display: block;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        transform: translateX(0);
+    }
+    
+    .overlay {
+        display: none !important;
+    }
+}

@@ -1,3 +1,381 @@
+/* ===== Estilos Responsivos ===== */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .settings-section {
+        padding: 1rem;
+    }
+    
+    .setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .toggle-switch {
+        align-self: flex-end;
+    }
+    
+    .btn-primary, .btn-danger {
+        width: 100%;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+    
+    .backup-codes-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Estilos para el Sidebar Blanco ===== */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background: #ffffff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.active {
+    transform: translateX(0);
+}
+
+/* Header del sidebar */
+.sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #3a7bd5;
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+.logo-icon {
+    margin-left: 0.5rem;
+    color: #ff6b6b;
+}
+
+.close-sidebar {
+    display: block;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-sidebar:hover {
+    color: #333;
+}
+
+/* Navegación */
+.sidebar-nav {
+    flex: 1;
+    padding: 1rem 0;
+    overflow-y: auto;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li a {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    color: #555;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.sidebar-nav li a i {
+    width: 24px;
+    text-align: center;
+    margin-right: 1rem;
+    color: #777;
+}
+
+.sidebar-nav li a:hover {
+    background-color: #f8f9fa;
+    color: #3a7bd5;
+}
+
+.sidebar-nav li a:hover i {
+    color: #3a7bd5;
+}
+
+.sidebar-nav li.active a {
+    color: #3a7bd5;
+    background-color: #f0f7ff;
+    border-left: 3px solid #3a7bd5;
+}
+
+.sidebar-nav li.active a i {
+    color: #3a7bd5;
+}
+
+/* Footer del sidebar */
+.sidebar-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.logout-btn i {
+    margin-right: 0.8rem;
+}
+
+.logout-btn:hover {
+    color: #e74c3c;
+}
+
+/* Navbar móvil */
+.mobile-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1100;
+    height: 60px;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    color: #3a7bd5;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1101;
+}
+
+.mobile-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #3a7bd5;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.user-mobile {
+    color: #3a7bd5;
+    font-size: 1.4rem;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    display: none;
+    backdrop-filter: blur(2px);
+}
+
+.overlay.active {
+    display: block;
+}
+
+/* Contenido principal */
+.main-content {
+    margin-top: 60px;
+    padding: 1.5rem;
+    transition: margin-left 0.3s;
+}
+
+/* No scroll cuando el sidebar está abierto */
+body.no-scroll {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+
+/* ===== Estilos responsivos para pantallas grandes ===== */
+@media (min-width: 768px) {
+    .sidebar {
+        transform: translateX(0);
+    }
+    
+    .mobile-nav {
+        display: none;
+    }
+    
+    .close-sidebar {
+        display: none;
+    }
+    
+    .overlay {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin-left: 280px;
+        margin-top: 0;
+        padding: 2rem;
+    }
+}
+
+/* Efectos de transición suaves */
+.sidebar-nav li a,
+.logout-btn,
+.menu-toggle {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Resto de tus estilos existentes... */
+.settings-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.settings-section h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+    font-size: 1.3rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.setting-info {
+    flex: 1;
+}
+
+.setting-info h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.setting-info p {
+    margin: 0.3rem 0 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -25,44 +403,51 @@
     gap: 1rem;
 }
 
-.form-group {
+.mfa-options {
+    margin-top: 1rem;
+    padding-left: 1rem;
+    border-left: 3px solid #eee;
+}
+
+.mfa-option {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+}
+
+.mfa-option input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+.security-questions-list {
+    margin-top: 1rem;
+}
+
+.security-question-item {
     margin-bottom: 1rem;
 }
 
-.form-group label {
+.security-question-item label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
 }
 
-.form-group input {
+.security-question-item input {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #ddd;
     border-radius: 4px;
 }
-.backup-codes-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin: 1rem 0;
-}
 
-.backup-code-item {
-    padding: 0.5rem;
-    background: #f5f5f5;
-    border-radius: 4px;
-    font-family: monospace;
-    text-align: center;
-}
-
+/* Estilos para el modal de MFA */
 .mfa-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.8);
+    background-color: rgba(0,0,0,0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,250 +455,47 @@
 }
 
 .mfa-modal-content {
-    background: white;
+    background-color: white;
     padding: 2rem;
     border-radius: 8px;
-    max-width: 500px;
+    max-width: 400px;
     width: 90%;
     text-align: center;
 }
 
-.backup-codes-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin: 1rem 0;
-}
-
-.backup-code {
-    padding: 0.5rem;
-    background: #f5f5f5;
-    border-radius: 4px;
-    font-family: monospace;
-    font-size: 1.1rem;
+.mfa-modal-content img {
+    max-width: 200px;
+    margin: 1rem auto;
+    display: block;
 }
 
 .mfa-modal-content button {
-    margin: 0.5rem;
+    margin-top: 1rem;
     padding: 0.5rem 1rem;
-    background: #3498db;
+    background: #4CAF50;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
-.settings-section {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .settings-section h2 {
-            margin-bottom: 1.5rem;
-            color: #333;
-            font-size: 1.3rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 0.5rem;
-        }
-        
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid #f5f5f5;
-        }
-        
-        .setting-info {
-            flex: 1;
-        }
-        
-        .setting-info h3 {
-            margin: 0;
-            font-size: 1rem;
-            color: #333;
-        }
-        
-        .setting-info p {
-            margin: 0.3rem 0 0;
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-        
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
-        
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        
-        input:checked + .slider {
-            background-color: #4CAF50;
-        }
-        
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-        
-        .btn-primary {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .btn-primary:hover {
-            background-color: #2980b9;
-        }
-        
-        .btn-danger {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .btn-danger:hover {
-            background-color: #c0392b;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-        }
-        
-        .modal-content {
-            background-color: white;
-            margin: 15% auto;
-            padding: 2rem;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 500px;
-        }
-        
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 1.5rem;
-            gap: 1rem;
-        }
-        
-        .mfa-options {
-            margin-top: 1rem;
-            padding-left: 1rem;
-            border-left: 3px solid #eee;
-        }
-        
-        .mfa-option {
-            margin: 1rem 0;
-            display: flex;
-            align-items: center;
-        }
-        
-        .mfa-option input[type="radio"] {
-            margin-right: 0.5rem;
-        }
-        
-        .security-questions-list {
-            margin-top: 1rem;
-        }
-        
-        .security-question-item {
-            margin-bottom: 1rem;
-        }
-        
-        .security-question-item label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-        
-        .security-question-item input {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        
-        /* Estilos para el modal de MFA */
-        .mfa-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        
-        .mfa-modal-content {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-        }
-        
-        .mfa-modal-content img {
-            max-width: 200px;
-            margin: 1rem auto;
-            display: block;
-        }
-        
-        .mfa-modal-content button {
-            margin-top: 1rem;
-            padding: 0.5rem 1rem;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+
+/* Estilos para inputs de verificación */
+#verify-password {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* Mejoras para los modales */
+.modal-content h2 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+.modal-content p {
+    margin-bottom: 1rem;
+    color: #7f8c8d;
+}

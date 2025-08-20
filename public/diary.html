@@ -4,181 +4,562 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Diario - LIANZE</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .no-scroll {
+            overflow: hidden;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+        .btn-outline {
+            background-color: transparent;
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+        .btn-outline:hover {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        .input, .textarea, .select {
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            transition: all 0.2s;
+        }
+        .input:focus, .textarea:focus, .select:focus {
+            outline: none;
+            ring: 2px;
+            ring-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        .mood-option.active {
+            background-color: #dbeafe;
+        }
+        .hidden {
+            display: none;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+        }
+        @media (min-width: 768px) {
+            .md\\:hidden {
+                display: none;
+            }
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-50">
+    <!-- Navbar móvil -->
+    <nav class="md:hidden fixed top-0 left-0 right-0 z-50 bg-white shadow-sm p-4 flex justify-between items-center">
+        <button class="p-2 text-gray-700" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a href="#" class="text-xl font-bold text-blue-600">LIANZE</a>
+        <div class="w-10"></div> <!-- Espacio para equilibrar -->
+    </nav>
+
+    <!-- Overlay para móvil -->
+    <div class="overlay hidden" onclick="toggleSidebar()"></div>
+
     <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <a href="index.html" class="logo">LIANZE</a>
+    <aside class="fixed top-0 left-0 z-40 w-64 h-screen bg-gray-800 text-white transition-transform duration-300 transform -translate-x-full md:translate-x-0">
+        <div class="px-4 py-6">
+            <a href="#" class="text-2xl font-bold text-white">LIANZE</a>
         </div>
-        <nav class="sidebar-nav">
-            <ul>
-                <li><a href="dashboard-patient.html">Dashboard</a></li>
-                <li><a href="appointments.html">Mis Citas</a></li>
-                <li><a href="psychologists.html">Psicólogos</a></li>
-                <li><a href="diary.html" class="active">Mi Diario</a></li>
-                <li><a href="calendar.html">Calendario</a></li>
-                <li><a href="profile.html">Mi Perfil</a></li>
-                <li><a href="settings.html">Configuración</a></li>
+        <nav class="px-4">
+            <ul class="space-y-2">
+                <li><a href="dashboard-patient.html" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg">Dashboard</a></li>
+                <li><a href="appointments.html" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg">Mis Citas</a></li>
+                <li><a href="psychologists.html" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg">Psicólogos</a></li>
+                <li><a href="diary.html" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg bg-gray-700">Mi Diario</a></li>
+                <li><a href="#" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg">Calendario</a></li>
+                <li><a href="profile.html" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg">Mi Perfil</a></li>
+                <li><a href="settings.html" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg">Configuración</a></li>
             </ul>
         </nav>
-        <div class="sidebar-footer">
-            <a href="index.html" class="logout-btn">Cerrar Sesión</a>
+        <div class="absolute bottom-0 left-0 right-0 p-4">
+            <a href="index.html" class="block w-full px-4 py-2 text-center text-white bg-red-600 hover:bg-red-700 rounded-lg">Cerrar Sesión</a>
         </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="main-content">
-        <header class="page-header">
-            <h1>Mi Diario Personal</h1>
-            <button class="btn btn-primary">Nueva Entrada</button>
+    <main class="mt-16 md:mt-0 md:ml-64 p-4 md:p-8 transition-all duration-300">
+        <!-- Header -->
+        <header class="page-header mb-6 md:mb-8 flex flex-col md:flex-row md:items-center md:justify-between">
+            <div class="mb-4 md:mb-0">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Mi Diario Personal</h1>
+                <p class="text-gray-600 text-sm md:text-base">Registra tus pensamientos y emociones diarias</p>
+            </div>
+            <button class="btn btn-primary self-start md:self-center" onclick="toggleNewEntryForm()">
+                <i class="fas fa-plus mr-2"></i>Nueva Entrada
+            </button>
         </header>
 
         <!-- Mood Tracker -->
-        <section class="mood-tracker">
-            <h2>¿Cómo te sientes hoy?</h2>
-            <div class="mood-options">
-                <div class="mood-option">
-                    <div class="mood-emoji">😊</div>
-                    <span>Muy bien</span>
+        <section class="mood-tracker bg-white p-4 md:p-6 rounded-lg shadow-sm mb-6 md:mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">¿Cómo te sientes hoy?</h2>
+            <div class="mood-options flex flex-wrap justify-center gap-3 md:gap-4">
+                <div class="mood-option flex flex-col items-center p-2 md:p-3 rounded-lg cursor-pointer transition-colors hover:bg-gray-100" data-mood="9">
+                    <div class="mood-emoji text-2xl md:text-3xl">😊</div>
+                    <span class="text-xs md:text-sm mt-1">Muy bien</span>
                 </div>
-                <div class="mood-option">
-                    <div class="mood-emoji">🙂</div>
-                    <span>Bien</span>
+                <div class="mood-option flex flex-col items-center p-2 md:p-3 rounded-lg cursor-pointer transition-colors hover:bg-gray-100" data-mood="7">
+                    <div class="mood-emoji text-2xl md:text-3xl">🙂</div>
+                    <span class="text-xs md:text-sm mt-1">Bien</span>
                 </div>
-                <div class="mood-option active">
-                    <div class="mood-emoji">😐</div>
-                    <span>Normal</span>
+                <div class="mood-option flex flex-col items-center p-2 md:p-3 rounded-lg cursor-pointer transition-colors hover:bg-gray-100" data-mood="5">
+                    <div class="mood-emoji text-2xl md:text-3xl">😐</div>
+                    <span class="text-xs md:text-sm mt-1">Normal</span>
                 </div>
-                <div class="mood-option">
-                    <div class="mood-emoji">😔</div>
-                    <span>Triste</span>
+                <div class="mood-option flex flex-col items-center p-2 md:p-3 rounded-lg cursor-pointer transition-colors hover:bg-gray-100" data-mood="3">
+                    <div class="mood-emoji text-2xl md:text-3xl">😔</div>
+                    <span class="text-xs md:text-sm mt-1">Triste</span>
                 </div>
-                <div class="mood-option">
-                    <div class="mood-emoji">😰</div>
-                    <span>Ansioso</span>
+                <div class="mood-option flex flex-col items-center p-2 md:p-3 rounded-lg cursor-pointer transition-colors hover:bg-gray-100" data-mood="2">
+                    <div class="mood-emoji text-2xl md:text-3xl">😰</div>
+                    <span class="text-xs md:text-sm mt-1">Ansioso</span>
+                </div>
+            </div>
+            
+            <!-- Campos adicionales que se muestran después de seleccionar un estado de ánimo -->
+            <div id="additionalFields" class="hidden mt-4 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="stressLevel" class="block mb-1 text-sm font-medium text-gray-700">Nivel de Estrés (1-10)</label>
+                        <input type="number" id="stressLevel" min="1" max="10" class="input w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="1-10">
+                    </div>
+                    <div class="form-group">
+                        <label for="sleepHours" class="block mb-1 text-sm font-medium text-gray-700">Horas de Sueño</label>
+                        <input type="number" id="sleepHours" step="0.5" min="0" max="24" class="input w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Ej: 7.5">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="emotions" class="block mb-1 text-sm font-medium text-gray-700">Emociones (separadas por comas)</label>
+                    <input type="text" id="emotions" class="input w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="alegría, tristeza, enojo...">
+                </div>
+                <div class="form-group">
+                    <label for="activities" class="block mb-1 text-sm font-medium text-gray-700">Actividades del día (separadas por comas)</label>
+                    <input type="text" id="activities" class="input w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="trabajo, ejercicio, lectura...">
                 </div>
             </div>
         </section>
 
-        <!-- New Entry Form -->
-        <section class="new-entry">
-            <h2>Nueva Entrada</h2>
-            <form class="diary-form">
+        <!-- New Entry Form (Initially hidden on mobile) -->
+        <section id="newEntryForm" class="new-entry bg-white p-4 md:p-6 rounded-lg shadow-sm mb-6 md:mb-8 hidden">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Nueva Entrada</h2>
+            <form id="diaryForm" class="diary-form space-y-4">
+                <input type="hidden" id="entryId">
+                <input type="hidden" id="selectedMood">
+                
                 <div class="form-group">
-                    <label for="title">Título</label>
-                    <input type="text" id="title" class="input" placeholder="¿Qué pasó hoy?">
+                    <label for="entryDate" class="block mb-1 text-sm font-medium text-gray-700">Fecha</label>
+                    <input type="date" id="entryDate" class="input w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
+                
                 <div class="form-group">
-                    <label for="content">Contenido</label>
-                    <textarea id="content" class="textarea" rows="6" placeholder="Escribe tus pensamientos, sentimientos o experiencias del día..."></textarea>
+                    <label for="notes" class="block mb-1 text-sm font-medium text-gray-700">Notas</label>
+                    <textarea id="notes" class="textarea w-full p-2.5 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" rows="6" placeholder="Escribe tus pensamientos, sentimientos o experiencias del día..." required></textarea>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="tags">Etiquetas</label>
-                        <input type="text" id="tags" class="input" placeholder="trabajo, familia, salud...">
-                    </div>
-                    <div class="form-group">
-                        <label for="privacy">Privacidad</label>
-                        <select id="privacy" class="input">
-                            <option value="private">Solo yo</option>
-                            <option value="therapist">Compartir con terapeuta</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-outline">Guardar Borrador</button>
-                    <button type="submit" class="btn btn-primary">Publicar Entrada</button>
+                
+                <div class="form-actions flex flex-col-reverse md:flex-row gap-2 md:gap-4 justify-end">
+                    <button type="button" class="btn btn-outline mt-2 md:mt-0" onclick="cancelEdit()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Entrada</button>
                 </div>
             </form>
         </section>
 
         <!-- Previous Entries -->
         <section class="diary-entries">
-            <h2>Entradas Anteriores</h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Entradas Anteriores</h2>
             
-            <div class="diary-entry">
-                <div class="entry-header">
-                    <div class="entry-date">
-                        <div class="date-day">14</div>
-                        <div class="date-month">Mar</div>
-                    </div>
-                    <div class="entry-info">
-                        <h3>Día productivo en el trabajo</h3>
-                        <div class="entry-meta">
-                            <span class="mood-indicator">😊</span>
-                            <span class="entry-time">6:30 PM</span>
-                            <div class="entry-tags">
-                                <span class="tag">trabajo</span>
-                                <span class="tag">logros</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="entry-content">
-                    <p>Hoy fue un día especialmente bueno en el trabajo. Logré completar el proyecto que tenía pendiente y recibí comentarios muy positivos de mi jefe. Me siento orgullosa de mi progreso y más confiada en mis habilidades...</p>
-                </div>
-                <div class="entry-actions">
-                    <button class="btn btn-sm btn-outline">Editar</button>
-                    <button class="btn btn-sm btn-outline">Compartir</button>
-                </div>
-            </div>
-
-            <div class="diary-entry">
-                <div class="entry-header">
-                    <div class="entry-date">
-                        <div class="date-day">12</div>
-                        <div class="date-month">Mar</div>
-                    </div>
-                    <div class="entry-info">
-                        <h3>Reflexiones sobre la terapia</h3>
-                        <div class="entry-meta">
-                            <span class="mood-indicator">🙂</span>
-                            <span class="entry-time">8:15 PM</span>
-                            <div class="entry-tags">
-                                <span class="tag">terapia</span>
-                                <span class="tag">crecimiento</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="entry-content">
-                    <p>Después de mi sesión con el Dr. García, he estado reflexionando sobre las técnicas de respiración que me enseñó. Realmente funcionan cuando siento que la ansiedad comienza a aparecer...</p>
-                </div>
-                <div class="entry-actions">
-                    <button class="btn btn-sm btn-outline">Editar</button>
-                    <button class="btn btn-sm btn-primary">Compartido con terapeuta</button>
-                </div>
-            </div>
-
-            <div class="diary-entry">
-                <div class="entry-header">
-                    <div class="entry-date">
-                        <div class="date-day">10</div>
-                        <div class="date-month">Mar</div>
-                    </div>
-                    <div class="entry-info">
-                        <h3>Día difícil</h3>
-                        <div class="entry-meta">
-                            <span class="mood-indicator">😔</span>
-                            <span class="entry-time">10:45 PM</span>
-                            <div class="entry-tags">
-                                <span class="tag">ansiedad</span>
-                                <span class="tag">estrés</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="entry-content">
-                    <p>Hoy fue uno de esos días donde todo parecía ir mal. Me desperté sintiéndome abrumada y esa sensación no me dejó en todo el día. Necesito recordar usar las técnicas que estoy aprendiendo...</p>
-                </div>
-                <div class="entry-actions">
-                    <button class="btn btn-sm btn-outline">Editar</button>
-                    <button class="btn btn-sm btn-outline">Compartir</button>
-                </div>
+            <div id="entriesContainer" class="space-y-4">
+                <!-- Las entradas se cargarán dinámicamente aquí -->
             </div>
         </section>
     </main>
+
+    <!-- Floating action button for mobile -->
+    <button id="mobileNewEntryBtn" class="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center z-30">
+        <i class="fas fa-plus text-xl"></i>
+    </button>
+
+    <script>
+        // Variables globales
+        let currentEditId = null;
+        const moodMap = {
+            9: { emoji: "😊", text: "Muy bien" },
+            7: { emoji: "🙂", text: "Bien" },
+            5: { emoji: "😐", text: "Normal" },
+            3: { emoji: "😔", text: "Triste" },
+            2: { emoji: "😰", text: "Ansioso" }
+        };
+
+        // Función para alternar el sidebar en móviles
+        function toggleSidebar() {
+            const sidebar = document.querySelector('aside');
+            const overlay = document.querySelector('.overlay');
+            
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+            
+            // Bloquear scroll del body cuando el menú está abierto
+            document.body.classList.toggle('no-scroll');
+        }
+
+        // Función para mostrar/ocultar el formulario de nueva entrada
+        function toggleNewEntryForm() {
+            const form = document.getElementById('newEntryForm');
+            form.classList.toggle('hidden');
+            
+            if (!form.classList.contains('hidden')) {
+                // Resetear formulario
+                document.getElementById('diaryForm').reset();
+                document.getElementById('entryId').value = '';
+                document.getElementById('entryDate').valueAsDate = new Date();
+                currentEditId = null;
+                
+                form.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Seleccionar estado de ánimo
+        document.querySelectorAll('.mood-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.mood-option').forEach(opt => {
+                    opt.classList.remove('active', 'bg-blue-50');
+                });
+                this.classList.add('active', 'bg-blue-50');
+                
+                // Guardar el valor del mood seleccionado
+                const moodValue = this.getAttribute('data-mood');
+                document.getElementById('selectedMood').value = moodValue;
+                
+                // Mostrar campos adicionales
+                document.getElementById('additionalFields').classList.remove('hidden');
+            });
+        });
+
+        // Configurar el botón flotante de móvil
+        document.getElementById('mobileNewEntryBtn').addEventListener('click', toggleNewEntryForm);
+
+        // Cargar entradas al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDiaryEntries();
+            document.getElementById('entryDate').valueAsDate = new Date();
+        });
+
+        // Manejar envío del formulario
+        document.getElementById('diaryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveDiaryEntry();
+        });
+
+        // Función para cargar entradas del diario
+        async function loadDiaryEntries() {
+    try {
+        const response = await fetch('/api/diary-entries', {
+            headers: {
+                'Authorization': `Bearer ${getAuthToken()}` // Implementa tu método de autenticación
+            }
+        });
+        
+        if (!response.ok) throw new Error('Error al cargar entradas');
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            displayEntries(data.entries);
+        } else {
+            throw new Error(data.message);
+        }
+    } catch (error) {
+        console.error('Error al cargar las entradas:', error);
+        alert('Error al cargar las entradas del diario: ' + error.message);
+    }
+}
+
+
+
+
+        // Función para mostrar entradas en la UI
+        function displayEntries(entries) {
+            const container = document.getElementById('entriesContainer');
+            container.innerHTML = '';
+            
+            if (entries.length === 0) {
+                container.innerHTML = '<p class="text-gray-600 text-center py-4">No hay entradas en el diario todavía.</p>';
+                return;
+            }
+            
+            // Ordenar entradas por fecha (más recientes primero)
+            entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            entries.forEach(entry => {
+                const entryDate = new Date(entry.date);
+                const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+                
+                const entryElement = document.createElement('div');
+                entryElement.className = 'diary-entry bg-white p-4 md:p-6 rounded-lg shadow-sm';
+                entryElement.innerHTML = `
+                    <div class="entry-header flex items-start gap-4">
+                        <div class="entry-date flex flex-col items-center justify-center bg-blue-100 text-blue-800 rounded-lg p-3 min-w-[60px]">
+                            <div class="date-day font-bold text-xl">${entryDate.getDate()}</div>
+                            <div class="date-month text-sm">${monthNames[entryDate.getMonth()]}</div>
+                        </div>
+                        <div class="entry-info flex-1">
+                            <h3 class="font-semibold text-gray-800 text-lg mb-1">${moodMap[entry.mood]?.text || 'Entrada'}</h3>
+                            <div class="entry-meta flex flex-wrap items-center gap-2 text-sm text-gray-600">
+                                <span class="mood-indicator">${moodMap[entry.mood]?.emoji || ''}</span>
+                                <span class="entry-time">${formatTime(entry.createdAt)}</span>
+                                ${entry.emotions ? `<div class="entry-tags flex flex-wrap gap-1">
+                                    ${entry.emotions.split(',').map(emotion => 
+                                        `<span class="tag bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">${emotion.trim()}</span>`
+                                    ).join('')}
+                                </div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="entry-content mt-4">
+                        <p class="text-gray-700">${entry.notes}</p>
+                    </div>
+                    <div class="entry-details grid grid-cols-1 md:grid-cols-3 gap-2 mt-4 text-sm text-gray-600">
+                        ${entry.sleepHours ? `<div><span class="font-medium">Sueño:</span> ${entry.sleepHours} horas</div>` : ''}
+                        ${entry.stressLevel ? `<div><span class="font-medium">Estrés:</span> ${entry.stressLevel}/10</div>` : ''}
+                        ${entry.activities ? `<div><span class="font-medium">Actividades:</span> ${entry.activities}</div>` : ''}
+                    </div>
+                    <div class="entry-actions flex gap-2 mt-4">
+                        <button class="btn btn-sm btn-outline" onclick="editEntry(${entry.id})">Editar</button>
+                        <button class="btn btn-sm btn-outline btn-danger" onclick="deleteEntry(${entry.id})">Eliminar</button>
+                    </div>
+                `;
+                
+                container.appendChild(entryElement);
+            });
+        }
+
+        // Función para formatear la hora
+        function formatTime(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Función para guardar una entrada
+        async function saveDiaryEntry() {
+    const formData = {
+        date: document.getElementById('entryDate').value,
+        mood: parseInt(document.getElementById('selectedMood').value),
+        emotions: document.getElementById('emotions').value,
+        notes: document.getElementById('notes').value,
+        activities: document.getElementById('activities').value,
+        sleepHours: document.getElementById('sleepHours').value ? parseFloat(document.getElementById('sleepHours').value) : null,
+        stressLevel: document.getElementById('stressLevel').value ? parseInt(document.getElementById('stressLevel').value) : null
+    };
+    
+    // Validación básica
+    if (!formData.mood) {
+        alert('Por favor selecciona cómo te sientes hoy');
+        return;
+    }
+    
+    if (!formData.notes) {
+        alert('Por favor escribe algunas notas');
+        return;
+    }
+    
+    try {
+        const entryId = document.getElementById('entryId').value;
+        const url = entryId ? `/api/diary-entries/${entryId}` : '/api/diary-entries';
+        const method = entryId ? 'PUT' : 'POST';
+        
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getAuthToken()}`
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || 'Error al guardar');
+        }
+        
+        alert(entryId ? 'Entrada actualizada correctamente' : 'Entrada guardada correctamente');
+        
+        // Limpiar formulario y recargar entradas
+        document.getElementById('diaryForm').reset();
+        document.getElementById('additionalFields').classList.add('hidden');
+        document.querySelectorAll('.mood-option').forEach(opt => {
+            opt.classList.remove('active', 'bg-blue-50');
+        });
+        
+        if (window.innerWidth < 768) {
+            document.getElementById('newEntryForm').classList.add('hidden');
+        }
+        
+        // Recargar entradas
+        loadDiaryEntries();
+        
+    } catch (error) {
+        console.error('Error al guardar la entrada:', error);
+        alert('Error al guardar la entrada: ' + error.message);
+    }
+}
+
+        // Función para editar una entrada
+        async function editEntry(id) {
+            try {
+                // En una implementación real, aquí harías una llamada a tu API
+                // const response = await fetch(`/api/diary-entries/${id}`);
+                // const entry = await response.json();
+                
+                // Simulamos una respuesta del servidor
+                const mockEntry = {
+                    id: id,
+                    date: "2025-03-14",
+                    mood: 9,
+                    emotions: "alegría,satisfacción",
+                    notes: "Hoy fue un día especialmente bueno en el trabajo. Logré completar el proyecto que tenía pendiente y recibí comentarios muy positivos de mi jefe. Me siento orgullosa de mi progreso y más confiada en mis habilidades...",
+                    activities: "trabajo,reunión",
+                    sleepHours: 7.5,
+                    stressLevel: 3
+                };
+                
+                // Rellenar formulario con los datos
+                document.getElementById('entryId').value = mockEntry.id;
+                document.getElementById('entryDate').value = mockEntry.date;
+                document.getElementById('selectedMood').value = mockEntry.mood;
+                document.getElementById('emotions').value = mockEntry.emotions;
+                document.getElementById('notes').value = mockEntry.notes;
+                document.getElementById('activities').value = mockEntry.activities;
+                document.getElementById('sleepHours').value = mockEntry.sleepHours;
+                document.getElementById('stressLevel').value = mockEntry.stressLevel;
+                
+                // Seleccionar el mood correspondiente
+                document.querySelectorAll('.mood-option').forEach(opt => {
+                    opt.classList.remove('active', 'bg-blue-50');
+                    if (parseInt(opt.getAttribute('data-mood')) === mockEntry.mood) {
+                        opt.classList.add('active', 'bg-blue-50');
+                    }
+                });
+                
+                // Mostrar campos adicionales
+                document.getElementById('additionalFields').classList.remove('hidden');
+                
+                // Mostrar formulario
+                document.getElementById('newEntryForm').classList.remove('hidden');
+                document.getElementById('newEntryForm').scrollIntoView({ behavior: 'smooth' });
+                
+                currentEditId = id;
+                
+            } catch (error) {
+                console.error('Error al cargar la entrada para editar:', error);
+                alert('Error al cargar la entrada');
+            }
+        }
+
+        // Función para eliminar una entrada
+        async function deleteEntry(id) {
+    if (!confirm('¿Estás seguro de que quieres eliminar esta entrada?')) return;
+    
+    try {
+        const response = await fetch(`/api/diary-entries/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${getAuthToken()}`
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || 'Error al eliminar');
+        }
+        
+        alert('Entrada eliminada correctamente');
+        loadDiaryEntries();
+        
+    } catch (error) {
+        console.error('Error al eliminar la entrada:', error);
+        alert('Error al eliminar la entrada: ' + error.message);
+    }
+}
+
+        // Función para cancelar edición
+        function cancelEdit() {
+            document.getElementById('diaryForm').reset();
+            document.getElementById('additionalFields').classList.add('hidden');
+            document.querySelectorAll('.mood-option').forEach(opt => {
+                opt.classList.remove('active', 'bg-blue-50');
+            });
+            document.getElementById('newEntryForm').classList.add('hidden');
+            currentEditId = null;
+        }
+
+
+        function getAuthToken() {
+    // Verifica dónde estás guardando el token
+    return localStorage.getItem('authToken') || 
+           sessionStorage.getItem('authToken') || 
+           getCookie('authToken');
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
+
+
+function debugAuth() {
+    const token = getAuthToken();
+    console.log('Token encontrado:', token ? 'Sí' : 'No');
+    if (token) {
+        console.log('Longitud del token:', token.length);
+        // Decodifica el token para ver su contenido (sin verificar)
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            console.log('Contenido del token:', payload);
+        } catch (e) {
+            console.log('Token no es un JWT válido');
+        }
+    }
+}
+
+// Llama a esta función cuando necesites debuggear
+debugAuth();
+    </script>
 </body>
 </html>

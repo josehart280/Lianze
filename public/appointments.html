@@ -5,160 +5,974 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Citas - LIANZE</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/patient.css">
+    <link rel="stylesheet" href="css/apointments.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
+
+     <nav class="mobile-nav md:hidden">
+        <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <a href="index.html" class="mobile-logo">LIANZE</a>
+    </nav>
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <a href="index.html" class="logo">LIANZE</a>
+            <a href="index.html" class="logo">
+                <span class="logo-text">LIANZE</span>
+                <span class="logo-icon"><i class="fas fa-heart"></i></span>
+            </a>
+            <button class="close-sidebar" onclick="toggleSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
+        
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="dashboard-patient.html">Dashboard</a></li>
-                <li><a href="appointments.html" class="active">Mis Citas</a></li>
-                <li><a href="psychologists.html">Psicólogos</a></li>
-                <li><a href="diary.html">Mi Diario</a></li>
-                <li><a href="calendar.html">Calendario</a></li>
-                <li><a href="profile.html">Mi Perfil</a></li>
-                <li><a href="settings.html">Configuración</a></li>
+                <li>
+                    <a href="dashboard-patient.html">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="appointments.html">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Mis Citas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="psychologists.html">
+                        <i class="fas fa-user-md"></i>
+                        <span>Psicólogos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="diary.html">
+                        <i class="fas fa-book"></i>
+                        <span>Mi Diario</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="calendar.html">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Calendario</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="profile.html">
+                        <i class="fas fa-user"></i>
+                        <span>Mi Perfil</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="settings.html">
+                        <i class="fas fa-cog"></i>
+                        <span>Configuración</span>
+                    </a>
+                </li>
             </ul>
         </nav>
+        
         <div class="sidebar-footer">
-            <a href="index.html" class="logout-btn">Cerrar Sesión</a>
+            <a href="index.html" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Cerrar Sesión</span>
+            </a>
         </div>
     </aside>
+    <div class="overlay" onclick="toggleSidebar()"></div>
 
     <!-- Main Content -->
     <main class="main-content">
         <header class="page-header">
             <h1>Mis Citas</h1>
-            <button class="btn btn-primary">Agendar Nueva Cita</button>
+            <button id="newAppointmentBtn" class="btn btn-primary">Agendar Nueva Cita</button>
         </header>
+        <div id="errorContainer" class="error-container" style="display: none;"></div>
 
         <!-- Filters -->
         <div class="filters">
             <div class="filter-group">
                 <label for="status">Estado:</label>
-                <select id="status" class="input">
+                <select id="statusFilter" class="input">
                     <option value="all">Todas</option>
-                    <option value="upcoming">Próximas</option>
+                    <option value="scheduled">Programadas</option>
                     <option value="completed">Completadas</option>
                     <option value="cancelled">Canceladas</option>
                 </select>
             </div>
             <div class="filter-group">
-                <label for="month">Mes:</label>
-                <select id="month" class="input">
-                    <option value="current">Este mes</option>
-                    <option value="next">Próximo mes</option>
-                    <option value="previous">Mes anterior</option>
+                <label for="month">Fecha:</label>
+                <input type="text" id="dateRangeFilter" class="input" placeholder="Seleccionar rango">
+            </div>
+            <div class="filter-group">
+                <label for="psychologist">Psicólogo:</label>
+                <select id="psychologistFilter" class="input">
+                    <option value="all">Todos</option>
                 </select>
             </div>
         </div>
 
         <!-- Appointments List -->
-        <div class="appointments-list">
-            <!-- Upcoming Appointments -->
-            <div class="appointment-card upcoming">
-                <div class="appointment-header">
-                    <div class="appointment-date">
-                        <div class="date-day">15</div>
-                        <div class="date-month">Mar</div>
-                    </div>
-                    <div class="appointment-info">
-                        <h3>Dr. García Martínez</h3>
-                        <p>Psicología Clínica</p>
-                        <div class="appointment-time">
-                            <span>🕐 10:00 AM - 11:00 AM</span>
-                            <span>💻 Videollamada</span>
-                        </div>
-                    </div>
-                    <div class="appointment-status">
-                        <span class="badge badge-success">Confirmada</span>
-                    </div>
-                </div>
-                <div class="appointment-actions">
-                    <button class="btn btn-primary">Unirse a Sesión</button>
-                    <button class="btn btn-outline">Reagendar</button>
-                    <button class="btn btn-secondary">Cancelar</button>
-                </div>
+        <div id="appointmentsContainer" class="appointments-list">
+            <!-- Las citas se cargarán dinámicamente aquí -->
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i> Cargando citas...
             </div>
+        </div>
 
-            <div class="appointment-card upcoming">
-                <div class="appointment-header">
-                    <div class="appointment-date">
-                        <div class="date-day">22</div>
-                        <div class="date-month">Mar</div>
+        <!-- Modal para nueva cita -->
+        <div id="appointmentModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Agendar Nueva Cita</h2>
+                <form id="appointmentForm">
+                    <div class="form-group">
+                        <label for="psychologistSelect">Psicólogo:</label>
+                        <select id="psychologistSelect" class="input" required>
+                            <option value="">Seleccionar psicólogo</option>
+                        </select>
                     </div>
-                    <div class="appointment-info">
-                        <h3>Dra. López Hernández</h3>
-                        <p>Terapia Cognitivo-Conductual</p>
-                        <div class="appointment-time">
-                            <span>🕐 2:00 PM - 3:00 PM</span>
-                            <span>💻 Videollamada</span>
-                        </div>
+                    <div class="form-group">
+                        <label for="appointmentDate">Fecha:</label>
+                        <input type="datetime-local" id="appointmentDate" class="input" required>
                     </div>
-                    <div class="appointment-status">
-                        <span class="badge badge-warning">Pendiente</span>
+                    <div class="form-group">
+                        <label for="appointmentType">Tipo de cita:</label>
+                        <select id="appointmentType" class="input" required>
+                            <option value="video">Videollamada</option>
+                            <option value="phone">Llamada telefónica</option>
+                            <option value="in_person">Presencial</option>
+                        </select>
                     </div>
-                </div>
-                <div class="appointment-actions">
-                    <button class="btn btn-outline">Ver Detalles</button>
-                    <button class="btn btn-outline">Reagendar</button>
-                    <button class="btn btn-secondary">Cancelar</button>
-                </div>
+                    <div class="form-group">
+                        <label for="appointmentNotes">Notas (opcional):</label>
+                        <textarea id="appointmentNotes" class="input" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Agendar</button>
+                        <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+                    </div>
+                </form>
             </div>
+        </div>
 
-            <!-- Completed Appointments -->
-            <div class="appointment-card completed">
-                <div class="appointment-header">
-                    <div class="appointment-date">
-                        <div class="date-day">08</div>
-                        <div class="date-month">Mar</div>
-                    </div>
-                    <div class="appointment-info">
-                        <h3>Dr. García Martínez</h3>
-                        <p>Psicología Clínica</p>
-                        <div class="appointment-time">
-                            <span>🕐 10:00 AM - 11:00 AM</span>
-                            <span>💻 Videollamada</span>
-                        </div>
-                    </div>
-                    <div class="appointment-status">
-                        <span class="badge badge-success">Completada</span>
-                    </div>
-                </div>
-                <div class="appointment-actions">
-                    <button class="btn btn-outline">Ver Resumen</button>
-                    <button class="btn btn-primary">Calificar</button>
-                    <button class="btn btn-outline">Agendar Seguimiento</button>
-                </div>
-            </div>
-
-            <div class="appointment-card completed">
-                <div class="appointment-header">
-                    <div class="appointment-date">
-                        <div class="date-day">01</div>
-                        <div class="date-month">Mar</div>
-                    </div>
-                    <div class="appointment-info">
-                        <h3>Dr. García Martínez</h3>
-                        <p>Psicología Clínica</p>
-                        <div class="appointment-time">
-                            <span>🕐 10:00 AM - 11:00 AM</span>
-                            <span>💻 Videollamada</span>
-                        </div>
-                    </div>
-                    <div class="appointment-status">
-                        <span class="badge badge-success">Completada</span>
-                    </div>
-                </div>
-                <div class="appointment-actions">
-                    <button class="btn btn-outline">Ver Resumen</button>
-                    <span class="rating">⭐⭐⭐⭐⭐</span>
+        <!-- Modal para detalles de cita -->
+        <div id="appointmentDetailModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <div id="appointmentDetailContent">
+                    <!-- Los detalles se cargarán dinámicamente aquí -->
                 </div>
             </div>
         </div>
+
+        <!-- Modal para calificar cita -->
+        <div id="ratingModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Calificar Sesión</h2>
+                <form id="ratingForm">
+                    <div class="form-group">
+                        <label>Calificación:</label>
+                        <div class="star-rating">
+                            <i class="far fa-star" data-rating="1"></i>
+                            <i class="far fa-star" data-rating="2"></i>
+                            <i class="far fa-star" data-rating="3"></i>
+                            <i class="far fa-star" data-rating="4"></i>
+                            <i class="far fa-star" data-rating="5"></i>
+                        </div>
+                        <input type="hidden" id="ratingValue" name="rating" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ratingComment">Comentario (opcional):</label>
+                        <textarea id="ratingComment" class="input" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Enviar Calificación</button>
+                        <button type="button" class="btn btn-secondary close-modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+    <script>
+
+        function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.overlay');
+    
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+    
+    // Bloquear scroll del body cuando el menú está abierto
+    document.body.classList.toggle('no-scroll');
+}
+
+// Cerrar sidebar al hacer clic en un enlace en móviles
+document.querySelectorAll('.sidebar-nav a').forEach(link => {
+    link.addEventListener('click', function() {
+        if (window.innerWidth < 768) {
+            toggleSidebar();
+        }
+    });
+});
+
+// Cerrar sidebar al hacer clic fuera en móviles
+document.addEventListener('click', function(e) {
+    const sidebar = document.querySelector('.sidebar');
+    const menuToggle = document.querySelector('.menu-toggle');
+    
+    if (window.innerWidth < 768 && 
+        sidebar.classList.contains('active') && 
+        !sidebar.contains(e.target) && 
+        e.target !== menuToggle && 
+        !e.target.closest('.menu-toggle')) {
+        toggleSidebar();
+    }
+});
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+    // Variables globales
+    let currentUser = null;
+    let psychologists = [];
+    let appointments = [];
+    let currentAppointmentId = null;
+    
+    // Elementos del DOM
+    const appointmentsContainer = document.getElementById('appointmentsContainer');
+    const statusFilter = document.getElementById('statusFilter');
+    const dateRangeFilter = document.getElementById('dateRangeFilter');
+    const psychologistFilter = document.getElementById('psychologistFilter');
+    const newAppointmentBtn = document.getElementById('newAppointmentBtn');
+    const appointmentModal = document.getElementById('appointmentModal');
+    const appointmentDetailModal = document.getElementById('appointmentDetailModal');
+    const ratingModal = document.getElementById('ratingModal');
+    const appointmentForm = document.getElementById('appointmentForm');
+    const ratingForm = document.getElementById('ratingForm');
+    const psychologistSelect = document.getElementById('psychologistSelect');
+    const closeModalButtons = document.querySelectorAll('.close-modal');
+    
+    // Inicializar Flatpickr para el rango de fechas
+    flatpickr(dateRangeFilter, {
+        mode: 'range',
+        locale: 'es',
+        dateFormat: 'd/m/Y',
+        allowInput: true
+    });
+    
+    // Cerrar modales
+    closeModalButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        });
+    });
+    
+    // Cerrar modal al hacer clic fuera del contenido
+    window.addEventListener('click', function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    });
+    
+    // Inicializar la página
+    initPage();
+    
+    async function initPage() {
+    try {
+        // Verificar autenticación
+        const token = localStorage.getItem('authToken');
+        const userData = localStorage.getItem('user');
+        
+        // Mostrar datos de depuración
+        console.log('Token:', token);
+        console.log('User data:', userData);
+        
+        if (!token || !userData) {
+            console.log('No token or user data, redirecting...');
+            window.location.href = 'index.html';
+            return;
+        }
+        
+        // Intentar parsear el usuario
+        try {
+            currentUser = JSON.parse(userData);
+            console.log('Current user:', currentUser);
+            
+            // Verificación básica del usuario
+            if (!currentUser || !currentUser.id) {
+                console.log('Invalid user data, redirecting...');
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+                return;
+            }
+        } catch (e) {
+            console.error('Error parsing user data:', e);
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+            return;
+        }
+        
+        // Cargar datos
+        console.log('Loading psychologists and appointments...');
+        await loadPsychologists();
+        await loadAppointments();
+        
+        setupFilters();
+        console.log('Page initialized successfully');
+    } catch (error) {
+        console.error('Initialization error:', error);
+        showError('Error al cargar la página. Por favor, inténtalo de nuevo.');
+    }
+}
+    
+    // Cargar lista de psicólogos
+    async function loadPsychologists() {
+       try {
+         const response = await fetch('/api/psychologists', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        });
+             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            psychologists = await response.json();
+            
+            // Llenar selectores de psicólogos
+            psychologistFilter.innerHTML = '<option value="all">Todos</option>';
+            psychologistSelect.innerHTML = '<option value="">Seleccionar psicólogo</option>';
+            
+            psychologists.forEach(psychologist => {
+                const option1 = document.createElement('option');
+                option1.value = psychologist.id;
+                option1.textContent = `${psychologist.firstName} ${psychologist.lastName}`;
+                psychologistFilter.appendChild(option1);
+                
+                const option2 = document.createElement('option');
+                option2.value = psychologist.id;
+                option2.textContent = `${psychologist.firstName} ${psychologist.lastName}`;
+                psychologistSelect.appendChild(option2);
+            });
+        } catch (error) {
+            console.error('Error cargando psicólogos:', error);
+            throw error;
+        }
+    }
+    
+    // Cargar citas del usuario
+   async function loadAppointments() {
+    try {
+        console.log('Attempting to load appointments...');
+        
+        appointmentsContainer.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Cargando citas...</div>';
+        
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            console.log('No token found, redirecting...');
+            window.location.href = 'index.html';
+            return;
+        }
+
+        const response = await fetch(`/api/appointments?userId=${currentUser.id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            console.log('Error response data:', errorData);
+            
+            if (response.status === 401 || response.status === 403) {
+                console.log('Unauthorized, redirecting...');
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+                return;
+            }
+            throw new Error(errorData.message || 'Error al cargar citas');
+        }
+        
+        appointments = await response.json();
+        console.log('Appointments loaded:', appointments);
+        renderAppointments(appointments);
+    } catch (error) {
+        console.error('Error loading appointments:', {
+            error: error,
+            message: error.message,
+            stack: error.stack
+        });
+        appointmentsContainer.innerHTML = '<div class="error-message">Error al cargar citas. Intenta recargar la página.</div>';
+    }
+}
+    
+    // Configurar filtros
+    function setupFilters() {
+        statusFilter.addEventListener('change', filterAppointments);
+        dateRangeFilter.addEventListener('change', filterAppointments);
+        psychologistFilter.addEventListener('change', filterAppointments);
+    }
+    
+    // Filtrar citas
+    function filterAppointments() {
+        const status = statusFilter.value;
+        const dateRange = dateRangeFilter.value;
+        const psychologistId = psychologistFilter.value;
+        
+        let filtered = [...appointments];
+        
+        // Filtrar por estado
+        if (status !== 'all') {
+            filtered = filtered.filter(app => app.status === status);
+        }
+        
+        // Filtrar por psicólogo
+        if (psychologistId !== 'all') {
+            filtered = filtered.filter(app => app.psychologistId == psychologistId);
+        }
+        
+        // Filtrar por rango de fechas
+        if (dateRange) {
+            const [startDateStr, endDateStr] = dateRange.split(' a ');
+            const startDate = startDateStr ? new Date(startDateStr.split('/').reverse().join('-')) : null;
+            const endDate = endDateStr ? new Date(endDateStr.split('/').reverse().join('-')) : null;
+            
+            filtered = filtered.filter(app => {
+                const appDate = new Date(app.dateTime);
+                if (startDate && appDate < startDate) return false;
+                if (endDate && appDate > endDate) return false;
+                return true;
+            });
+        }
+        
+        renderAppointments(filtered);
+    }
+    
+    // Renderizar citas en el DOM
+    function renderAppointments(appointmentsToRender) {
+        if (appointmentsToRender.length === 0) {
+            appointmentsContainer.innerHTML = '<div class="empty-message">No tienes citas programadas.</div>';
+            return;
+        }
+        
+        appointmentsContainer.innerHTML = '';
+        
+        // Ordenar citas por fecha (más recientes primero)
+        appointmentsToRender.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
+        
+        appointmentsToRender.forEach(appointment => {
+            const appointmentCard = createAppointmentCard(appointment);
+            appointmentsContainer.appendChild(appointmentCard);
+        });
+    }
+    
+    // Crear tarjeta de cita
+    function createAppointmentCard(appointment) {
+        const card = document.createElement('div');
+        card.className = `appointment-card ${appointment.status}`;
+        
+        const psychologist = psychologists.find(p => p.id === appointment.psychologistId) || {};
+        const appointmentDate = new Date(appointment.dateTime);
+        const formattedDate = formatDate(appointmentDate);
+        const formattedTime = formatTime(appointmentDate);
+        const duration = appointment.duration || 60; // Duración predeterminada de 60 minutos
+        
+        // Determinar tipo de icono según el tipo de cita
+        let appointmentTypeIcon = '💻';
+        let appointmentTypeText = 'Videollamada';
+        
+        if (appointment.type === 'phone') {
+            appointmentTypeIcon = '📞';
+            appointmentTypeText = 'Llamada telefónica';
+        } else if (appointment.type === 'in_person') {
+            appointmentTypeIcon = '🏢';
+            appointmentTypeText = 'Presencial';
+        }
+        
+        // Determinar clase de estado y texto
+        let statusClass = '';
+        let statusText = '';
+        
+        switch (appointment.status) {
+            case 'scheduled':
+                statusClass = 'badge-warning';
+                statusText = 'Programada';
+                break;
+            case 'completed':
+                statusClass = 'badge-success';
+                statusText = 'Completada';
+                break;
+            case 'cancelled':
+                statusClass = 'badge-secondary';
+                statusText = 'Cancelada';
+                break;
+            case 'confirmed':
+                statusClass = 'badge-primary';
+                statusText = 'Confirmada';
+                break;
+            default:
+                statusClass = 'badge-light';
+                statusText = appointment.status;
+        }
+        
+        card.innerHTML = `
+            <div class="appointment-header">
+                <div class="appointment-date">
+                    <div class="date-day">${formattedDate.day}</div>
+                    <div class="date-month">${formattedDate.month}</div>
+                </div>
+                <div class="appointment-info">
+                    <h3>${psychologist.firstName || ''} ${psychologist.lastName || ''}</h3>
+                    <p>${psychologist.specialties ? psychologist.specialties.join(', ') : ''}</p>
+                    <div class="appointment-time">
+                        <span>🕐 ${formattedTime} (${duration} min)</span>
+                        <span>${appointmentTypeIcon} ${appointmentTypeText}</span>
+                    </div>
+                </div>
+                <div class="appointment-status">
+                    <span class="badge ${statusClass}">${statusText}</span>
+                </div>
+            </div>
+            <div class="appointment-actions">
+                ${createActionButtons(appointment)}
+            </div>
+        `;
+        
+        return card;
+    }
+    
+    // Crear botones de acción según el estado de la cita
+    function createActionButtons(appointment) {
+        let buttons = '';
+        const now = new Date();
+        const appointmentDate = new Date(appointment.dateTime);
+        
+        // Botón para ver detalles siempre disponible
+        buttons += `<button class="btn btn-outline view-details" data-id="${appointment.id}">Ver Detalles</button>`;
+        
+        if (appointment.status === 'scheduled' || appointment.status === 'confirmed') {
+            // Si la cita es hoy o en el futuro
+            if (appointmentDate >= now) {
+                // Botón para unirse a la sesión (si es videollamada y está cerca de la hora)
+                const timeDiff = appointmentDate - now;
+                const hoursDiff = timeDiff / (1000 * 60 * 60);
+                
+                if (appointment.type === 'video' && hoursDiff < 1 && hoursDiff > -1) {
+                    buttons += `<button class="btn btn-primary join-session" data-id="${appointment.id}">Unirse a Sesión</button>`;
+                }
+                
+                // Botón para cancelar
+                buttons += `<button class="btn btn-secondary cancel-appointment" data-id="${appointment.id}">Cancelar</button>`;
+                
+                // Botón para reagendar (si es más de 24 horas antes)
+                if (timeDiff > 24 * 60 * 60 * 1000) {
+                    buttons += `<button class="btn btn-outline reschedule" data-id="${appointment.id}">Reagendar</button>`;
+                }
+            }
+        } else if (appointment.status === 'completed') {
+            // Si la cita está completada y no tiene calificación
+            if (!appointment.rating) {
+                buttons += `<button class="btn btn-primary rate-appointment" data-id="${appointment.id}">Calificar</button>`;
+            } else {
+                // Mostrar calificación si ya fue calificada
+                buttons += `<span class="rating">${getStarRating(appointment.rating)}</span>`;
+            }
+            
+            // Botón para agendar seguimiento
+            buttons += `<button class="btn btn-outline follow-up" data-id="${appointment.psychologistId}">Agendar Seguimiento</button>`;
+        }
+        
+        return buttons;
+    }
+    
+    // Manejador de eventos para botones de acción
+    appointmentsContainer.addEventListener('click', function(e) {
+        const target = e.target;
+        const appointmentId = target.getAttribute('data-id');
+        
+        if (!appointmentId) return;
+        
+        if (target.classList.contains('view-details')) {
+            showAppointmentDetails(appointmentId);
+        } else if (target.classList.contains('join-session')) {
+            joinAppointmentSession(appointmentId);
+        } else if (target.classList.contains('cancel-appointment')) {
+            cancelAppointment(appointmentId);
+        } else if (target.classList.contains('reschedule')) {
+            rescheduleAppointment(appointmentId);
+        } else if (target.classList.contains('rate-appointment')) {
+            rateAppointment(appointmentId);
+        } else if (target.classList.contains('follow-up')) {
+            scheduleFollowUp(appointmentId); // En este caso, appointmentId es psychologistId
+        }
+    });
+    
+    // Mostrar detalles de la cita
+    async function showAppointmentDetails(appointmentId) {
+        try {
+            const response = await fetch(`/api/appointments/${appointmentId}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            }
+        });
+            if (!response.ok) throw new Error('Error al cargar detalles de la cita');
+            
+            const appointment = await response.json();
+            const psychologist = psychologists.find(p => p.id === appointment.psychologistId) || {};
+            const appointmentDate = new Date(appointment.dateTime);
+            const formattedDate = formatDateTime(appointmentDate);
+            
+            let detailsHTML = `
+                <h2>Detalles de la Cita</h2>
+                <div class="detail-group">
+                    <h3>${psychologist.firstName || ''} ${psychologist.lastName || ''}</h3>
+                    <p>${psychologist.specialties ? psychologist.specialties.join(', ') : ''}</p>
+                </div>
+                
+                <div class="detail-group">
+                    <p><strong>Fecha y Hora:</strong> ${formattedDate}</p>
+                    <p><strong>Duración:</strong> ${appointment.duration || 60} minutos</p>
+                    <p><strong>Tipo:</strong> ${getAppointmentTypeText(appointment.type)}</p>
+                    <p><strong>Estado:</strong> ${getStatusText(appointment.status)}</p>
+                </div>
+            `;
+            
+            if (appointment.notes) {
+                detailsHTML += `
+                    <div class="detail-group">
+                        <h4>Notas:</h4>
+                        <p>${appointment.notes}</p>
+                    </div>
+                `;
+            }
+            
+            if (appointment.status === 'completed') {
+                detailsHTML += `
+                    <div class="detail-group">
+                        <h4>Resumen de Sesión:</h4>
+                        <p>${appointment.summary || 'No hay resumen disponible.'}</p>
+                    </div>
+                `;
+                
+                if (appointment.rating) {
+                    detailsHTML += `
+                        <div class="detail-group">
+                            <h4>Tu Calificación:</h4>
+                            <p>${getStarRating(appointment.rating)}</p>
+                            ${appointment.ratingComment ? `<p>"${appointment.ratingComment}"</p>` : ''}
+                        </div>
+                    `;
+                }
+            }
+            
+            document.getElementById('appointmentDetailContent').innerHTML = detailsHTML;
+            appointmentDetailModal.style.display = 'block';
+        } catch (error) {
+            console.error('Error mostrando detalles de cita:', error);
+            showError('Error al cargar los detalles de la cita.');
+        }
+    }
+    
+    // Unirse a sesión de videollamada
+    function joinAppointmentSession(appointmentId) {
+        // Aquí iría la lógica para unirse a la videollamada
+        // Por ahora simulamos redirección a una URL de videollamada
+        const appointment = appointments.find(a => a.id == appointmentId);
+        if (appointment && appointment.videoUrl) {
+            window.open(appointment.videoUrl, '_blank');
+        } else {
+            showError('No se pudo encontrar el enlace de la videollamada.');
+        }
+    }
+    
+    // Cancelar cita
+    async function cancelAppointment(appointmentId) {
+        if (!confirm('¿Estás seguro de que deseas cancelar esta cita?')) return;
+        
+        try {
+            const response = await fetch(`/api/appointments/${appointmentId}/cancel`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+            
+            if (!response.ok) throw new Error('Error al cancelar la cita');
+            
+            // Recargar citas después de cancelar
+            await loadAppointments();
+            showSuccess('Cita cancelada exitosamente.');
+        } catch (error) {
+            console.error('Error cancelando cita:', error);
+            showError('Error al cancelar la cita. Por favor, inténtalo de nuevo.');
+        }
+    }
+    
+    // Reagendar cita
+    async function rescheduleAppointment(appointmentId) {
+        const appointment = appointments.find(a => a.id == appointmentId);
+        if (!appointment) return;
+        
+        // Mostrar el modal con los datos actuales de la cita
+        psychologistSelect.value = appointment.psychologistId;
+        appointmentDate.value = formatDateTimeForInput(new Date(appointment.dateTime));
+        appointmentType.value = appointment.type;
+        appointmentNotes.value = appointment.notes || '';
+        
+        // Guardar el ID de la cita que estamos reagendando
+        currentAppointmentId = appointmentId;
+        
+        // Mostrar el modal
+        appointmentModal.style.display = 'block';
+    }
+    
+    // Calificar cita
+    function rateAppointment(appointmentId) {
+        currentAppointmentId = appointmentId;
+        
+        // Configurar estrellas de calificación
+        const stars = document.querySelectorAll('.star-rating i');
+        stars.forEach(star => {
+            star.classList.remove('fas');
+            star.classList.add('far');
+            
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                document.getElementById('ratingValue').value = rating;
+                
+                // Actualizar visualización de estrellas
+                stars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+        });
+        
+        ratingModal.style.display = 'block';
+    }
+    
+    // Agendar cita de seguimiento
+    function scheduleFollowUp(psychologistId) {
+        // Prellenar el psicólogo en el formulario de nueva cita
+        psychologistSelect.value = psychologistId;
+        
+        // Establecer fecha predeterminada (7 días después de hoy)
+        const nextWeek = new Date();
+        nextWeek.setDate(nextWeek.getDate() + 7);
+        appointmentDate.value = formatDateTimeForInput(nextWeek);
+        
+        // Mostrar el modal
+        appointmentModal.style.display = 'block';
+    }
+    
+    // Manejador para nueva cita
+    newAppointmentBtn.addEventListener('click', function() {
+        // Limpiar el formulario
+        appointmentForm.reset();
+        currentAppointmentId = null;
+        
+        // Mostrar el modal
+        appointmentModal.style.display = 'block';
+    });
+    
+    // Enviar formulario de cita
+    appointmentForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const psychologistId = psychologistSelect.value;
+        const dateTime = appointmentDate.value;
+        const type = appointmentType.value;
+        const notes = appointmentNotes.value;
+        
+        try {
+            let response;
+            
+            if (currentAppointmentId) {
+                // Reagendar cita existente
+                response = await fetch(`/api/appointments/${currentAppointmentId}/reschedule`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify({
+                        dateTime: dateTime,
+                        type: type,
+                        notes: notes
+                    })
+                });
+            } else {
+                // Crear nueva cita
+                response = await fetch('/api/appointments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify({
+                        psychologistId: psychologistId,
+                        dateTime: dateTime,
+                        type: type,
+                        notes: notes,
+                        userId: currentUser.id
+                    })
+                });
+            }
+            
+            if (!response.ok) throw new Error('Error al guardar la cita');
+            
+            // Cerrar modal y recargar citas
+            appointmentModal.style.display = 'none';
+            await loadAppointments();
+            
+            showSuccess(currentAppointmentId ? 'Cita reagendada exitosamente.' : 'Cita agendada exitosamente.');
+            currentAppointmentId = null;
+        } catch (error) {
+            console.error('Error guardando cita:', error);
+            showError('Error al guardar la cita. Por favor, inténtalo de nuevo.');
+        }
+    });
+    
+    // Enviar formulario de calificación
+    ratingForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const rating = document.getElementById('ratingValue').value;
+        const comment = document.getElementById('ratingComment').value;
+        
+        try {
+            const response = await fetch(`/api/appointments/${currentAppointmentId}/rate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                },
+                body: JSON.stringify({
+                    rating: rating,
+                    comment: comment
+                })
+            });
+            
+            if (!response.ok) throw new Error('Error al enviar calificación');
+            
+            // Cerrar modal y recargar citas
+            ratingModal.style.display = 'none';
+            await loadAppointments();
+            
+            showSuccess('Calificación enviada exitosamente.');
+            currentAppointmentId = null;
+        } catch (error) {
+            console.error('Error enviando calificación:', error);
+            showError('Error al enviar calificación. Por favor, inténtalo de nuevo.');
+        }
+    });
+    
+    // Funciones de ayuda
+    function formatDate(date) {
+        return {
+            day: date.getDate(),
+            month: date.toLocaleString('es', { month: 'short' })
+        };
+    }
+    
+    function formatTime(date) {
+        return date.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
+    }
+    
+    function formatDateTime(date) {
+        return date.toLocaleString('es', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+    
+    function formatDateTimeForInput(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+    
+    function getAppointmentTypeText(type) {
+        switch (type) {
+            case 'video': return 'Videollamada';
+            case 'phone': return 'Llamada telefónica';
+            case 'in_person': return 'Presencial';
+            default: return type;
+        }
+    }
+    
+    function getStatusText(status) {
+        switch (status) {
+            case 'scheduled': return 'Programada';
+            case 'confirmed': return 'Confirmada';
+            case 'completed': return 'Completada';
+            case 'cancelled': return 'Cancelada';
+            default: return status;
+        }
+    }
+    
+    function getStarRating(rating) {
+        const fullStars = '★'.repeat(rating);
+        const emptyStars = '☆'.repeat(5 - rating);
+        return fullStars + emptyStars;
+    }
+    
+    function showError(message) {
+    const errorContainer = document.getElementById('errorContainer');
+    errorContainer.innerHTML = `
+        <div class="error-alert">
+            <i class="fas fa-exclamation-circle"></i>
+            ${message}
+        </div>
+    `;
+    errorContainer.style.display = 'block';
+    
+    setTimeout(() => {
+        errorContainer.style.display = 'none';
+    }, 5000);
+}
+    
+    
+    function showSuccess(message) {
+        const successDiv = document.createElement('div');
+        successDiv.className = 'success-message';
+        successDiv.textContent = message;
+        
+        // Mostrar temporalmente el mensaje de éxito
+        document.body.appendChild(successDiv);
+        setTimeout(() => {
+            successDiv.remove();
+        }, 5000);
+    }
+});
+    </script>
 </body>
 </html>

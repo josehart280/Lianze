@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Seguro - LIANZE</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Flowbite CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/pagos.css">
+    <style>
+        /* Estilos responsive adicionales */
+        @media (max-width: 768px) {
+            .card-container {
+                height: 180px !important;
+            }
+            .mobile-payment-button {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 1rem;
+                background: white;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+                z-index: 40;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar móvil -->
+    <nav class="md:hidden fixed top-0 left-0 right-0 z-50 bg-white shadow-sm p-4 flex justify-between items-center">
+        <button class="p-2 text-gray-700" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a href="#" class="text-xl font-bold text-blue-600">LIANZE</a>
+        <div class="w-10"></div> <!-- Espacio para equilibrar -->
+    </nav>
+
+    <!-- Overlay para móvil -->
+    <div class="overlay fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="fixed top-0 left-0 z-40 w-64 h-screen bg-gray-800 text-white transition-transform duration-300 transform -translate-x-full md:translate-x-0">
+        <div class="px-4 py-6">
+            <a href="#" class="text-2xl font-bold text-white">LIANZE</a>
+        </div>
+        <nav class="px-4">
+            <ul class="space-y-2">
+                <li><a href="dashboard-patient.html" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg">Dashboard</a></li>
+                <li><a href="appointments.html" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg">Mis Citas</a></li>
+                <li><a href="psychologists.html" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg">Psicólogos</a></li>
+                <li><a href="diary.html" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg">Mi Diario</a></li>
+                <li><a href="#" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg">Calendario</a></li>
+                <li><a href="profile.html" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg">Mi Perfil</a></li>
+                <li><a href="settings.html" class="flex items-center p-2 text-gray-300 hover:bg-gray-700 rounded-lg">Configuración</a></li>
+            </ul>
+        </nav>
+        <div class="absolute bottom-0 left-0 right-0 p-4">
+            <a href="index.html" class="block w-full px-4 py-2 text-center text-white bg-red-600 hover:bg-red-700 rounded-lg">Cerrar Sesión</a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="mt-16 md:mt-0 md:ml-64 p-4 md:p-8 transition-all duration-300">
+        <!-- Header -->
+        <header class="mb-6 md:mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Pago seguro</h1>
+                    <p class="text-gray-600 text-sm md:text-base">Completa los datos de pago para confirmar tu cita</p>
+                </div>
+                <button onclick="goBack()" class="hidden md:flex items-center text-blue-600 hover:text-blue-800">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Volver
+                </button>
+            </div>
+        </header>
+
+        <!-- Payment Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Payment Card -->
+            <div class="bg-white p-4 md:p-6 rounded-lg shadow-sm">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Método de pago</h2>
+
+                <!-- Sección para tarjeta predeterminada -->
+                <div id="defaultCardSection" class="hidden mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                    <h3 class="font-medium text-gray-800 mb-2">Tarjeta guardada</h3>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p id="defaultCardPreview" class="font-medium">•••• •••• •••• ••••</p>
+                            <p id="defaultCardName" class="text-sm text-gray-600">Nombre en tarjeta</p>
+                        </div>
+                        <button onclick="useDefaultCard()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm">
+                            Usar esta tarjeta
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- O usar nueva tarjeta -->
+                <div class="flex items-center mb-4">
+                    <div class="flex-1 border-t border-gray-300"></div>
+                    <span class="mx-4 text-gray-500 text-sm">O</span>
+                    <div class="flex-1 border-t border-gray-300"></div>
+                </div>
+
+                <!-- Card Preview -->
+                <div class="relative mb-6">
+                    <div class="card-container relative w-full h-48 bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl p-6 text-white shadow-lg transition-all duration-500">
+                        <!-- Card Front -->
+                        <div class="card-front">
+                            <div class="flex justify-between items-start mb-8">
+                                <div>
+                                    <p class="text-sm opacity-80">Nombre en la tarjeta</p>
+                                    <p id="card-preview-name" class="text-lg font-medium">NOMBRE APELLIDO</p>
+                                </div>
+                                <div id="card-brand-icon" class="w-12 h-8 bg-white rounded flex items-center justify-center">
+                                    <!-- Brand logo will be inserted here -->
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-sm opacity-80">Número de tarjeta</p>
+                                <p id="card-preview-number" class="text-xl font-mono tracking-wider">•••• •••• •••• ••••</p>
+                            </div>
+                            <div class="flex justify-between mt-6">
+                                <div>
+                                    <p class="text-sm opacity-80">Válida hasta</p>
+                                    <p id="card-preview-expiry" class="font-medium">MM/AA</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm opacity-80">Código de seguridad</p>
+                                    <p class="font-medium">•••</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Back -->
+                        <div class="card-back">
+                            <div class="h-8 bg-gray-900 mt-4 mb-6"></div>
+                            <div class="flex justify-end px-6">
+                                <div class="bg-gray-200 h-8 w-3/4 rounded flex items-center justify-end pr-4">
+                                    <span id="card-preview-cvc" class="text-gray-800 font-mono">•••</span>
+                                </div>
+                            </div>
+                            <div class="mt-8 px-6">
+                                <p class="text-xs opacity-70">Este es un diseño de tarjeta de demostración. No ingreses información real.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Form -->
+                <form id="paymentForm" class="space-y-4">
+                    <div class="relative">
+                        <label for="cardNumber" class="block mb-1 text-sm font-medium text-gray-700">Número de tarjeta</label>
+                        <div class="relative">
+                            <input type="text" id="cardNumber" name="cardNumber" 
+                                   class="card-input bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pl-3 pr-12" 
+                                   placeholder="1234 5678 9012 3456" maxlength="19"
+                                   oninput="formatCardNumber(this); detectCardType(this.value)">
+                            <div id="cardTypeIcon" class="card-icon">
+                                <!-- Icon will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="cardName" class="block mb-1 text-sm font-medium text-gray-700">Nombre en la tarjeta</label>
+                        <input type="text" id="cardName" name="cardName" 
+                               class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                               placeholder="Como aparece en la tarjeta"
+                               oninput="document.getElementById('card-preview-name').textContent = this.value.toUpperCase() || 'NOMBRE APELLIDO'">
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="cardExpiry" class="block mb-1 text-sm font-medium text-gray-700">Válida hasta</label>
+                            <input type="text" id="cardExpiry" name="cardExpiry" 
+                                   class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                   placeholder="MM/AA" maxlength="5"
+                                   oninput="formatExpiry(this); document.getElementById('card-preview-expiry').textContent = this.value || 'MM/AA'">
+                        </div>
+                        <div class="relative">
+                            <label for="cardCvc" class="block mb-1 text-sm font-medium text-gray-700">Código CVC</label>
+                            <input type="text" id="cardCvc" name="cardCvc" 
+                                   class="cvc-input bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                   placeholder="•••" maxlength="4"
+                                   oninput="document.getElementById('card-preview-cvc').textContent = this.value.replace(/./g, '•') || '•••'"
+                                   onfocus="document.querySelector('.card-container').classList.add('flipped')"
+                                   onblur="document.querySelector('.card-container').classList.remove('flipped')">
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4 hidden md:block">
+                        <button type="button" id="processPaymentButton" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg text-lg font-medium flex items-center justify-center">
+                            <span id="paymentButtonText">Pagar $0.00</span>
+                            <span id="paymentSpinner" class="ml-2 hidden">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Order Summary -->
+            <div class="bg-white p-4 md:p-6 rounded-lg shadow-sm">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Resumen de la cita</h2>
+                
+                <div class="border-b border-gray-200 pb-4 mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Psicólogo seleccionado</h3>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center text-white text-2xl font-bold" id="psychologistInitials">
+                            <!-- Initials will be inserted here -->
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-800" id="psychologistName">Dr. Nombre Apellido</p>
+                            <p class="text-sm text-gray-600" id="psychologistSpecialty">Especialidad</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border-b border-gray-200 pb-4 mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Detalles de la cita</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Fecha y hora:</span>
+                            <span class="font-medium" id="appointmentDateTime">25 Jul 2025, 14:00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Duración:</span>
+                            <span class="font-medium">50 minutos</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Modalidad:</span>
+                            <span class="font-medium">Video llamada</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border-b border-gray-200 pb-4 mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Resumen de pago</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Tarifa por sesión:</span>
+                            <span class="font-medium" id="sessionFee">$0.00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Comisión de servicio:</span>
+                            <span class="font-medium">$5.00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Impuestos:</span>
+                            <span class="font-medium">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pt-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-medium text-gray-800">Total a pagar:</span>
+                        <span class="text-2xl font-bold text-blue-600" id="totalAmount">$0.00</span>
+                    </div>
+                </div>
+                
+                <div class="mt-6 bg-blue-50 p-4 rounded-lg">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mt-1">
+                            <i class="fas fa-lock text-blue-500"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-blue-800">Tu pago está protegido con encriptación de alta seguridad. No almacenamos los datos de tu tarjeta.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Payment Methods -->
+        <div class="mt-8 bg-white p-4 md:p-6 rounded-lg shadow-sm">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Otros métodos de pago</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button class="flex items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/PayPal_Logo_Icon_2014.svg/1200px-PayPal_Logo_Icon_2014.svg.png" alt="PayPal" class="h-8">
+                </button>
+                
+                <button id="sinpeMovilButton" class="flex items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors" onclick="initSinpePayment()">
+                    <div class="flex items-center">
+                        <img src="https://images.seeklogo.com/logo-png/42/2/sinpe-movil-logo-png_seeklogo-424651.png" alt="SINPE Móvil" class="h-12 md:h-20">
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Botón de pago fijo para móviles -->
+        <div class="mobile-payment-button md:hidden">
+            <button type="button" id="mobileProcessPaymentButton" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg text-lg font-medium flex items-center justify-center">
+                <span id="mobilePaymentButtonText">Pagar $0.00</span>
+                <span id="mobilePaymentSpinner" class="ml-2 hidden">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </span>
+            </button>
+        </div>
+
+        <!-- SINPE Modal -->
+        <div id="sinpeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">Pagar con SINPE Móvil</h3>
+                    <button onclick="closeSinpeModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label for="sinpePhone" class="block mb-1 text-sm font-medium text-gray-700">Número de teléfono</label>
+                        <input type="tel" id="sinpePhone" class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="8888 8888">
+                    </div>
+                    
+                    <div class="pt-2">
+                        <button onclick="processSinpePayment()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium">
+                            Confirmar Pago
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Flowbite JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    
+    <script>
+        // Función para obtener el ID del usuario desde localStorage
+        function getUserId() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            return user ? user.id : null;
+        }
+
+        // Función para alternar el sidebar en móviles
+        function toggleSidebar() {
+            const sidebar = document.querySelector('aside');
+            const overlay = document.querySelector('.overlay');
+            
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+            
+            // Bloquear scroll del body cuando el menú está abierto
+            document.body.classList.toggle('no-scroll');
+        }
+
+        // Cerrar sidebar al hacer clic en un enlace en móviles
+        document.querySelectorAll('aside a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 768) {
+                    toggleSidebar();
+                }
+            });
+        });
+
+        // Cargar métodos de pago al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPaymentMethods();
+
+            // Configurar datos del psicólogo
+            const urlParams = new URLSearchParams(window.location.search);
+            const psychologist = JSON.parse(urlParams.get('psychologist') || localStorage.getItem('selectedPsychologist'));
+            
+            if (psychologist) {
+                localStorage.setItem('selectedPsychologist', JSON.stringify(psychologist));
+                
+                document.getElementById('psychologistInitials').textContent = 
+                    (psychologist.firstName ? psychologist.firstName.charAt(0) : '') + 
+                    (psychologist.lastName ? psychologist.lastName.charAt(0) : '');
+                
+                document.getElementById('psychologistName').textContent = 
+                    `${psychologist.firstName} ${psychologist.lastName}`;
+                
+                const specialties = Array.isArray(psychologist.specialties) ? 
+                    psychologist.specialties.join(', ') : psychologist.specialties;
+                document.getElementById('psychologistSpecialty').textContent = specialties;
+                
+                const hourlyRate = psychologist.hourlyRate || 0;
+                document.getElementById('sessionFee').textContent = `$${hourlyRate.toFixed(2)}`;
+                document.getElementById('totalAmount').textContent = `$${(hourlyRate + 5).toFixed(2)}`;
+                document.getElementById('paymentButtonText').textContent = `Pagar $${(hourlyRate + 5).toFixed(2)}`;
+                document.getElementById('mobilePaymentButtonText').textContent = `Pagar $${(hourlyRate + 5).toFixed(2)}`;
+            }
+            
+            // Configurar fecha de cita
+            const now = new Date();
+            const appointmentDate = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+            const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('appointmentDateTime').textContent = 
+                appointmentDate.toLocaleDateString('es-ES', options);
+
+            // Event listener para el botón de pago
+            document.getElementById('processPaymentButton').addEventListener('click', function() {
+                const defaultCard = JSON.parse(localStorage.getItem('defaultPaymentMethod'));
+                if (defaultCard) {
+                    processPaymentWithDefaultCard(defaultCard);
+                } else {
+                    processPayment();
+                }
+            });
+
+            // Event listener para el botón de pago móvil
+            document.getElementById('mobileProcessPaymentButton').addEventListener('click', function() {
+                const defaultCard = JSON.parse(localStorage.getItem('defaultPaymentMethod'));
+                if (defaultCard) {
+                    processPaymentWithDefaultCard(defaultCard);
+                } else {
+                    processPayment();
+                }
+            });
+        });
+
+        // Cargar métodos de pago del usuario
+        async function loadPaymentMethods() {
+            const userId = getUserId();
+            if (!userId) {
+                console.error('Usuario no autenticado');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/payment-methods/${userId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                if (!response.ok) throw new Error('Error al cargar métodos de pago');
+                
+                const data = await response.json();
+                
+                const defaultCard = data.find(card => card.isDefault);
+                
+                if (defaultCard) {
+                    document.getElementById('defaultCardSection').classList.remove('hidden');
+                    document.getElementById('defaultCardPreview').textContent = defaultCard.cardNumber;
+                    document.getElementById('defaultCardName').textContent = defaultCard.cardHolder;
+                    localStorage.setItem('defaultPaymentMethod', JSON.stringify(defaultCard));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al cargar métodos de pago. Inténtalo de nuevo.');
+            }
+        }
+
+        // Usar tarjeta predeterminada
+        function useDefaultCard() {
+            const defaultCard = JSON.parse(localStorage.getItem('defaultPaymentMethod'));
+            if (!defaultCard) return;
+
+            document.getElementById('cardNumber').value = defaultCard.cardNumber.replace(/\d{4}(?= \d{4})/g, "••••");
+            document.getElementById('cardName').value = defaultCard.cardHolder;
+            document.getElementById('cardExpiry').value = `${defaultCard.expirationMonth.toString().padStart(2, '0')}/${defaultCard.expirationYear.toString().slice(-2)}`;
+            
+            document.getElementById('card-preview-number').textContent = defaultCard.cardNumber.replace(/\d{4}(?= \d{4})/g, "••••");
+            document.getElementById('card-preview-name').textContent = defaultCard.cardHolder.toUpperCase();
+            document.getElementById('card-preview-expiry').textContent = `${defaultCard.expirationMonth.toString().padStart(2, '0')}/${defaultCard.expirationYear.toString().slice(-2)}`;
+        }
+
+        // Procesar pago con tarjeta predeterminada
+        async function processPaymentWithDefaultCard(card) {
+            const paymentButton = document.getElementById('processPaymentButton');
+            const mobilePaymentButton = document.getElementById('mobileProcessPaymentButton');
+            const originalText = paymentButton.innerHTML;
+            const mobileOriginalText = mobilePaymentButton.innerHTML;
+            
+            paymentButton.disabled = true;
+            mobilePaymentButton.disabled = true;
+            paymentButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando pago...';
+            mobilePaymentButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando pago...';
+            
+            try {
+                const psychologist = JSON.parse(localStorage.getItem('selectedPsychologist'));
+                const amount = psychologist.hourlyRate + 5;
+                
+                const response = await fetch('/api/payments/process-card', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        userId: getUserId(),
+                        cardId: card.id,
+                        amount: amount,
+                        psychologistId: psychologist.id,
+                        description: `Cita con ${psychologist.firstName} ${psychologist.lastName}`
+                    })
+                });
+                
+                if (!response.ok) {
+                    let errorMsg = response.statusText;
+                    try {
+                        const errorData = await response.json();
+                        errorMsg = errorData.message || errorMsg;
+                    } catch (e) {}
+                    
+                    throw new Error(errorMsg);
+                }
+                
+                const paymentResult = await response.json();
+                alert(`Pago exitoso. ID: ${paymentResult.transactionId}`);
+                window.location.href = 'appointments.html';
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al procesar el pago: ' + error.message);
+            } finally {
+                paymentButton.disabled = false;
+                mobilePaymentButton.disabled = false;
+                paymentButton.innerHTML = originalText;
+                mobilePaymentButton.innerHTML = mobileOriginalText;
+            }
+        }
+
+        // Procesar pago con nueva tarjeta
+        async function processPayment() {
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s+/g, '');
+            const cardName = document.getElementById('cardName').value;
+            const cardExpiry = document.getElementById('cardExpiry').value;
+            const cardCvc = document.getElementById('cardCvc').value;
+            const userId = getUserId();
+            
+            // Validaciones
+            if (!cardNumber || cardNumber.length < 16) {
+                alert('Por favor ingresa un número de tarjeta válido');
+                return;
+            }
+            
+            if (!cardName) {
+                alert('Por favor ingresa el nombre como aparece en la tarjeta');
+                return;
+            }
+            
+            if (!cardExpiry || cardExpiry.length < 5) {
+                alert('Por favor ingresa una fecha de expiración válida (MM/AA)');
+                return;
+            }
+            
+            if (!cardCvc || cardCvc.length < 3) {
+                alert('Por favor ingresa un código CVC válido');
+                return;
+            }
+            
+            if (!userId) {
+                alert('No se pudo identificar al usuario. Por favor inicia sesión nuevamente.');
+                return;
+            }
+            
+            // Mostrar loading
+            const paymentButton = document.getElementById('processPaymentButton');
+            const mobilePaymentButton = document.getElementById('mobileProcessPaymentButton');
+            const originalText = paymentButton.innerHTML;
+            const mobileOriginalText = mobilePaymentButton.innerHTML;
+            
+            paymentButton.disabled = true;
+            mobilePaymentButton.disabled = true;
+            paymentButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+            mobilePaymentButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+            
+            try {
+                const psychologist = JSON.parse(localStorage.getItem('selectedPsychologist'));
+                const amount = psychologist.hourlyRate + 5;
+                const [expMonth, expYear] = cardExpiry.split('/');
+                
+                const response = await fetch('/api/payments/process-card', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        cardNumber: cardNumber,
+                        cardHolder: cardName,
+                        expirationMonth: parseInt(expMonth),
+                        expirationYear: parseInt(expYear),
+                        cvv: cardCvc,
+                        amount: amount,
+                        psychologistId: psychologist.id,
+                        description: `Cita con ${psychologist.firstName} ${psychologist.lastName}`
+                    })
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Error al procesar el pago');
+                }
+                
+                const result = await response.json();
+                alert(`Pago exitoso. Referencia: ${result.transactionId}`);
+                window.location.href = 'appointments.html';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al procesar el pago: ' + error.message);
+            } finally {
+                paymentButton.disabled = false;
+                mobilePaymentButton.disabled = false;
+                paymentButton.innerHTML = originalText;
+                mobilePaymentButton.innerHTML = mobileOriginalText;
+            }
+        }
+
+        // Funciones para SINPE Móvil
+        let sinpePaymentState = 'init'; // init, verify, complete
+        let sinpeTransactionId = null;
+
+        function initSinpePayment() {
+            const userId = getUserId();
+            document.getElementById('sinpeModal').classList.remove('hidden');
+        }
+
+        function closeSinpeModal() {
+            document.getElementById('sinpeModal').classList.add('hidden');
+        }
+
+        async function processSinpePayment() {
+            const phoneNumber = document.getElementById('sinpePhone').value.replace(/\s+/g, '');
+            const psychologist = JSON.parse(localStorage.getItem('selectedPsychologist'));
+            
+            const button = document.querySelector('#sinpeModal button[onclick="processSinpePayment()"]');
+            const originalText = button.textContent;
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+
+            try {
+                const response = await fetch('/api/payments/process-sinpe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        phoneNumber: phoneNumber,
+                        psychologistId: psychologist.id
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Error procesando pago SINPE');
+                }
+
+                const result = await response.json();
+                closeSinpeModal();
+                alert('Pago con SINPE Móvil completado exitosamente. Referencia: ' + result.sinpeReference);
+                window.location.href = 'appointments.html';
+            } catch (error) {
+                console.error('Error en proceso SINPE:', error);
+                alert('Error: ' + error.message);
+            } finally {
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+        }
+
+        // Funciones auxiliares para formato de tarjeta
+        function formatCardNumber(input) {
+            let value = input.value.replace(/\s+/g, '').replace(/[^0-9]/g, '');
+            let formatted = '';
+            
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formatted += ' ';
+                }
+                formatted += value[i];
+            }
+            
+            input.value = formatted;
+            
+            // Update card preview
+            const preview = document.getElementById('card-preview-number');
+            if (value.length > 0) {
+                const visible = value.substring(0, 4);
+                const hidden = value.substring(4).replace(/./g, '•');
+                preview.textContent = `${visible} ${hidden.substring(0, 4)} ${hidden.substring(4, 8)} ${hidden.substring(8, 12)}`.substring(0, 19);
+            } else {
+                preview.textContent = '•••• •••• •••• ••••';
+            }
+        }
+        
+        function detectCardType(cardNumber) {
+            const firstDigit = cardNumber.replace(/\s+/g, '')[0];
+            const cardTypeIcon = document.getElementById('cardTypeIcon');
+            const cardBrandIcon = document.getElementById('card-brand-icon');
+            const cardInput = document.getElementById('cardNumber');
+            
+            // Reset
+            cardTypeIcon.innerHTML = '';
+            cardBrandIcon.innerHTML = '';
+            cardInput.classList.remove('visa', 'mastercard');
+            
+            if (!firstDigit) return;
+            
+            if (firstDigit === '4') {
+                // Visa
+                cardTypeIcon.innerHTML = '<i class="fab fa-cc-visa text-2xl text-blue-800"></i>';
+                cardBrandIcon.innerHTML = '<i class="fab fa-cc-visa text-2xl text-blue-800"></i>';
+                cardInput.classList.add('visa');
+            } else if (firstDigit === '5') {
+                // Mastercard
+                cardTypeIcon.innerHTML = '<i class="fab fa-cc-mastercard text-2xl text-red-600"></i>';
+                cardBrandIcon.innerHTML = '<i class="fab fa-cc-mastercard text-2xl text-red-600"></i>';
+                cardInput.classList.add('mastercard');
+            }
+        }
+        
+        function formatExpiry(input) {
+            let value = input.value.replace(/\s+/g, '').replace(/[^0-9]/g, '');
+            
+            if (value.length > 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            
+            input.value = value;
+        }
+
+        // Funciones auxiliares
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

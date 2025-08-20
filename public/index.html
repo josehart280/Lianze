@@ -39,123 +39,108 @@
         class="container mx-auto px-4 py-3 flex justify-between items-center"
       >
       
-        <a href="#" class="logo">Lianze</a>
+        <!-- Desktop Navigation -->
         <div class="hidden md:flex items-center space-x-6">
-          <a href="#" class="text-gray-700 hover:text-primary transition-colors"
-            >Inicio</a
-          >
-          <a href="#" class="text-gray-700 hover:text-primary transition-colors"
-            >Psicólogos</a
-          >
-          <a href="#" class="text-gray-700 hover:text-primary transition-colors"
-            >Servicios</a
-          >
-          <a href="#" class="text-gray-700 hover:text-primary transition-colors"
-            >Blog</a
-          >
-          <a href="#" class="text-gray-700 hover:text-primary transition-colors"
-            >Comunidad</a
-          >
+          <a href="#" class="text-gray-700 hover:text-primary transition-colors">Inicio</a>
+          <a href="#" class="text-gray-700 hover:text-primary transition-colors">Psicólogos</a>
+          <a href="#" class="text-gray-700 hover:text-primary transition-colors">Servicios</a>
+          <a href="#" class="text-gray-700 hover:text-primary transition-colors">Blog</a>
+          <a href="#" class="text-gray-700 hover:text-primary transition-colors">Comunidad</a>
         </div>
-        <div class="flex items-center space-x-4">
-          <a
-            href="login.html"
-            class="hidden md:block text-primary hover:text-primary-dark font-medium !rounded-button whitespace-nowrap"
-          >
+        
+        <!-- Auth Buttons Desktop -->
+        <div class="hidden md:flex items-center space-x-4">
+          <a href="login.html" class="text-primary hover:text-primary-dark font-medium whitespace-nowrap">
             Iniciar Sesión
           </a>
-          <a
-            id="registerBtn"
-            class="hidden md:block bg-primary text-white px-4 py-2 font-medium hover:bg-primary/90 transition-colors !rounded-button whitespace-nowrap" href="register.html"
-          >
+          <a href="register.html" class="bg-primary text-white px-4 py-2 font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">
             Registrarse
-        </a>
-          <div
-            class="md:hidden w-10 h-10 flex items-center justify-center"
-            id="mobileMenuBtn"
-          >
-            <i class="ri-menu-line ri-lg"></i>
-          </div>
+          </a>
         </div>
+        
+        <!-- Mobile Menu Button -->
+        <button id="mobileMenuBtn" class="md:hidden w-10 h-10 flex items-center justify-center">
+          <i class="ri-menu-line ri-lg"></i>
+        </button>
       </div>
-      <div
-        id="mobileMenu"
-        class="hidden md:hidden bg-white px-4 py-2 shadow-md"
-      >
+      
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="hidden md:hidden bg-white px-4 py-2 shadow-md">
         <nav class="flex flex-col space-y-3 py-3">
-          <a
-            href="#"
-            class="text-gray-700 hover:text-primary transition-colors py-2"
-            >Inicio</a
-          >
-          <a
-            href="#"
-            class="text-gray-700 hover:text-primary transition-colors py-2"
-            >Psicólogos</a
-          >
-          <a
-            href="#"
-            class="text-gray-700 hover:text-primary transition-colors py-2"
-            >Servicios</a
-          >
-          <a
-            href="#"
-            class="text-gray-700 hover:text-primary transition-colors py-2"
-            >Blog</a
-          >
-          <a
-            href="#"
-            class="text-gray-700 hover:text-primary transition-colors py-2"
-            >Comunidad</a
-          >
+          <a href="#" class="text-gray-700 hover:text-primary transition-colors py-2">Inicio</a>
+          <a href="#" class="text-gray-700 hover:text-primary transition-colors py-2">Psicólogos</a>
+          <a href="#" class="text-gray-700 hover:text-primary transition-colors py-2">Servicios</a>
+          <a href="#" class="text-gray-700 hover:text-primary transition-colors py-2">Blog</a>
+          <a href="#" class="text-gray-700 hover:text-primary transition-colors py-2">Comunidad</a>
+          
           <div class="flex flex-col space-y-2 pt-2 border-t border-gray-100">
-            <a
-              href="login.html"
-              class="w-full text-center py-2 text-primary font-medium !rounded-button whitespace-nowrap"
-            >
+            <a href="login.html" class="w-full text-center py-2 text-primary font-medium whitespace-nowrap">
               Iniciar Sesión
             </a>
-            <button
-              class="w-full text-center py-2 bg-primary text-white font-medium hover:bg-primary/90 transition-colors !rounded-button whitespace-nowrap"
-            >
+            <a href="register.html" class="w-full text-center py-2 bg-primary text-white font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">
               Registrarse
-            </button>
+            </a>
           </div>
         </nav>
       </div>
     </header>
     <main class="flex-grow">
-      <!-- Hero Section -->
-      <section class="hero-section relative">
-        <div
-          class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"
-        ></div>
-        <div class="container mx-auto px-4 py-16 md:py-24 relative">
-          <div class="max-w-xl">
-            <h1
-              class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4"
-            >
-              Encuentra tu camino hacia el bienestar emocional
-            </h1>
-            <p class="text-lg text-gray-700 mb-8">
-              Conectamos a pacientes con psicólogos profesionales para sesiones
-              online personalizadas. Tu salud mental es nuestra prioridad.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4">
-              <button
-                class="bg-primary text-white px-6 py-3 font-medium hover:bg-primary/90 transition-colors !rounded-button whitespace-nowrap"
-              >
-                Buscar Psicólogo
-              </button>
-              <button
-                class="bg-white text-primary border border-primary px-6 py-3 font-medium hover:bg-gray-50 transition-colors !rounded-button whitespace-nowrap"
-              >
-                Hacer Test Gratuito
-              </button>
-            </div>
-          </div>
+
+      <section class="py-16 bg-primary">
+        <div class="container mx-auto px-4 text-center">
+          <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">
+            Comienza tu camino hacia el bienestar hoy
+          </h2>
+          <p class="text-white/90 mb-8 max-w-2xl mx-auto">
+            Regístrate ahora y obtén acceso a tu primer test de evaluación
+            gratuito.
+          </p>
+          <button
+            class="bg-white text-primary px-6 py-3 font-medium hover:bg-gray-100 transition-colors !rounded-button whitespace-nowrap"
+            onclick="window.location.href='register.html'"
+          >
+            Crear cuenta gratis
+          </button>
+
+          <button
+            class="bg-white text-primary px-6 py-3 font-medium hover:bg-gray-100 transition-colors !rounded-button whitespace-nowrap"
+            onclick="window.location.href='login.html'"
+          >
+            Inicia Sesion
+          </button>
         </div>
       </section>
+      <!-- Hero Section -->
+<section class="hero-section relative">
+  <div class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+  <div class="container mx-auto px-4 py-16 md:py-24 relative">
+    <div class="max-w-xl">
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+        Encuentra tu camino hacia el bienestar emocional
+      </h1>
+      <p class="text-lg text-gray-700 mb-8">
+        Conectamos a pacientes con psicólogos profesionales para sesiones
+        online personalizadas. Tu salud mental es nuestra prioridad.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <button
+          class="bg-primary text-white px-6 py-3 font-medium hover:bg-primary/90 transition-colors rounded-lg whitespace-nowrap"
+          onclick="window.location.href='login.html'"
+        >
+          Buscar Psicólogo
+        </button>
+        <button
+          class="bg-white text-primary border border-primary px-6 py-3 font-medium hover:bg-gray-50 transition-colors rounded-lg whitespace-nowrap"
+          onclick="window.location.href='login.html'"
+        >
+          Hacer Test Gratuito
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
       <!-- Search Section -->
       <section class="py-12 bg-white">
         <div class="container mx-auto px-4">
@@ -184,25 +169,8 @@
                     id="specialtyDropdown"
                     class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10"
                   >
-                    <div class="py-1">
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        Ansiedad
-                      </div>
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        Depresión
-                      </div>
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        Terapia de pareja
-                      </div>
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        Autoestima
-                      </div>
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        Estrés
-                      </div>
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        Trauma
-                      </div>
+                    <div class="py-1" id="specialtyOptions">
+                      <!-- Options will be loaded here dynamically -->
                     </div>
                   </div>
                 </div>
@@ -227,22 +195,8 @@
                     id="languageDropdown"
                     class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10"
                   >
-                    <div class="py-1">
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        Español
-                      </div>
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        Inglés
-                      </div>
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        Francés
-                      </div>
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        Alemán
-                      </div>
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        Italiano
-                      </div>
+                    <div class="py-1" id="languageOptions">
+                      <!-- Options will be loaded here dynamically -->
                     </div>
                   </div>
                 </div>
@@ -268,19 +222,19 @@
                     class="hidden absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10"
                   >
                     <div class="py-1">
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-price="30">
                         Menos de €30
                       </div>
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-price="50">
                         €30 - €50
                       </div>
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-price="70">
                         €50 - €70
                       </div>
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-price="90">
                         €70 - €90
                       </div>
-                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-price="9999">
                         Más de €90
                       </div>
                     </div>
@@ -288,16 +242,14 @@
                 </div>
               </div>
             </div>
-            <a
-              href="https://readdy.ai/home/f08cb069-abcf-44fb-a146-6d469706f938/c873aec8-70ac-4bdb-ba00-d404bfebb38b"
-              data-readdy="true"
-            >
+            <div>
               <button
+                id="searchPsychologistsBtn"
                 class="w-full bg-primary text-white py-3 font-medium hover:bg-primary/90 transition-colors !rounded-button whitespace-nowrap"
               >
                 Buscar Psicólogos
               </button>
-            </a>
+            </div>
           </div>
         </div>
       </section>
@@ -315,153 +267,9 @@
               </div>
             </a>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div class="aspect-w-3 aspect-h-2 bg-gray-200">
-                <img
-                  src="https://readdy.ai/api/search-image?query=Professional%20female%20psychologist%20with%20glasses%20and%20warm%20smile%2C%20wearing%20business%20casual%20attire%2C%20in%20an%20office%20setting%20with%20bookshelves%2C%20plants%2C%20and%20a%20comfortable%20chair.%20Natural%20lighting%2C%20professional%20portrait%20style%2C%20high%20quality%20photorealistic%20image.&width=600&height=400&seq=psych1&orientation=landscape"
-                  alt="Dra. Lucía Martínez"
-                  class="object-cover w-full h-full"
-                />
-              </div>
-              <div class="p-5">
-                <div class="flex items-center mb-2">
-                  <h3 class="text-lg font-semibold mr-2">
-                    Dra. Lucía Martínez
-                  </h3>
-                  <div class="flex">
-                    <div
-                      class="w-4 h-4 flex items-center justify-center text-yellow-400"
-                    >
-                      <i class="ri-star-fill"></i>
-                    </div>
-                    <span class="text-sm font-medium ml-1">4.9</span>
-                  </div>
-                </div>
-                <p class="text-gray-600 text-sm mb-3">
-                  Psicóloga Clínica • Terapia Cognitivo-Conductual
-                </p>
-                <div class="flex flex-wrap gap-2 mb-4">
-                  <span
-                    class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs"
-                    >Ansiedad</span
-                  >
-                  <span
-                    class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs"
-                    >Depresión</span
-                  >
-                  <span
-                    class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs"
-                    >Estrés</span
-                  >
-                </div>
-                <div class="flex justify-between items-center">
-                  <span class="text-gray-900 font-semibold">€50 / sesión</span>
-                  <button
-                    class="bg-primary text-white px-4 py-2 font-medium hover:bg-primary/90 transition-colors !rounded-button whitespace-nowrap"
-                  >
-                    Ver perfil
-                  </button>
-                </div>
-              </div>
-            </div>
-            
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div class="aspect-w-3 aspect-h-2 bg-gray-200">
-                <img
-                  src="https://readdy.ai/api/search-image?query=Professional%20male%20psychologist%20with%20beard%2C%20wearing%20casual%20professional%20attire%2C%20in%20a%20modern%20therapy%20office%20with%20minimalist%20decor%2C%20plants%2C%20and%20natural%20light.%20Warm%20and%20approachable%20expression%2C%20high%20quality%20photorealistic%20image.&width=600&height=400&seq=psych2&orientation=landscape"
-                  alt="Dr. Carlos Ruiz"
-                  class="object-cover w-full h-full"
-                />
-              </div>
-              <div class="p-5">
-                <div class="flex items-center mb-2">
-                  <h3 class="text-lg font-semibold mr-2">Dr. Carlos Ruiz</h3>
-                  <div class="flex">
-                    <div
-                      class="w-4 h-4 flex items-center justify-center text-yellow-400"
-                    >
-                      <i class="ri-star-fill"></i>
-                    </div>
-                    <span class="text-sm font-medium ml-1">4.8</span>
-                  </div>
-                </div>
-                <p class="text-gray-600 text-sm mb-3">
-                  Psicólogo • Terapia Sistémica • Mindfulness
-                </p>
-                <div class="flex flex-wrap gap-2 mb-4">
-                  <span
-                    class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs"
-                    >Relaciones</span
-                  >
-                  <span
-                    class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs"
-                    >Autoestima</span
-                  >
-                  <span
-                    class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs"
-                    >Trauma</span
-                  >
-                </div>
-                <div class="flex justify-between items-center">
-                  <span class="text-gray-900 font-semibold">€45 / sesión</span>
-                  <button
-                    class="bg-primary text-white px-4 py-2 font-medium hover:bg-primary/90 transition-colors !rounded-button whitespace-nowrap"
-                  >
-                    Ver perfil
-                  </button>
-                </div>
-              </div>
-            </div>
-           
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div class="aspect-w-3 aspect-h-2 bg-gray-200">
-                <img
-                  src="https://readdy.ai/api/search-image?query=Young%20female%20psychologist%20with%20curly%20hair%2C%20wearing%20smart%20casual%20clothing%2C%20in%20a%20bright%20modern%20office%20with%20plants%20and%20bookshelves.%20Friendly%20and%20professional%20demeanor%2C%20sitting%20at%20a%20desk%20with%20a%20notebook%2C%20high%20quality%20photorealistic%20image.&width=600&height=400&seq=psych3&orientation=landscape"
-                  alt="Dra. Elena Gómez"
-                  class="object-cover w-full h-full"
-                />
-              </div>
-              <div class="p-5">
-                <div class="flex items-center mb-2">
-                  <h3 class="text-lg font-semibold mr-2">Dra. Elena Gómez</h3>
-                  <div class="flex">
-                    <div
-                      class="w-4 h-4 flex items-center justify-center text-yellow-400"
-                    >
-                      <i class="ri-star-fill"></i>
-                    </div>
-                    <span class="text-sm font-medium ml-1">4.7</span>
-                  </div>
-                </div>
-                <p class="text-gray-600 text-sm mb-3">
-                  Psicóloga Infantil • Terapia de Juego
-                </p>
-                <div class="flex flex-wrap gap-2 mb-4">
-                  <span
-                    class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs"
-                    >TDAH</span
-                  >
-                  <span
-                    class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs"
-                    >Aprendizaje</span
-                  >
-                  <span
-                    class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs"
-                    >Conducta</span
-                  >
-                </div>
-                <div class="flex justify-between items-center">
-                  <span class="text-gray-900 font-semibold">€55 / sesión</span>
-                  <button
-                    class="bg-primary text-white px-4 py-2 font-medium hover:bg-primary/90 transition-colors !rounded-button whitespace-nowrap"
-                  >
-                    Ver perfil
-                  </button>
-                </div>
-              </div>
-            </div>
+          <div id="psychologistsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Psychologist cards will be loaded here -->
+            <p id="noPsychologistsMessage" class="hidden col-span-full text-center text-gray-600">No se encontraron psicólogos con los filtros seleccionados.</p>
           </div>
         </div>
       </section>
@@ -701,23 +509,7 @@
           </div>
         </div>
       </section>
-      <!-- CTA Section -->
-      <section class="py-16 bg-primary">
-        <div class="container mx-auto px-4 text-center">
-          <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">
-            Comienza tu camino hacia el bienestar hoy
-          </h2>
-          <p class="text-white/90 mb-8 max-w-2xl mx-auto">
-            Regístrate ahora y obtén acceso a tu primer test de evaluación
-            gratuito.
-          </p>
-          <button
-            class="bg-white text-primary px-6 py-3 font-medium hover:bg-gray-100 transition-colors !rounded-button whitespace-nowrap"
-          >
-            Crear cuenta gratis
-          </button>
-        </div>
-      </section>
+      
       <!-- Blog Preview -->
       <section class="py-12 bg-white">
         <div class="container mx-auto px-4">
@@ -968,6 +760,7 @@
                 <button
                   type="submit"
                   class="bg-primary text-white px-4 py-2 rounded-r hover:bg-primary/90 transition-colors !rounded-button whitespace-nowrap"
+                  onclick="window.location.href='register.html'"
                 >
                   Suscribir
                 </button>
@@ -1016,65 +809,364 @@
         </div>
       </div>
     </footer>
-    <script id="mobileMenuScript">
+        <script>
       document.addEventListener("DOMContentLoaded", function () {
+        // Mobile menu toggle
         const mobileMenuBtn = document.getElementById("mobileMenuBtn");
         const mobileMenu = document.getElementById("mobileMenu");
-        mobileMenuBtn.addEventListener("click", function () {
-          mobileMenu.classList.toggle("hidden");
-        });
-      });
-    </script>
-    <script id="formControlsScript">
-      document.addEventListener("DOMContentLoaded", function () {
-        // Custom form controls functionality
-        const checkboxes = document.querySelectorAll(".custom-checkbox");
-        checkboxes.forEach((checkbox) => {
-          checkbox.addEventListener("click", function () {
-            this.checked = !this.checked;
-          });
-        });
-        const radioButtons = document.querySelectorAll(".custom-radio");
-        radioButtons.forEach((radio) => {
-          radio.addEventListener("click", function () {
-            const name = this.getAttribute("name");
-            document.querySelectorAll(`input[name="${name}"]`).forEach((r) => {
-              r.checked = false;
+        
+        if (mobileMenuBtn && mobileMenu) {
+          mobileMenuBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            mobileMenu.classList.toggle("hidden");
+            
+            // Close menu when clicking outside
+            document.addEventListener("click", function closeMenu(e) {
+              if (!mobileMenu.contains(e.target) && e.target !== mobileMenuBtn) {
+                mobileMenu.classList.add("hidden");
+                document.removeEventListener("click", closeMenu);
+              }
             });
-            this.checked = true;
           });
-        });
+        }
+
         // Dropdown functionality
         function setupDropdown(selectorId, dropdownId, valueId) {
           const selector = document.getElementById(selectorId);
           const dropdown = document.getElementById(dropdownId);
           const valueSpan = document.getElementById(valueId);
+          
           if (selector && dropdown && valueSpan) {
             selector.addEventListener("click", function (e) {
               e.stopPropagation();
+              
+              // Close other open dropdowns
+              document.querySelectorAll('[id$="Dropdown"]').forEach(dd => {
+                if (dd.id !== dropdownId) dd.classList.add("hidden");
+              });
+              
               dropdown.classList.toggle("hidden");
             });
-            dropdown.querySelectorAll("div.px-4").forEach((option) => {
+            
+            // Handle option clicks
+            dropdown.querySelectorAll("div[class*='px-4']").forEach(option => {
               option.addEventListener("click", function (e) {
                 e.stopPropagation();
                 valueSpan.textContent = this.textContent;
+                if (this.dataset.price) {
+                  valueSpan.dataset.price = this.dataset.price;
+                }
                 dropdown.classList.add("hidden");
               });
             });
           }
         }
-        // Close dropdowns when clicking outside
-        document.addEventListener("click", function () {
-          const dropdowns = document.querySelectorAll('[id$="Dropdown"]');
-          dropdowns.forEach((dropdown) => {
-            dropdown.classList.add("hidden");
-          });
-        });
-        // Setup each dropdown
+
+        // Setup all dropdowns
         setupDropdown("specialtySelector", "specialtyDropdown", "specialtyValue");
         setupDropdown("languageSelector", "languageDropdown", "languageValue");
         setupDropdown("priceSelector", "priceDropdown", "priceValue");
+
+        // Close dropdowns when clicking outside
+        document.addEventListener("click", function () {
+          document.querySelectorAll('[id$="Dropdown"]').forEach(dropdown => {
+            dropdown.classList.add("hidden");
+          });
+        });
+
+        // Search psychologists button
+        const searchBtn = document.getElementById("searchPsychologistsBtn");
+        if (searchBtn) {
+          searchBtn.addEventListener("click", function() {
+            // Simulate search - in a real app this would call your API
+            alert("Buscando psicólogos con los filtros seleccionados...");
+          });
+        }
       });
     </script>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Mobile menu toggle
+  const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener("click", function () {
+      mobileMenu.classList.toggle("hidden");
+    });
+  }
+
+  // Botones de encuesta/test - llevan a login.html
+  const testButtons = document.querySelectorAll('button:contains("Test Gratuito"), button:contains("Hacer Test Gratuito")');
+  testButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      window.location.href = 'login.html';
+    });
+  });
+
+  // Botón "Crear cuenta gratis" - lleva a register.html
+  const createAccountButtons = document.querySelectorAll('button:contains("Crear cuenta gratis"), button:contains("Registrarse")');
+  createAccountButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      window.location.href = 'register.html';
+    });
+  });
+
+  // Función para buscar psicólogos
+  
+  async function searchPsychologists() {
+  try {
+    // Obtener valores de filtro
+    const specialty = document.getElementById('specialtyValue').textContent;
+    const language = document.getElementById('languageValue').textContent;
+    const price = document.getElementById('priceValue').textContent;
+    
+    // Construir parámetros de consulta
+    const params = new URLSearchParams();
+    if (specialty !== 'Selecciona especialidad') params.append('specialty', specialty);
+    if (language !== 'Selecciona idioma') params.append('language', language);
+    if (price !== 'Rango de precio') {
+      // Convertir texto de precio a valor numérico
+      const priceValue = price === 'Menos de €30' ? 30 :
+                        price === '€30 - €50' ? 50 :
+                        price === '€50 - €70' ? 70 :
+                        price === '€70 - €90' ? 90 :
+                        price === 'Más de €90' ? 9999 : null;
+      if (priceValue) params.append('maxPrice', priceValue);
+    }
+    
+    // Hacer la petición
+    const response = await fetch(`/api/psychologists/filter?${params.toString()}`);
+    if (!response.ok) throw new Error('Error searching psychologists');
+    
+    const psychologists = await response.json();
+    displayPsychologists(psychologists);
+    
+  } catch (error) {
+    console.error('Error searching psychologists:', error);
+    alert('Error searching psychologists. Please try again.');
+  }
+}
+
+
+
+
+
+  // Función para mostrar psicólogos en la interfaz
+  
+function displayPsychologists(psychologists) {
+  const container = document.getElementById('psychologistsList');
+  const noResultsMsg = document.getElementById('noPsychologistsMessage');
+  
+  // Limpiar resultados anteriores
+  container.innerHTML = '';
+  
+  if (psychologists.length === 0) {
+    noResultsMsg.classList.remove('hidden');
+    return;
+  }
+  
+  noResultsMsg.classList.add('hidden');
+  
+  // Mostrar cada psicólogo
+  psychologists.forEach(psychologist => {
+    const card = document.createElement('div');
+    card.className = 'bg-white rounded-lg shadow-sm overflow-hidden';
+
+    card.innerHTML = `
+      <div class="aspect-w-3 aspect-h-2 bg-gray-200">
+        <img src="https://placehold.co/600x400" alt="${psychologist.firstName} ${psychologist.lastName}" class="object-cover w-full h-full">
+      </div>
+      <div class="p-5">
+        <div class="flex items-center mb-2">
+          <h3 class="text-lg font-semibold mr-2">
+            ${psychologist.firstName} ${psychologist.lastName}
+          </h3>
+          ${psychologist.isVerified ? '<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Verificado</span>' : ''}
+        </div>
+        <div class="flex items-center mb-3">
+          <div class="flex text-yellow-400 mr-2">
+            ${generateStars(psychologist.rating || 0)}
+          </div>
+          <span class="text-sm text-gray-600">(${psychologist.totalReviews || 0} reseñas)</span>
+        </div>
+        <p class="text-gray-600 text-sm mb-3">
+          ${Array.isArray(psychologist.specialties) ? psychologist.specialties.join(', ') : psychologist.specialties}
+        </p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          ${formatTags(psychologist.languages, 'blue')}
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-900 font-semibold">€${psychologist.hourlyRate || '0'} / sesión</span>
+          <button class="bg-primary text-white px-4 py-2 font-medium hover:bg-primary/90 transition-colors rounded-lg"
+                  onclick="window.location.href='login.html'">
+            Ver perfil
+          </button>
+        </div>
+      </div>
+    `;
+
+        container.appendChild(card);
+  });
+}
+
+
+
+  // Función para generar estrellas de calificación
+  function generateStars(rating) {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  let stars = '';
+  
+  for (let i = 0; i < 5; i++) {
+    if (i < fullStars) {
+      stars += '<i class="ri-star-fill"></i>';
+    } else if (i === fullStars && hasHalfStar) {
+      stars += '<i class="ri-star-half-fill"></i>';
+    } else {
+      stars += '<i class="ri-star-line"></i>';
+    }
+  }
+  
+  return stars;
+}
+
+
+function formatTags(items, color) {
+  if (!items) return '';
+  const tags = Array.isArray(items) ? items : items.split(',');
+  return tags.map(tag => 
+    `<span class="bg-${color}-50 text-${color}-700 px-2 py-1 rounded text-xs">${tag.trim()}</span>`
+  ).join('');
+}
+
+
+
+
+
+
+  // Cargar opciones de filtros y psicólogos al inicio
+ 
+  async function loadInitialData() {
+  try {
+    // Cargar opciones de filtro
+    const filtersResponse = await fetch('/api/psychologists/filters-data');
+    if (!filtersResponse.ok) throw new Error('Error loading filter options');
+    const filtersData = await filtersResponse.json();
+    
+    // Llenar dropdown de especialidades
+    const specialtyOptions = document.getElementById('specialtyOptions');
+    filtersData.specialties.forEach(specialty => {
+      const option = document.createElement('div');
+      option.className = 'px-4 py-2 hover:bg-gray-100 cursor-pointer';
+      option.textContent = specialty;
+      option.addEventListener('click', () => {
+        document.getElementById('specialtyValue').textContent = specialty;
+        document.getElementById('specialtyDropdown').classList.add('hidden');
+      });
+      specialtyOptions.appendChild(option);
+    });
+    
+    // Llenar dropdown de idiomas
+    const languageOptions = document.getElementById('languageOptions');
+    filtersData.languages.forEach(language => {
+      const option = document.createElement('div');
+      option.className = 'px-4 py-2 hover:bg-gray-100 cursor-pointer';
+      option.textContent = language;
+      option.addEventListener('click', () => {
+        document.getElementById('languageValue').textContent = language;
+        document.getElementById('languageDropdown').classList.add('hidden');
+      });
+      languageOptions.appendChild(option);
+    });
+    
+    // Cargar psicólogos inicialmente
+    await searchPsychologists();
+    
+  } catch (error) {
+    console.error('Error loading initial data:', error);
+    alert('Error loading page. Please refresh.');
+  }}
+
+
+
+  // Función para poblar los desplegables
+  function populateDropdown(containerId, items, valueSpanId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '';
+    items.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'px-4 py-2 hover:bg-gray-100 cursor-pointer';
+      div.textContent = item;
+      div.addEventListener('click', function() {
+        document.getElementById(valueSpanId).textContent = item;
+        // Close parent dropdown
+        this.closest('.relative').querySelector('[id$="Dropdown"]').classList.add('hidden');
+      });
+      container.appendChild(div);
+    });
+  }
+
+  // Asignar la función de búsqueda al botón "Buscar Psicólogos"
+  const searchPsychologistsBtn = document.getElementById('searchPsychologistsBtn');
+  if (searchPsychologistsBtn) {
+    searchPsychologistsBtn.addEventListener('click', searchPsychologists);
+  }
+
+  // Dropdown functionality
+  function setupDropdown(selectorId, dropdownId, valueId) {
+    const selector = document.getElementById(selectorId);
+    const dropdown = document.getElementById(dropdownId);
+    const valueSpan = document.getElementById(valueId);
+    
+    if (selector && dropdown && valueSpan) {
+      selector.addEventListener("click", function (e) {
+        e.stopPropagation();
+        dropdown.classList.toggle("hidden");
+      });
+      
+      // For price dropdown, use data-price attribute
+      if (selectorId === 'priceSelector') {
+        dropdown.querySelectorAll("div.px-4").forEach((option) => {
+          option.addEventListener("click", function (e) {
+            e.stopPropagation();
+            valueSpan.textContent = this.textContent;
+            valueSpan.dataset.price = this.dataset.price; // Store numeric value
+            dropdown.classList.add("hidden");
+          });
+        });
+      } else {
+        // For other dropdowns, textContent is enough
+        dropdown.querySelectorAll("div.px-4").forEach((option) => {
+          option.addEventListener("click", function (e) {
+            e.stopPropagation();
+            valueSpan.textContent = this.textContent;
+            dropdown.classList.add("hidden");
+          });
+        });
+      }
+    }
+  }
+
+  // Setup each dropdown
+  setupDropdown("specialtySelector", "specialtyDropdown", "specialtyValue");
+  setupDropdown("languageSelector", "languageDropdown", "languageValue");
+  setupDropdown("priceSelector", "priceDropdown", "priceValue");
+
+  // Close dropdowns when clicking outside
+  document.addEventListener("click", function (event) {
+    const dropdowns = document.querySelectorAll('[id$="Dropdown"]');
+    dropdowns.forEach((dropdown) => {
+      const selector = dropdown.previousElementSibling; // Assuming selector is sibling
+      if (selector && !selector.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.add("hidden");
+      }
+    });
+  });
+
+  // Load initial data when the DOM is fully loaded
+  loadInitialData();
+});
+</script>
   </body>
 </html>

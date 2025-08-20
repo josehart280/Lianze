@@ -5,28 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Psicólogo - LIANZE</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/psychologist_dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+
+
+     <nav class="mobile-nav md:hidden">
+        <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <a href="index.html" class="mobile-logo">LIANZE</a>
+    </nav>
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <a href="index.html" class="logo">LIANZE</a>
+            <a href="index.html" class="logo">
+                <span class="logo-text">LIANZE</span>
+                <span class="logo-icon"><i class="fas fa-heart"></i></span>
+            </a>
+            <button class="close-sidebar" onclick="toggleSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="dashboard-psychologist.html" class="active">Dashboard</a></li>
-                <li><a href="patients.html">Mis Pacientes</a></li>
-                <li><a href="appointments-psy.html">Citas</a></li>
-                <li><a href="calendar-psy.html">Calendario</a></li>
-                <li><a href="reports.html">Reportes</a></li>
-                <li><a href="profile-psy.html">Mi Perfil</a></li>
-                <li><a href="settings.html">Configuración</a></li>
+                <li class="active"><a href="dashboard-psychologist.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="patients.html"><i class="fas fa-users"></i> Mis Pacientes</a></li>
+                <li><a href="appointments-psy.html"><i class="fas fa-calendar-check"></i> Citas</a></li>
+                <li><a href="calendar-psy.html"><i class="fas fa-calendar-alt"></i> Calendario</a></li>
+                <li><a href="reports.html"><i class="fas fa-chart-bar"></i> Reportes</a></li>
+                <li><a href="profile-psy.html"><i class="fas fa-user"></i> Mi Perfil</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> Configuración</a></li>
             </ul>
         </nav>
         <div class="sidebar-footer">
-            <a href="index.html" class="logout-btn">Cerrar Sesión</a>
+            <a href="index.html" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Cerrar Sesión</span>
+            </a>
         </div>
     </aside>
+
+    <!-- Overlay para mobile -->
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Overlay para mobile -->
+    <div class="overlay"></div>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -37,29 +60,29 @@
 
         <!-- Stats Cards -->
         <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">👥</div>
+            <div class="stat-card fade-in">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
                 <div class="stat-info">
                     <div class="stat-number">24</div>
                     <div class="stat-label">Pacientes Activos</div>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon">📅</div>
+            <div class="stat-card fade-in">
+                <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
                 <div class="stat-info">
                     <div class="stat-number">8</div>
                     <div class="stat-label">Citas Hoy</div>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon">💰</div>
+            <div class="stat-card fade-in">
+                <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
                 <div class="stat-info">
                     <div class="stat-number">$2,400</div>
                     <div class="stat-label">Ingresos del Mes</div>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon">⭐</div>
+            <div class="stat-card fade-in">
+                <div class="stat-icon"><i class="fas fa-star"></i></div>
                 <div class="stat-info">
                     <div class="stat-number">4.9</div>
                     <div class="stat-label">Calificación</div>
@@ -69,9 +92,9 @@
 
         <!-- Today's Schedule -->
         <section class="todays-schedule">
-            <h2>Agenda de Hoy</h2>
+            <h2><i class="fas fa-calendar-day"></i> Agenda de Hoy</h2>
             <div class="schedule-list">
-                <div class="schedule-item">
+                <div class="schedule-item fade-in">
                     <div class="schedule-time">09:00</div>
                     <div class="schedule-content">
                         <h4>María González</h4>
@@ -81,7 +104,7 @@
                         <button class="btn btn-sm btn-primary">Iniciar</button>
                     </div>
                 </div>
-                <div class="schedule-item">
+                <div class="schedule-item fade-in">
                     <div class="schedule-time">10:30</div>
                     <div class="schedule-content">
                         <h4>Carlos Ruiz</h4>
@@ -91,7 +114,7 @@
                         <button class="btn btn-sm btn-outline">Ver Perfil</button>
                     </div>
                 </div>
-                <div class="schedule-item">
+                <div class="schedule-item fade-in">
                     <div class="schedule-time">14:00</div>
                     <div class="schedule-content">
                         <h4>Ana López</h4>
@@ -106,9 +129,9 @@
 
         <!-- Recent Patients -->
         <section class="recent-patients">
-            <h2>Pacientes Recientes</h2>
+            <h2><i class="fas fa-user-clock"></i> Pacientes Recientes</h2>
             <div class="patients-grid">
-                <div class="patient-card">
+                <div class="patient-card fade-in">
                     <div class="patient-avatar">MG</div>
                     <div class="patient-info">
                         <h4>María González</h4>
@@ -116,7 +139,7 @@
                         <span class="badge badge-success">Activo</span>
                     </div>
                 </div>
-                <div class="patient-card">
+                <div class="patient-card fade-in">
                     <div class="patient-avatar">CR</div>
                     <div class="patient-info">
                         <h4>Carlos Ruiz</h4>
@@ -124,7 +147,7 @@
                         <span class="badge badge-warning">Pendiente</span>
                     </div>
                 </div>
-                <div class="patient-card">
+                <div class="patient-card fade-in">
                     <div class="patient-avatar">AL</div>
                     <div class="patient-info">
                         <h4>Ana López</h4>
@@ -135,5 +158,43 @@
             </div>
         </section>
     </main>
+
+
+    <script>
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.overlay');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            // Bloquear scroll del body cuando el menú está abierto
+            document.body.classList.toggle('no-scroll');
+        }
+
+        // Cerrar sidebar al hacer clic en un enlace en móviles
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 768) {
+                    toggleSidebar();
+                }
+            });
+        });
+
+        // Cerrar sidebar al hacer clic fuera en móviles
+        document.addEventListener('click', function(e) {
+            const sidebar = document.querySelector('.sidebar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (window.innerWidth < 768 && 
+                sidebar.classList.contains('active') && 
+                !sidebar.contains(e.target) && 
+                e.target !== menuToggle && 
+                !e.target.closest('.menu-toggle')) {
+                toggleSidebar();
+            }
+        });
+    </script>
 </body>
 </html>

@@ -6,6 +6,7 @@
     <title>Registrarse - LIANZE</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/register.css">
+    
 </head>
 <body>
     <div class="auth-container">
@@ -13,10 +14,21 @@
             <div class="auth-header">
                 <a href="index.html" class="logo">LIANZE</a>
                 <h1>Crear Cuenta</h1>
-                <p>Únete a nuestra comunidad</p>
+                <p>Completa los siguientes pasos para registrarte</p>
             </div>
 
-            <form id="registerForm" class="auth-form">
+            <!-- Paso 1: Información básica -->
+            <form id="basicInfoForm" class="auth-form">
+                <div class="form-group">
+                    <label for="dni">Cédula (DNI)</label>
+                    <div class="input-with-button">
+                        <input type="text" id="dni" name="dni" class="input" 
+                               pattern="\d{9}" title="Ingrese un número de cédula válido (9 dígitos)">
+                        <button type="button" id="consultarTSE" class="btn btn-secondary">Consultar TSE</button>
+                    </div>
+                    <div id="dniError" class="error-message"></div>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="firstName">Nombre</label>
@@ -61,194 +73,304 @@
                     <div id="confirmPasswordError" class="error-message"></div>
                 </div>
 
-                <div class="form-group">
-                    <label for="userType">Tipo de Usuario</label>
-                    <select id="userType" name="userType" class="input" required>
-                        <option value="">Selecciona una opción</option>
-                        <option value="patient">Paciente</option>
-                        <option value="psychologist">Psicólogo</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-    <label for="country">País</label>
-    <select id="country" name="country" class="input" required>
-        <option value="">Selecciona un país</option>
-        
-    </select>
-</div>
-<div class="form-group">
-    <label for="province">Provincia</label>
-    <select id="province" name="province" class="input" disabled required>
-        <option value="">Primero selecciona un país</option>
-    </select>
-</div>
-
-<div class="form-group">
-    <label for="canton">Cantón</label>
-    <select id="canton" name="canton" class="input" disabled required>
-        <option value="">Primero selecciona una provincia</option>
-    </select>
-</div>
-
-<div class="form-group">
-    <label for="district">Distrito</label>
-    <select id="district" name="district" class="input" disabled required>
-        <option value="">Primero selecciona un cantón</option>
-    </select>
-</div>
-
-
-                <div class="form-options">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="terms" required>
-                        <span class="checkmark"></span>
-                        Acepto los <a href="terms.html">términos y condiciones</a>
-                    </label>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-full">Crear Cuenta</button>
+                <button type="button" id="nextToUserType" class="btn btn-primary btn-full">Siguiente</button>
             </form>
+        </div>
+    </div>
 
-            <div class="auth-footer">
-                <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a></p>
+    <!-- Modal para selección de tipo de usuario -->
+    <div id="userTypeModal" class="modal">
+        <div class="modal-content">
+            <h2>Selecciona tu tipo de usuario</h2>
+            <p>Elige el rol que mejor describa cómo usarás LIANZE</p>
+            
+            <div class="user-type-options">
+                <div class="user-type-option" data-type="patient">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5217/5217806.png" alt="Paciente">
+                    <span>Paciente</span>
+                </div>
+                <div class="user-type-option" data-type="psychologist">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2784/2784487.png" alt="Psicólogo">
+                    <span>Psicólogo</span>
+                </div>
+            </div>
+            
+            <input type="hidden" id="userType" name="userType" value="">
+            
+            <div class="modal-buttons">
+                <button class="btn-back" id="backToBasicInfo">Atrás</button>
+                <button class="btn-next" id="nextToLocation">Siguiente</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para información de ubicación -->
+    <div id="locationModal" class="modal">
+        <div class="modal-content">
+            <h2>Información de ubicación</h2>
+            <p>Por favor, completa tus datos de ubicación</p>
+            
+            <div class="form-group">
+                <label for="country">País</label>
+                <select id="country" name="country" class="input" required>
+                    <option value="">Selecciona un país</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="province">Provincia</label>
+                <select id="province" name="province" class="input" disabled required>
+                    <option value="">Primero selecciona un país</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="canton">Cantón</label>
+                <select id="canton" name="canton" class="input" disabled required>
+                    <option value="">Primero selecciona una provincia</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="district">Distrito</label>
+                <select id="district" name="district" class="input" disabled required>
+                    <option value="">Primero selecciona un cantón</option>
+                </select>
+            </div>
+            
+            <div class="form-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="terms" required>
+                    <span class="checkmark"></span>
+                    Acepto los <a href="terms.html">términos y condiciones</a>
+                </label>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="btn-back" id="backToUserType">Atrás</button>
+                <button class="btn-next" id="submitRegister">Registrarse</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Lista de contraseñas comunes (puedes ampliarla)
+        // Lista de contraseñas comunes
         const commonPasswords = ['password', '123456', 'qwerty', 'admin', 'welcome', 'contraseña', 'password123'];
         
+        // Variables para almacenar datos del formulario
+        let formData = {
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+            userType: '',
+            countryId: '',
+            provinceId: '',
+            cantonId: '',
+            districtId: ''
+        };
 
         document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const response = await fetch('/api/locations/countries');
-        const countries = await response.json();
-        
-        const countrySelect = document.getElementById('country');
-        countries.forEach(country => {
-            const option = document.createElement('option');
-            option.value = country.id;
-            option.textContent = country.description;
-            countrySelect.appendChild(option);
+            // Cargar países al inicio
+            try {
+                const response = await fetch('/api/locations/countries');
+                const countries = await response.json();
+                
+                const countrySelect = document.getElementById('country');
+                countries.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country.id;
+                    option.textContent = country.description;
+                    countrySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error cargando países:', error);
+            }
+            
+            // Configurar eventos de los modales
+            setupModalNavigation();
+            
+            // Configurar selección de tipo de usuario
+            setupUserTypeSelection();
+            
+            // Configurar validación de contraseña
+            setupPasswordValidation();
+            
+            // Configurar consulta TSE
+            setupTSEConsultation();
         });
-    } catch (error) {
-        console.error('Error cargando países:', error);
-    }
-});
 
-// Manejar cambio de país
-document.getElementById('country').addEventListener('change', async function() {
-    const countryId = this.value;
-    const provinceSelect = document.getElementById('province');
-    const cantonSelect = document.getElementById('canton');
-    const districtSelect = document.getElementById('district');
-    
-    // Resetear selects dependientes
-    provinceSelect.innerHTML = '<option value="">Selecciona una provincia</option>';
-    cantonSelect.innerHTML = '<option value="">Selecciona un cantón</option>';
-    districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
-    
-    cantonSelect.disabled = true;
-    districtSelect.disabled = true;
-    
-    if (!countryId) {
-        provinceSelect.disabled = true;
-        return;
-    }
-    
-    try {
-        provinceSelect.disabled = true;
-        const response = await fetch(`/api/locations/provinces/${countryId}`);
-        const provinces = await response.json();
-        
-        provinceSelect.innerHTML = '<option value="">Selecciona una provincia</option>';
-        provinces.forEach(province => {
-            const option = document.createElement('option');
-            option.value = province.id;
-            option.textContent = province.description;
-            provinceSelect.appendChild(option);
-        });
-        
-        provinceSelect.disabled = false;
-    } catch (error) {
-        console.error('Error cargando provincias:', error);
-    }
-});
+        function setupModalNavigation() {
+            // Botón para avanzar a selección de tipo de usuario
+            document.getElementById('nextToUserType').addEventListener('click', () => {
+                if (validateBasicInfo()) {
+                    // Guardar datos básicos
+                    formData.firstName = document.getElementById('firstName').value;
+                    formData.lastName = document.getElementById('lastName').value;
+                    formData.email = document.getElementById('email').value;
+                    formData.password = document.getElementById('password').value;
+                    
+                    // Mostrar modal de tipo de usuario
+                    document.getElementById('basicInfoForm').style.display = 'none';
+                    document.getElementById('userTypeModal').style.display = 'flex';
+                }
+            });
+            
+            // Botón para volver a información básica
+            document.getElementById('backToBasicInfo').addEventListener('click', () => {
+                document.getElementById('userTypeModal').style.display = 'none';
+                document.getElementById('basicInfoForm').style.display = 'block';
+            });
+            
+            // Botón para avanzar a ubicación
+            document.getElementById('nextToLocation').addEventListener('click', () => {
+                if (formData.userType) {
+                    document.getElementById('userTypeModal').style.display = 'none';
+                    document.getElementById('locationModal').style.display = 'flex';
+                } else {
+                    alert('Por favor selecciona un tipo de usuario');
+                }
+            });
+            
+            // Botón para volver a tipo de usuario
+            document.getElementById('backToUserType').addEventListener('click', () => {
+                document.getElementById('locationModal').style.display = 'none';
+                document.getElementById('userTypeModal').style.display = 'flex';
+            });
+            
+            // Botón para enviar registro
+            document.getElementById('submitRegister').addEventListener('click', async () => {
+                if (validateLocationInfo()) {
+                    await submitRegistration();
+                }
+            });
+        }
 
-// Manejar cambio de provincia
-document.getElementById('province').addEventListener('change', async function() {
-    const provinceId = this.value;
-    const cantonSelect = document.getElementById('canton');
-    const districtSelect = document.getElementById('district');
-    
-    // Resetear selects dependientes
-    cantonSelect.innerHTML = '<option value="">Selecciona un cantón</option>';
-    districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
-    districtSelect.disabled = true;
-    
-    if (!provinceId) {
-        cantonSelect.disabled = true;
-        return;
-    }
-    
-    try {
-        cantonSelect.disabled = true;
-        const response = await fetch(`/api/locations/cantons/${provinceId}`);
-        const cantons = await response.json();
-        
-        cantonSelect.innerHTML = '<option value="">Selecciona un cantón</option>';
-        cantons.forEach(canton => {
-            const option = document.createElement('option');
-            option.value = canton.id;
-            option.textContent = canton.description;
-            cantonSelect.appendChild(option);
-        });
-        
-        cantonSelect.disabled = false;
-    } catch (error) {
-        console.error('Error cargando cantones:', error);
-    }
-});
+        function setupUserTypeSelection() {
+            const options = document.querySelectorAll('.user-type-option');
+            
+            options.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Remover selección previa
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Seleccionar nueva opción
+                    option.classList.add('selected');
+                    formData.userType = option.dataset.type;
+                    document.getElementById('userType').value = option.dataset.type;
+                });
+            });
+        }
 
-// Manejar cambio de cantón
-document.getElementById('canton').addEventListener('change', async function() {
-    const cantonId = this.value;
-    const districtSelect = document.getElementById('district');
-    
-    // Resetear select dependiente
-    districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
-    
-    if (!cantonId) {
-        districtSelect.disabled = true;
-        return;
-    }
-    
-    try {
-        districtSelect.disabled = true;
-        const response = await fetch(`/api/locations/districts/${cantonId}`);
-        const districts = await response.json();
-        
-        districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
-        districts.forEach(district => {
-            const option = document.createElement('option');
-            option.value = district.id;
-            option.textContent = district.description;
-            districtSelect.appendChild(option);
-        });
-        
-        districtSelect.disabled = false;
-    } catch (error) {
-        console.error('Error cargando distritos:', error);
-    }
-});
+        function setupPasswordValidation() {
+            document.getElementById('password').addEventListener('input', function() {
+                validatePasswordStrength(this.value);
+            });
+        }
 
+        function setupTSEConsultation() {
+            document.getElementById('consultarTSE').addEventListener('click', async function() {
+                const dni = document.getElementById('dni').value.trim();
+                const dniError = document.getElementById('dniError');
+                
+                dniError.textContent = '';
+                
+                if (!dni) {
+                    dniError.textContent = 'Por favor ingrese su número de cédula';
+                    return;
+                }
+                
+                if (!/^\d{9}$/.test(dni)) {
+                    dniError.textContent = 'La cédula debe tener 9 dígitos';
+                    return;
+                }
+                
+                try {
+                    this.disabled = true;
+                    this.textContent = 'Consultando...';
+                    
+                    const response = await fetch(`/api/tse/ciudadano/${dni}`);
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        if (data.success) {
+                            // Autocompletar campos
+                            document.getElementById('firstName').value = data.data.firstName;
+                            document.getElementById('lastName').value = data.data.lastName;
+                            document.getElementById('email').value = data.data.email || '';
+                            
+                            // Deshabilitar campos autocompletados (opcional)
+                            document.getElementById('firstName').readOnly = true;
+                            document.getElementById('lastName').readOnly = true;
+                            
+                            // Mostrar mensaje de éxito
+                            dniError.textContent = '';
+                            alert('Datos del TSE cargados correctamente');
+                        } else {
+                            dniError.textContent = data.message || 'No se encontraron datos para esta cédula';
+                        }
+                    } else {
+                        dniError.textContent = data.message || 'Error al consultar el TSE';
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    dniError.textContent = 'Error al conectar con el servicio del TSE';
+                } finally {
+                    this.disabled = false;
+                    this.textContent = 'Consultar TSE';
+                }
+            });
+        }
 
-        document.getElementById('password').addEventListener('input', function() {
-            validatePasswordStrength(this.value);
-        });
-        
+        function validateBasicInfo() {
+            // Limpiar mensajes de error
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            
+            // Validar nombres
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            
+            const nameRegex = /^[a-zA-Z0-9_.]{4,}$/;
+            const emailRegex = /@/;
+            
+            if (!nameRegex.test(firstName)) {
+                document.getElementById('firstNameError').textContent = 'Mínimo 4 caracteres, solo letras, números, _ y .';
+                return false;
+            }
+            
+            if (emailRegex.test(firstName)) {
+                document.getElementById('firstNameError').textContent = 'No puede ser un email';
+                return false;
+            }
+            
+            if (!nameRegex.test(lastName)) {
+                document.getElementById('lastNameError').textContent = 'Mínimo 5 caracteres, solo letras, números, _ y .';
+                return false;
+            }
+            
+            if (emailRegex.test(lastName)) {
+                document.getElementById('lastNameError').textContent = 'No puede ser un email';
+                return false;
+            }
+            
+            // Validar contraseña
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            const isPasswordValid = validatePasswordStrength(password);
+            if (!isPasswordValid) {
+                document.getElementById('passwordError').textContent = 'La contraseña no cumple con los requisitos de seguridad';
+                return false;
+            }
+            
+            // Validar contraseñas coincidan
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPasswordError').textContent = 'Las contraseñas no coinciden';
+                return false;
+            }
+            
+            return true;
+        }
+
         function validatePasswordStrength(password) {
             // Resetear clases
             document.querySelectorAll('.requirement').forEach(el => {
@@ -298,7 +420,7 @@ document.getElementById('canton').addEventListener('change', async function() {
             
             return hasMinLength && hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && !isCommonPassword;
         }
-        
+
         function updateRequirement(id, isValid) {
             const element = document.getElementById(id);
             if (isValid) {
@@ -309,201 +431,215 @@ document.getElementById('canton').addEventListener('change', async function() {
                 element.classList.remove('valid');
             }
         }
-        
-        function validateName(name) {
-            const nameRegex = /^[a-zA-Z0-9_.]{5,}$/;
-            const emailRegex = /@/;
-            
-            if (!nameRegex.test(name)) {
-                return { valid: false, message: "Mínimo 5 caracteres, solo letras, números, _ y ." };
-            }
-            
-            if (emailRegex.test(name)) {
-                return { valid: false, message: "No puede ser un email" };
-            }
-            
-            return { valid: true };
-        }
-        
-        document.getElementById('registerForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Limpiar mensajes de error anteriores
-            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-            
-            // Obtener valores del formulario
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const userType = document.getElementById('userType').value;
-            const countryId = document.getElementById('country').value;
-    const provinceId = document.getElementById('province').value;
-    const cantonId = document.getElementById('canton').value;
-    const districtId = document.getElementById('district').value;
-            
-            // Validar nombres
-            const firstNameValidation = validateName(firstName);
-            if (!firstNameValidation.valid) {
-                document.getElementById('firstNameError').textContent = firstNameValidation.message;
-                return;
-            }
-            
-            const lastNameValidation = validateName(lastName);
-            if (!lastNameValidation.valid) {
-                document.getElementById('lastNameError').textContent = lastNameValidation.message;
-                return;
-            }
-            
-            // Validar contraseña
-            const isPasswordValid = validatePasswordStrength(password);
-            if (!isPasswordValid) {
-                document.getElementById('passwordError').textContent = 'La contraseña no cumple con los requisitos de seguridad';
-                return;
-            }
-            
-            // Validar contraseñas coincidan
-            if (password !== confirmPassword) {
-                document.getElementById('confirmPasswordError').textContent = 'Las contraseñas no coinciden';
-                return;
-            }
 
+        function validateLocationInfo() {
+            const countryId = document.getElementById('country').value;
+            
             if (!countryId) {
-        alert('Por favor selecciona un país');
-        return;
-    }
+                alert('Por favor selecciona un país');
+                return false;
+            }
+            
+            if (!document.querySelector('input[name="terms"]:checked')) {
+                alert('Debes aceptar los términos y condiciones');
+                return false;
+            }
+            
+            // Guardar datos de ubicación
+            formData.countryId = countryId;
+            formData.provinceId = document.getElementById('province').value || null;
+            formData.cantonId = document.getElementById('canton').value || null;
+            formData.districtId = document.getElementById('district').value || null;
+            
+            return true;
+        }
+
+        async function submitRegistration() {
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    if (data.nextStep === 'security-questions') {
+                        showBackupCodesModal(data.backupCodes, data.userId, data.userType);
+                    } else {
+                        redirectAfterRegistration(data.userType);
+                    }
+                } else {
+                    // Mostrar error del servidor
+                    if (data.message && data.message.includes('email')) {
+                        alert(data.message);
+                    } else {
+                        alert(data.message || 'Error en el registro');
+                    }
+                    
+                    // Volver al formulario básico
+                    document.getElementById('locationModal').style.display = 'none';
+                    document.getElementById('basicInfoForm').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Ocurrió un error al registrar. Por favor, inténtalo más tarde.');
+            }
+        }
+
+        function showBackupCodesModal(codes, userId, userType) {
+            // Ocultar todos los modales
+            document.getElementById('locationModal').style.display = 'none';
+            
+            // Crear modal para códigos de respaldo
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'flex';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h2>Tus Códigos de Respaldo MFA</h2>
+                    <p>Guarda estos códigos en un lugar seguro. Cada código solo se puede usar una vez.</p>
+                    <div class="backup-codes-container">
+                        ${codes.map(code => `<div class="backup-code">${code}</div>`).join('')}
+                    </div>
+                    <div class="modal-buttons">
+                        <button id="copy-codes-btn">Copiar Códigos</button>
+                        <button class="btn-next" id="continue-after-codes">Continuar</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Copiar códigos al portapapeles
+            document.getElementById('copy-codes-btn').addEventListener('click', () => {
+                navigator.clipboard.writeText(codes.join('\n'));
+                alert('Códigos copiados al portapapeles');
+            });
+            
+            // Continuar después de guardar códigos
+            document.getElementById('continue-after-codes').addEventListener('click', () => {
+                modal.remove();
+                redirectAfterRegistration(userType, userId);
+            });
+        }
+
+        function redirectAfterRegistration(userType, userId) {
+            if (userType === 'psychologist') {
+                window.location.href = `psychologist-profile-setup.html?userId=${userId}`;
+            } else {
+                window.location.href = `security-questions.html?userId=${userId}&userType=${userType}`;
+            }
+        }
+
+        // Manejar cambio de país
+        document.getElementById('country').addEventListener('change', async function() {
+            const countryId = this.value;
+            const provinceSelect = document.getElementById('province');
+            const cantonSelect = document.getElementById('canton');
+            const districtSelect = document.getElementById('district');
+            
+            // Resetear selects dependientes
+            provinceSelect.innerHTML = '<option value="">Selecciona una provincia</option>';
+            cantonSelect.innerHTML = '<option value="">Selecciona un cantón</option>';
+            districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+            
+            cantonSelect.disabled = true;
+            districtSelect.disabled = true;
+            
+            if (!countryId) {
+                provinceSelect.disabled = true;
+                return;
+            }
             
             try {
-        const response = await fetch('/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                firstName,
-                lastName,
-                email,
-                password,
-                userType,
-                countryId,
-                provinceId,
-                cantonId,
-                districtId
-            })
-        });
-        
-        const data = await response.json();
-        console.log("Respuesta del servidor:", data);
-        
-        if (response.ok) {
-           
-            if (data.nextStep === 'security-questions') {
-
-                showBackupCodesModal(data.backupCodes);
+                provinceSelect.disabled = true;
+                const response = await fetch(`/api/locations/provinces/${countryId}`);
+                const provinces = await response.json();
                 
-                document.getElementById('continue-after-codes').addEventListener('click', () => {
-            window.location.href = `security-questions.html?userId=${data.userId}&userType=${data.userType}`;
-        });
-            } else {
+                provinceSelect.innerHTML = '<option value="">Selecciona una provincia</option>';
+                provinces.forEach(province => {
+                    const option = document.createElement('option');
+                    option.value = province.id;
+                    option.textContent = province.description;
+                    provinceSelect.appendChild(option);
+                });
                 
-                if (data.userType === 'patient') {
-                    window.location.href = 'dashboard-patient.html';
-                } else if (data.userType === 'psychologist') {
-                    window.location.href = 'dashboard-psychologist.html';
-                }
+                provinceSelect.disabled = false;
+            } catch (error) {
+                console.error('Error cargando provincias:', error);
             }
-        } else {
-            // Mostrar error del servidor
-            if (data.message && data.message.includes('email')) {
-                document.getElementById('emailError').textContent = data.message;
-            } else {
-                alert(data.message || 'Error en el registro');
+        });
+
+        // Manejar cambio de provincia
+        document.getElementById('province').addEventListener('change', async function() {
+            const provinceId = this.value;
+            const cantonSelect = document.getElementById('canton');
+            const districtSelect = document.getElementById('district');
+            
+            // Resetear selects dependientes
+            cantonSelect.innerHTML = '<option value="">Selecciona un cantón</option>';
+            districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+            districtSelect.disabled = true;
+            
+            if (!provinceId) {
+                cantonSelect.disabled = true;
+                return;
             }
-        }
+            
+            try {
+                cantonSelect.disabled = true;
+                const response = await fetch(`/api/locations/cantons/${provinceId}`);
+                const cantons = await response.json();
+                
+                cantonSelect.innerHTML = '<option value="">Selecciona un cantón</option>';
+                cantons.forEach(canton => {
+                    const option = document.createElement('option');
+                    option.value = canton.id;
+                    option.textContent = canton.description;
+                    cantonSelect.appendChild(option);
+                });
+                
+                cantonSelect.disabled = false;
+            } catch (error) {
+                console.error('Error cargando cantones:', error);
+            }
+        });
 
-
-function showBackupCodesModal(codes) {
-    const modal = document.createElement('div');
-    modal.className = 'mfa-modal';
-    modal.innerHTML = `
-        <div class="mfa-modal-content">
-            <h2>Tus Códigos de Respaldo MFA</h2>
-            <p>Guarda estos códigos en un lugar seguro. Cada código solo se puede usar una vez.</p>
-            <div class="backup-codes-container">
-                ${codes.map(code => `<div class="backup-code">${code}</div>`).join('')}
-            </div>
-            <button id="copy-codes-btn">Copiar Códigos</button>
-            <button id="continue-after-codes">Continuar</button>
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-    
-    // Copiar códigos al portapapeles
-    document.getElementById('copy-codes-btn').addEventListener('click', () => {
-        navigator.clipboard.writeText(codes.join('\n'));
-        alert('Códigos copiados al portapapeles');
-    });
-    
-    // Estilos para el modal
-    const style = document.createElement('style');
-    style.textContent = `
-        .mfa-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .mfa-modal-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-        }
-        .backup-codes-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 1rem 0;
-        }
-        .backup-code {
-            padding: 0.5rem;
-            background: #f5f5f5;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 1.1rem;
-        }
-        .mfa-modal-content button {
-            margin: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-    `;
-    document.head.appendChild(style);
-}
-
-
-
-
-
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Ocurrió un error al registrar. Por favor, inténtalo más tarde.');
-    }
-});
+        // Manejar cambio de cantón
+        document.getElementById('canton').addEventListener('change', async function() {
+            const cantonId = this.value;
+            const districtSelect = document.getElementById('district');
+            
+            // Resetear select dependiente
+            districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+            
+            if (!cantonId) {
+                districtSelect.disabled = true;
+                return;
+            }
+            
+            try {
+                districtSelect.disabled = true;
+                const response = await fetch(`/api/locations/districts/${cantonId}`);
+                const districts = await response.json();
+                
+                districtSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+                districts.forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district.id;
+                    option.textContent = district.description;
+                    districtSelect.appendChild(option);
+                });
+                
+                districtSelect.disabled = false;
+            } catch (error) {
+                console.error('Error cargando distritos:', error);
+            }
+        });
     </script>
 </body>
 </html>

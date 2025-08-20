@@ -10,24 +10,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* Estilos personalizados adicionales */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            .main-content {
-                margin-left: 0;
-            }
-            .mobile-menu-btn {
-                display: block;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/cs">
 </head>
 <body class="bg-gray-50">
     <!-- Botón de menú móvil -->
@@ -70,29 +53,33 @@
                 <div>
                     <label for="specialty" class="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Especialidad</label>
                     <select id="specialty" class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 md:p-2.5">
-                        <option selected>Todas las especialidades</option>
+                        <option selected value="">Todas las especialidades</option>
                         <option value="Ansiedad">Ansiedad</option>
                         <option value="Depresión">Depresión</option>
                         <option value="Terapia de pareja">Terapia de pareja</option>
                         <option value="Estrés">Estrés</option>
+                        <option value="Psicología Infantil">Psicología Infantil</option>
+                        <option value="Terapia Familiar">Terapia Familiar</option>
+                        <option value="Trauma">Trauma</option>
                     </select>
                 </div>
                 <div>
                     <label for="language" class="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Idioma</label>
                     <select id="language" class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 md:p-2.5">
-                        <option selected>Todos los idiomas</option>
+                        <option selected value="">Todos los idiomas</option>
                         <option value="Español">Español</option>
                         <option value="Inglés">Inglés</option>
-                        <option value="Francés">Francés</option>
+                        <option value="Catalán">Catalán</option>
                     </select>
                 </div>
                 <div>
                     <label for="price" class="block mb-1 md:mb-2 text-sm font-medium text-gray-700">Precio máximo</label>
                     <select id="price" class="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 md:p-2.5">
-                        <option selected>Cualquier precio</option>
+                        <option selected value="">Cualquier precio</option>
                         <option value="50">Hasta $50</option>
                         <option value="80">Hasta $80</option>
                         <option value="100">Hasta $100</option>
+                        <option value="150">Hasta $150</option>
                     </select>
                 </div>
                 <div class="flex items-end space-x-2">
@@ -105,119 +92,13 @@
         <!-- Psychologists Grid -->
         <section>
             <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mb-3 md:mb-4">Psicólogos disponibles</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                <!-- Psychologist Card 1 -->
-                <div class="flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 md:flex-row md:max-w-xl">
-                    <div class="w-full md:w-40 flex-shrink-0">
-                        <div class="h-40 md:h-full bg-blue-500 flex items-center justify-center text-white text-3xl md:text-4xl font-bold rounded-t-lg md:rounded-l-lg md:rounded-tr-none">
-                            AM
-                        </div>
-                    </div>
-                    <div class="flex flex-col justify-between p-3 md:p-4 leading-normal">
-                        <div>
-                            <h5 class="mb-1 md:mb-2 text-lg md:text-xl font-bold tracking-tight text-gray-900">Dra. Ana Martínez</h5>
-                            <p class="mb-2 md:mb-3 text-xs md:text-sm text-blue-600 font-medium">Ansiedad y Depresión</p>
-                            <div class="flex items-center mb-1 md:mb-2">
-                                <div class="flex text-yellow-400 text-xs md:text-sm">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                                <span class="text-xs text-gray-500 ml-1 md:ml-2">(24 reseñas)</span>
-                            </div>
-                            <div class="flex flex-wrap gap-1 mb-2 md:mb-3">
-                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">Español</span>
-                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">Inglés</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <span class="text-base md:text-lg font-bold text-gray-900">$80</span>
-                                <span class="text-xs md:text-sm text-gray-500">/sesión</span>
-                            </div>
-                            <button onclick="openModal('psychologistModal1')" class="text-blue-600 hover:text-blue-800 text-xs md:text-sm font-medium">Ver →</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Psychologist Card 2 -->
-                <div class="flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 md:flex-row md:max-w-xl">
-                    <div class="w-full md:w-40 flex-shrink-0">
-                        <div class="h-40 md:h-full bg-green-500 flex items-center justify-center text-white text-3xl md:text-4xl font-bold rounded-t-lg md:rounded-l-lg md:rounded-tr-none">
-                            JP
-                        </div>
-                    </div>
-                    <div class="flex flex-col justify-between p-3 md:p-4 leading-normal">
-                        <div>
-                            <h5 class="mb-1 md:mb-2 text-lg md:text-xl font-bold tracking-tight text-gray-900">Dr. Juan Pérez</h5>
-                            <p class="mb-2 md:mb-3 text-xs md:text-sm text-blue-600 font-medium">Terapia de pareja</p>
-                            <div class="flex items-center mb-1 md:mb-2">
-                                <div class="flex text-yellow-400 text-xs md:text-sm">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </div>
-                                <span class="text-xs text-gray-500 ml-1 md:ml-2">(18 reseñas)</span>
-                            </div>
-                            <div class="flex flex-wrap gap-1 mb-2 md:mb-3">
-                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">Español</span>
-                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">Francés</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <span class="text-base md:text-lg font-bold text-gray-900">$95</span>
-                                <span class="text-xs md:text-sm text-gray-500">/sesión</span>
-                            </div>
-                            <button onclick="openModal('psychologistModal2')" class="text-blue-600 hover:text-blue-800 text-xs md:text-sm font-medium">Ver →</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Psychologist Card 3 -->
-                <div class="flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 md:flex-row md:max-w-xl">
-                    <div class="w-full md:w-40 flex-shrink-0">
-                        <div class="h-40 md:h-full bg-purple-500 flex items-center justify-center text-white text-3xl md:text-4xl font-bold rounded-t-lg md:rounded-l-lg md:rounded-tr-none">
-                            LM
-                        </div>
-                    </div>
-                    <div class="flex flex-col justify-between p-3 md:p-4 leading-normal">
-                        <div>
-                            <h5 class="mb-1 md:mb-2 text-lg md:text-xl font-bold tracking-tight text-gray-900">Dra. Laura Méndez</h5>
-                            <p class="mb-2 md:mb-3 text-xs md:text-sm text-blue-600 font-medium">Psicología infantil</p>
-                            <div class="flex items-center mb-1 md:mb-2">
-                                <div class="flex text-yellow-400 text-xs md:text-sm">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </div>
-                                <span class="text-xs text-gray-500 ml-1 md:ml-2">(32 reseñas)</span>
-                            </div>
-                            <div class="flex flex-wrap gap-1 mb-2 md:mb-3">
-                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">Español</span>
-                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">Alemán</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <span class="text-base md:text-lg font-bold text-gray-900">$75</span>
-                                <span class="text-xs md:text-sm text-gray-500">/sesión</span>
-                            </div>
-                            <button onclick="openModal('psychologistModal3')" class="text-blue-600 hover:text-blue-800 text-xs md:text-sm font-medium">Ver →</button>
-                        </div>
-                    </div>
-                </div>
+            <div id="psychologistsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <!-- Las cards se generarán dinámicamente aquí -->
             </div>
         </section>
 
-        <!-- Modal Psicólogo 1 - Versión mejorada -->
-        <div id="psychologistModal1" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <!-- Modal Psicólogo (dinámico) -->
+        <div id="psychologistModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
             <div class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow">
@@ -226,87 +107,22 @@
                         <h3 class="text-lg md:text-xl font-semibold text-gray-900">
                             Perfil del Psicólogo
                         </h3>
-                        <button type="button" onclick="closeModal('psychologistModal1')" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
+                        <button type="button" onclick="closeModal('psychologistModal')" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
                             <i class="fas fa-times"></i>
                             <span class="sr-only">Cerrar</span>
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <div class="p-4 space-y-4">
-                        <div class="flex flex-col md:flex-row gap-4">
-                            <div class="w-full md:w-1/3 flex justify-center">
-                                <div class="bg-blue-500 w-32 h-32 md:w-48 md:h-48 rounded-lg flex items-center justify-center text-white text-4xl md:text-6xl font-bold">
-                                    AM
-                                </div>
-                            </div>
-                            <div class="w-full md:w-2/3">
-                                <h4 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">Dra. Ana Martínez</h4>
-                                <p class="text-md md:text-lg text-blue-600 font-medium mb-3 md:mb-4">Ansiedad y Depresión</p>
-                                
-                                <div class="flex items-center mb-3 md:mb-4">
-                                    <div class="flex text-yellow-400 mr-2 text-sm md:text-base">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <span class="text-gray-700 text-sm md:text-base">5.0 (24 reseñas) • 8 años de experiencia</span>
-                                </div>
-                                
-                                <div class="mb-4 md:mb-6">
-                                    <h5 class="text-md md:text-lg font-semibold text-gray-900 mb-1 md:mb-2">Sobre mí</h5>
-                                    <p class="text-gray-700 text-sm md:text-base">Soy especialista en trastornos de ansiedad y depresión con más de 8 años de experiencia. Mi enfoque combina terapia cognitivo-conductual con técnicas de mindfulness para ayudar a mis pacientes a recuperar el control de sus vidas.</p>
-                                </div>
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-6">
-                                    <div>
-                                        <h5 class="text-md md:text-lg font-semibold text-gray-900 mb-1 md:mb-2">Especialidades</h5>
-                                        <div class="flex flex-wrap gap-1 md:gap-2">
-                                            <span class="bg-blue-100 text-blue-800 text-xs md:text-sm px-2 md:px-3 py-1 rounded-full">Ansiedad</span>
-                                            <span class="bg-blue-100 text-blue-800 text-xs md:text-sm px-2 md:px-3 py-1 rounded-full">Depresión</span>
-                                            <span class="bg-blue-100 text-blue-800 text-xs md:text-sm px-2 md:px-3 py-1 rounded-full">Estrés</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h5 class="text-md md:text-lg font-semibold text-gray-900 mb-1 md:mb-2">Idiomas</h5>
-                                        <div class="flex flex-wrap gap-1 md:gap-2">
-                                            <span class="bg-green-100 text-green-800 text-xs md:text-sm px-2 md:px-3 py-1 rounded-full">Español</span>
-                                            <span class="bg-green-100 text-green-800 text-xs md:text-sm px-2 md:px-3 py-1 rounded-full">Inglés</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                                    <div>
-                                        <h5 class="text-md md:text-lg font-semibold text-gray-900 mb-1 md:mb-2">Precio</h5>
-                                        <p class="text-gray-700 text-sm md:text-base">$80 por sesión (50 minutos)</p>
-                                    </div>
-                                    <div>
-                                        <h5 class="text-md md:text-lg font-semibold text-gray-900 mb-1 md:mb-2">Disponibilidad</h5>
-                                        <p class="text-gray-700 text-sm md:text-base">L-V: 9am - 6pm<br>Sáb: 10am - 2pm</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="p-4 space-y-4" id="modalContent">
+                        <!-- Contenido se llenará dinámicamente -->
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 border-t border-gray-200 rounded-b">
                         <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Agendar cita</button>
-                        <button type="button" onclick="closeModal('psychologistModal1')" class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900">Cancelar</button>
+                        <button type="button" onclick="closeModal('psychologistModal')" class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900">Cancelar</button>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Modal Psicólogo 2 (similar al 1) -->
-        <div id="psychologistModal2" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
-            <!-- Contenido similar al modal 1 -->
-        </div>
-
-        <!-- Modal Psicólogo 3 (similar al 1) -->
-        <div id="psychologistModal3" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
-            <!-- Contenido similar al modal 1 -->
         </div>
 
         <!-- Chat Bubble -->
@@ -320,8 +136,83 @@
     
     <script>
         // Funciones para manejar modales
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
+        function openModal(psychologist) {
+            const modal = document.getElementById('psychologistModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            // Parsear datos que están como strings JSON
+            const specialties = tryParseJSON(psychologist.specialties) || psychologist.specialties;
+            const languages = tryParseJSON(psychologist.languages) || psychologist.languages;
+            const education = tryParseJSON(psychologist.education) || psychologist.education;
+            
+            // Generar contenido del modal
+            modalContent.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="w-full md:w-1/3 flex justify-center">
+                        <div class="bg-blue-500 w-32 h-32 md:w-48 md:h-48 rounded-lg flex items-center justify-center text-white text-4xl md:text-6xl font-bold">
+                            ${getInitials(psychologist.firstName, psychologist.lastName)}
+                        </div>
+                    </div>
+                    <div class="w-full md:w-2/3">
+                        <h4 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">${psychologist.firstName} ${psychologist.lastName}</h4>
+                        <p class="text-md md:text-lg text-blue-600 font-medium mb-3 md:mb-4">${Array.isArray(specialties) ? specialties.join(', ') : specialties}</p>
+                        
+                        <div class="flex items-center mb-3 md:mb-4">
+                            <div class="flex text-yellow-400 mr-2 text-sm md:text-base">
+                                ${generateStars(psychologist.rating || 0)}
+                            </div>
+                            <span class="text-gray-700 text-sm md:text-base">
+                                ${psychologist.rating ? psychologist.rating.toFixed(1) : 'N/A'} 
+                                (${psychologist.totalReviews || 0} reseñas) • 
+                                ${psychologist.experience || 'N/A'} años de experiencia
+                            </span>
+                        </div>
+                        
+                        <div class="mb-4 md:mb-6">
+                            <h5 class="text-md md:text-lg font-semibold text-gray-900 mb-1 md:mb-2">Sobre mí</h5>
+                            <p class="text-gray-700 text-sm md:text-base">${psychologist.bio || 'No hay biografía disponible'}</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-6">
+                            <div>
+                                <h5 class="text-md md:text-lg font-semibold text-gray-900 mb-1 md:mb-2">Especialidades</h5>
+                                <div class="flex flex-wrap gap-1 md:gap-2">
+                                    ${generateBadges(specialties, 'blue')}
+                                </div>
+                            </div>
+                            <div>
+                                <h5 class="text-md md:text-lg font-semibold text-gray-900 mb-1 md:mb-2">Idiomas</h5>
+                                <div class="flex flex-wrap gap-1 md:gap-2">
+                                    ${generateBadges(languages, 'green')}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                            <div>
+                                <h5 class="text-md md:text-lg font-semibold text-gray-900 mb-1 md:mb-2">Precio</h5>
+                                <p class="text-gray-700 text-sm md:text-base">$${psychologist.hourlyRate || 'N/A'} por sesión (50 minutos)</p>
+                            </div>
+                            <div>
+                                <h5 class="text-md md:text-lg font-semibold text-gray-900 mb-1 md:mb-2">Disponibilidad</h5>
+                                <p class="text-gray-700 text-sm md:text-base">${psychologist.availability || 'No especificada'}</p>
+                            </div>
+                        </div>
+                        
+                        ${education ? `
+                        <div class="mt-4">
+                            <h5 class="text-md md:text-lg font-semibold text-gray-900 mb-1 md:mb-2">Educación</h5>
+                            <ul class="list-disc list-inside text-gray-700 text-sm md:text-base">
+                                ${Array.isArray(education) 
+                                    ? education.map(item => `<li>${item}</li>`).join('') 
+                                    : `<li>${education}</li>`}
+                            </ul>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
             modal.classList.remove('hidden');
             document.body.classList.add('overflow-hidden');
         }
@@ -332,27 +223,60 @@
             document.body.classList.remove('overflow-hidden');
         }
         
-        // Cerrar modal al hacer clic fuera del contenido
-        document.addEventListener('click', function(event) {
-            const modals = document.querySelectorAll('[id^="psychologistModal"]');
-            modals.forEach(modal => {
-                if (!modal.classList.contains('hidden') && event.target === modal) {
-                    closeModal(modal.id);
-                }
-            });
-        });
-        
-        // Cerrar modal con tecla ESC
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                const modals = document.querySelectorAll('[id^="psychologistModal"]');
-                modals.forEach(modal => {
-                    if (!modal.classList.contains('hidden')) {
-                        closeModal(modal.id);
-                    }
-                });
+        // Función para parsear strings JSON
+        function tryParseJSON(jsonString) {
+            try {
+                return JSON.parse(jsonString);
+            } catch (e) {
+                return null;
             }
-        });
+        }
+        
+        // Función para generar iniciales
+        function getInitials(firstName, lastName) {
+            return (firstName ? firstName.charAt(0) : '') + (lastName ? lastName.charAt(0) : '');
+        }
+        
+        // Función para generar estrellas de rating
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            
+            let stars = '';
+            
+            // Estrellas llenas
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            // Media estrella
+            if (hasHalfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            // Estrellas vacías
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+        
+        // Función para generar badges
+        function generateBadges(items, color) {
+            if (!items) return '';
+            
+            const itemsArray = Array.isArray(items) ? items : items.split(',').map(item => item.trim());
+            const colorClasses = {
+                blue: 'bg-blue-100 text-blue-800',
+                green: 'bg-green-100 text-green-800'
+            };
+            
+            return itemsArray.map(item => 
+                `<span class="${colorClasses[color] || 'bg-gray-100 text-gray-800'} text-xs md:text-sm px-2 md:px-3 py-1 rounded-full">${item}</span>`
+            ).join('');
+        }
         
         // Función para mostrar/ocultar sidebar en móviles
         function toggleSidebar() {
@@ -360,6 +284,159 @@
             sidebar.classList.toggle('translate-x-0');
             sidebar.classList.toggle('-translate-x-full');
         }
+        
+        // Función para cargar psicólogos desde la API
+        async function loadPsychologists() {
+            try {
+                const response = await fetch('/api/psychologists');
+                if (!response.ok) throw new Error('Error al cargar psicólogos');
+                
+                const psychologists = await response.json();
+                renderPsychologists(psychologists);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('psychologistsContainer').innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <p class="text-red-500">Error al cargar los psicólogos. Por favor intenta más tarde.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Función para renderizar psicólogos en las cards
+        function renderPsychologists(psychologists) {
+            const container = document.getElementById('psychologistsContainer');
+            
+            if (psychologists.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <p>No se encontraron psicólogos con los filtros seleccionados.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = psychologists.map(psychologist => {
+                // Parsear datos que están como strings JSON
+                const specialties = tryParseJSON(psychologist.specialties) || psychologist.specialties;
+                const languages = tryParseJSON(psychologist.languages) || psychologist.languages;
+                
+                return `
+                    <div class="flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 md:flex-row md:max-w-xl">
+                        <div class="w-full md:w-40 flex-shrink-0">
+                            <div class="h-40 md:h-full bg-blue-500 flex items-center justify-center text-white text-3xl md:text-4xl font-bold rounded-t-lg md:rounded-l-lg md:rounded-tr-none">
+                                ${getInitials(psychologist.firstName, psychologist.lastName)}
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-between p-3 md:p-4 leading-normal">
+                            <div>
+                                <h5 class="mb-1 md:mb-2 text-lg md:text-xl font-bold tracking-tight text-gray-900">${psychologist.firstName} ${psychologist.lastName}</h5>
+                                <p class="mb-2 md:mb-3 text-xs md:text-sm text-blue-600 font-medium">${Array.isArray(specialties) ? specialties.join(', ') : specialties}</p>
+                                <div class="flex items-center mb-1 md:mb-2">
+                                    <div class="flex text-yellow-400 text-xs md:text-sm">
+                                        ${generateStars(psychologist.rating || 0)}
+                                    </div>
+                                    <span class="text-xs text-gray-500 ml-1 md:ml-2">(${psychologist.totalReviews || 0} reseñas)</span>
+                                </div>
+                                <div class="flex flex-wrap gap-1 mb-2 md:mb-3">
+                                    ${generateLanguageTags(languages)}
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-base md:text-lg font-bold text-gray-900">$${psychologist.hourlyRate || 'N/A'}</span>
+                                    <span class="text-xs md:text-sm text-gray-500">/sesión</span>
+                                </div>
+                                <button onclick="openModal(${escapeHtml(JSON.stringify(psychologist))})" class="text-blue-600 hover:text-blue-800 text-xs md:text-sm font-medium">Ver →</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Función para generar tags de idiomas
+        function generateLanguageTags(languages) {
+            if (!languages) return '';
+            
+            const languagesArray = Array.isArray(languages) ? languages : languages.split(',').map(item => item.trim());
+            
+            return languagesArray.map(lang => 
+                `<span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded">${lang}</span>`
+            ).join('');
+        }
+        
+        // Función para escapar HTML (seguridad)
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        // Función para aplicar filtros
+        async function applyFilters() {
+            const specialty = document.getElementById('specialty').value;
+            const language = document.getElementById('language').value;
+            const price = document.getElementById('price').value;
+            
+            try {
+                let url = '/api/psychologists/filter?';
+                const params = [];
+                
+                if (specialty) params.push(`specialty=${encodeURIComponent(specialty)}`);
+                if (language) params.push(`language=${encodeURIComponent(language)}`);
+                if (price) params.push(`maxPrice=${price}`);
+                
+                const response = await fetch(url + params.join('&'));
+                if (!response.ok) throw new Error('Error al filtrar psicólogos');
+                
+                const psychologists = await response.json();
+                renderPsychologists(psychologists);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('psychologistsContainer').innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <p class="text-red-500">Error al aplicar filtros. Por favor intenta nuevamente.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Función para resetear filtros
+        function resetFilters() {
+            document.getElementById('specialty').value = '';
+            document.getElementById('language').value = '';
+            document.getElementById('price').value = '';
+            loadPsychologists();
+        }
+        
+        // Event listeners
+        document.getElementById('applyFilters').addEventListener('click', applyFilters);
+        document.getElementById('resetFilters').addEventListener('click', resetFilters);
+        
+        // Cerrar modal al hacer clic fuera del contenido
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('psychologistModal');
+            if (!modal.classList.contains('hidden') && event.target === modal) {
+                closeModal('psychologistModal');
+            }
+        });
+        
+        // Cerrar modal con tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('psychologistModal');
+                if (!modal.classList.contains('hidden')) {
+                    closeModal('psychologistModal');
+                }
+            }
+        });
+        
+        // Cargar psicólogos al iniciar
+        document.addEventListener('DOMContentLoaded', loadPsychologists);
     </script>
 </body>
 </html>

@@ -1247,3 +1247,167 @@ body {
     background: white;
   }
 }
+
+
+/* Sidebar - Mobile First */
+.sidebar {
+  width: 100%;
+  background: white;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  height: 100vh;
+  padding: 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow-y: auto;
+  transition: left 0.3s ease;
+}
+
+.sidebar-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px; /* Altura fija para el header */
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #4F46E5;
+  text-decoration: none;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  font-size: 1.8rem; /* Tamaño más grande para el icono */
+  cursor: pointer;
+  color: #4a5568;
+  width: 40px; /* Ancho fijo */
+  height: 40px; /* Alto fijo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001; /* Asegurar que esté por encima del overlay */
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 1rem 0;
+}
+
+.sidebar-nav li {
+  margin-bottom: 0.5rem; /* Más espacio entre elementos */
+}
+
+.sidebar-nav a {
+  display: block;
+  padding: 1rem; /* Más padding para mejor tacto */
+  color: #4a5568;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  font-size: 1rem; /* Tamaño de fuente más grande */
+}
+
+.sidebar-nav a:hover {
+  background: #f7fafc;
+  color: #4F46E5;
+}
+
+.sidebar-nav a.active {
+  background: rgba(79, 70, 229, 0.1);
+  color: #4F46E5;
+  border-left: 3px solid #4F46E5;
+}
+
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid #e2e8f0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  height: 70px; /* Altura fija para el footer */
+  display: flex;
+  align-items: center;
+}
+
+.logout-btn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background: #ef4444;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem; /* Tamaño de fuente más grande */
+}
+
+/* Overlay para mobile */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Ajustes para el contenido principal cuando el sidebar está abierto */
+.main-content {
+  padding: 1rem;
+  width: 100%;
+  transition: margin-left 0.3s ease;
+  margin-top: 60px; /* Compensar por el header fijo */
+  margin-bottom: 70px; /* Compensar por el footer fijo */
+  min-height: calc(100vh - 130px); /* Ajustar altura */
+}
+
+/* Media Queries para tablets */
+@media (min-width: 768px) {
+  .sidebar {
+    width: 280px;
+    left: 0;
+  }
+  
+  .main-content {
+    margin-left: 280px;
+    padding: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 0;
+    min-height: 100vh;
+  }
+  
+  .menu-toggle {
+    display: none;
+  }
+  
+  .overlay {
+    display: none;
+  }
+  
+  .sidebar-footer {
+    position: static;
+    height: auto;
+  }
+}
