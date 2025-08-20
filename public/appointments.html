@@ -701,27 +701,30 @@ document.addEventListener('click', function(e) {
     
     // Cancelar cita
     async function cancelAppointment(appointmentId) {
-        if (!confirm('¿Estás seguro de que deseas cancelar esta cita?')) return;
+    if (!confirm('¿Estás seguro de que deseas cancelar esta cita?')) return;
+    
+    try {
+        const response = await fetch(`/api/appointments/${appointmentId}/cancel`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+            },
+            body: JSON.stringify({
+                patientId: currentUser.id // ← Cambiado a patientId
+            })
+        });
         
-        try {
-            const response = await fetch(`/api/appointments/${appointmentId}/cancel`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                }
-            });
-            
-            if (!response.ok) throw new Error('Error al cancelar la cita');
-            
-            // Recargar citas después de cancelar
-            await loadAppointments();
-            showSuccess('Cita cancelada exitosamente.');
-        } catch (error) {
-            console.error('Error cancelando cita:', error);
-            showError('Error al cancelar la cita. Por favor, inténtalo de nuevo.');
-        }
+        if (!response.ok) throw new Error('Error al cancelar la cita');
+        
+        // Recargar citas después de cancelar
+        await loadAppointments();
+        showSuccess('Cita cancelada exitosamente.');
+    } catch (error) {
+        console.error('Error cancelando cita:', error);
+        showError('Error al cancelar la cita. Por favor, inténtalo de nuevo.');
     }
+}
     
     // Reagendar cita
     async function rescheduleAppointment(appointmentId) {
@@ -797,61 +800,62 @@ document.addEventListener('click', function(e) {
     
     // Enviar formulario de cita
     appointmentForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
+    e.preventDefault();
+    
+    const psychologistId = psychologistSelect.value;
+    const dateTime = appointmentDate.value;
+    const type = appointmentType.value;
+    const notes = appointmentNotes.value;
+    
+    try {
+        let response;
         
-        const psychologistId = psychologistSelect.value;
-        const dateTime = appointmentDate.value;
-        const type = appointmentType.value;
-        const notes = appointmentNotes.value;
-        
-        try {
-            let response;
-            
-            if (currentAppointmentId) {
-                // Reagendar cita existente
-                response = await fetch(`/api/appointments/${currentAppointmentId}/reschedule`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                    },
-                    body: JSON.stringify({
-                        dateTime: dateTime,
-                        type: type,
-                        notes: notes
-                    })
-                });
-            } else {
-                // Crear nueva cita
-                response = await fetch('/api/appointments', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                    },
-                    body: JSON.stringify({
-                        psychologistId: psychologistId,
-                        dateTime: dateTime,
-                        type: type,
-                        notes: notes,
-                        userId: currentUser.id
-                    })
-                });
-            }
-            
-            if (!response.ok) throw new Error('Error al guardar la cita');
-            
-            // Cerrar modal y recargar citas
-            appointmentModal.style.display = 'none';
-            await loadAppointments();
-            
-            showSuccess(currentAppointmentId ? 'Cita reagendada exitosamente.' : 'Cita agendada exitosamente.');
-            currentAppointmentId = null;
-        } catch (error) {
-            console.error('Error guardando cita:', error);
-            showError('Error al guardar la cita. Por favor, inténtalo de nuevo.');
+        if (currentAppointmentId) {
+            // Reagendar cita existente
+            response = await fetch(`/api/appointments/${currentAppointmentId}/reschedule`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                },
+                body: JSON.stringify({
+                    dateTime: dateTime,
+                    type: type,
+                    notes: notes,
+                    patientId: currentUser.id // ← Cambiado a patientId
+                })
+            });
+        } else {
+            // Crear nueva cita
+            response = await fetch('/api/appointments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                },
+                body: JSON.stringify({
+                    psychologistId: psychologistId,
+                    dateTime: dateTime,
+                    type: type,
+                    notes: notes,
+                    patientId: currentUser.id // ← Cambiado a patientId
+                })
+            });
         }
-    });
+        
+        if (!response.ok) throw new Error('Error al guardar la cita');
+        
+        // Cerrar modal y recargar citas
+        appointmentModal.style.display = 'none';
+        await loadAppointments();
+        
+        showSuccess(currentAppointmentId ? 'Cita reagendada exitosamente.' : 'Cita agendada exitosamente.');
+        currentAppointmentId = null;
+    } catch (error) {
+        console.error('Error guardando cita:', error);
+        showError('Error al guardar la cita. Por favor, inténtalo de nuevo.');
+    }
+});
     
     // Enviar formulario de calificación
     ratingForm.addEventListener('submit', async function(e) {

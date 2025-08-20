@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const sql = require('mssql');
+
 const path = require('path'); 
 const speakeasy = require('speakeasy');
 const QRCode = require('qrcode');
@@ -2990,6 +2991,18 @@ app.get('/api/appointments', authenticateJWT, async (req, res) => {
         const result = await executeQuery(query, params);
         
         const appointments = result.recordset.map(appointment => {
+            // Manejar el formato de specialties
+            let specialtiesArray = [];
+            if (appointment.specialties) {
+                try {
+                    // Intentar parsear como JSON primero
+                    specialtiesArray = JSON.parse(appointment.specialties);
+                } catch (e) {
+                    // Si falla el parsing JSON, tratar como string separado por comas
+                    specialtiesArray = appointment.specialties.split(',').map(s => s.trim());
+                }
+            }
+
             return {
                 id: appointment.id,
                 patientId: appointment.patientId,
@@ -3008,7 +3021,7 @@ app.get('/api/appointments', authenticateJWT, async (req, res) => {
                 psychologist: {
                     firstName: appointment.psychologistFirstName,
                     lastName: appointment.psychologistLastName,
-                    specialties: appointment.specialties ? JSON.parse(appointment.specialties) : [],
+                    specialties: specialtiesArray, // Usar el array procesado
                     hourlyRate: appointment.hourlyRate
                 },
                 patient: {
@@ -3049,6 +3062,18 @@ app.get('/api/appointments/:id', authenticateJWT, async (req, res) => {
 
         const appointment = result.recordset[0];
         
+        // Manejar el formato de specialties
+        let specialtiesArray = [];
+        if (appointment.specialties) {
+            try {
+                // Intentar parsear como JSON primero
+                specialtiesArray = JSON.parse(appointment.specialties);
+            } catch (e) {
+                // Si falla el parsing JSON, tratar como string separado por comas
+                specialtiesArray = appointment.specialties.split(',').map(s => s.trim());
+            }
+        }
+
         const response = {
             id: appointment.id,
             patientId: appointment.patientId,
@@ -3068,7 +3093,7 @@ app.get('/api/appointments/:id', authenticateJWT, async (req, res) => {
             psychologist: {
                 firstName: appointment.psychologistFirstName,
                 lastName: appointment.psychologistLastName,
-                specialties: appointment.specialties ? JSON.parse(appointment.specialties) : [],
+                specialties: specialtiesArray, // Usar el array procesado
                 bio: appointment.bio,
                 hourlyRate: appointment.hourlyRate
             },
@@ -3095,14 +3120,14 @@ app.post('/api/appointments', authenticateJWT, async (req, res) => {
             return res.status(400).json({ error: 'Datos incompletos' });
         }
 
-        if (!['video', 'phone', 'in_person', 'chat', 'audio'].includes(type)) {
-            return res.status(400).json({ error: 'Tipo de cita no válido' });
-        }
-
-        const appointmentDate = new Date(dateTime);
-        if (isNaN(appointmentDate.getTime())) {
+        // Convertir el formato de fecha de JavaScript a formato SQL Server
+        const jsDate = new Date(dateTime);
+        if (isNaN(jsDate.getTime())) {
             return res.status(400).json({ error: 'Fecha no válida' });
         }
+
+        // Formatear fecha para SQL Server (YYYY-MM-DD HH:MM:SS)
+        const sqlDateTime = jsDate.toISOString().slice(0, 19).replace('T', ' ');
 
         // Verificar disponibilidad del psicólogo
         const availabilityCheck = await executeQuery(`
@@ -3111,8 +3136,8 @@ app.post('/api/appointments', authenticateJWT, async (req, res) => {
             AND dateTime BETWEEN DATEADD(MINUTE, -59, @dateTime) AND DATEADD(MINUTE, 59, @dateTime)
             AND status NOT IN ('cancelled')
         `, [
-            { name: 'psychologistId', value: psychologistId },
-            { name: 'dateTime', value: dateTime }
+            { name: 'psychologistId', value: parseInt(psychologistId), type: sql.Int },
+            { name: 'dateTime', value: sqlDateTime, type: sql.DateTime }
         ]);
 
         if (availabilityCheck.recordset.length > 0) {
@@ -3122,7 +3147,7 @@ app.post('/api/appointments', authenticateJWT, async (req, res) => {
         // Obtener tarifa del psicólogo
         const psychologistRate = await executeQuery(`
             SELECT hourlyRate FROM PsychologistProfiles WHERE userId = @psychologistId
-        `, [{ name: 'psychologistId', value: psychologistId }]);
+        `, [{ name: 'psychologistId', value: parseInt(psychologistId), type: sql.Int }]);
 
         const hourlyRate = psychologistRate.recordset[0]?.hourlyRate || 0;
         const price = (hourlyRate * 1).toFixed(2); // Duración predeterminada de 60 minutos
@@ -3139,12 +3164,12 @@ app.post('/api/appointments', authenticateJWT, async (req, res) => {
                 @type, 'scheduled', @notes, @price, GETDATE(), GETDATE()
             )
         `, [
-            { name: 'patientId', value: patientId },
-            { name: 'psychologistId', value: psychologistId },
-            { name: 'dateTime', value: dateTime },
-            { name: 'type', value: type },
-            { name: 'notes', value: notes || null },
-            { name: 'price', value: price }
+            { name: 'patientId', value: parseInt(patientId), type: sql.Int },
+            { name: 'psychologistId', value: parseInt(psychologistId), type: sql.Int },
+            { name: 'dateTime', value: sqlDateTime, type: sql.DateTime },
+            { name: 'type', value: type, type: sql.NVarChar },
+            { name: 'notes', value: notes || null, type: sql.NVarChar },
+            { name: 'price', value: parseFloat(price), type: sql.Decimal(10, 2) }
         ]);
 
         const newAppointmentId = result.recordset[0].id;
@@ -3156,8 +3181,8 @@ app.post('/api/appointments', authenticateJWT, async (req, res) => {
             await executeQuery(`
                 UPDATE Citas SET videoUrl = @videoUrl WHERE id = @id
             `, [
-                { name: 'videoUrl', value: videoUrl },
-                { name: 'id', value: newAppointmentId }
+                { name: 'videoUrl', value: videoUrl, type: sql.NVarChar },
+                { name: 'id', value: newAppointmentId, type: sql.Int }
             ]);
         }
 
@@ -3167,9 +3192,21 @@ app.post('/api/appointments', authenticateJWT, async (req, res) => {
             FROM Users u
             LEFT JOIN PsychologistProfiles pp ON u.id = pp.userId
             WHERE u.id = @psychologistId
-        `, [{ name: 'psychologistId', value: psychologistId }]);
+        `, [{ name: 'psychologistId', value: parseInt(psychologistId), type: sql.Int }]);
 
         const psychologist = psychologistResult.recordset[0];
+        
+        // Manejar el formato de specialties
+        let specialtiesArray = [];
+        if (psychologist.specialties) {
+            try {
+                // Intentar parsear como JSON primero
+                specialtiesArray = JSON.parse(psychologist.specialties);
+            } catch (e) {
+                // Si falla el parsing JSON, tratar como string separado por comas
+                specialtiesArray = psychologist.specialties.split(',').map(s => s.trim());
+            }
+        }
 
         res.json({
             success: true,
@@ -3177,12 +3214,13 @@ app.post('/api/appointments', authenticateJWT, async (req, res) => {
             psychologist: {
                 firstName: psychologist.firstName,
                 lastName: psychologist.lastName,
-                specialties: psychologist.specialties ? JSON.parse(psychologist.specialties) : [],
+                specialties: specialtiesArray, // Usar el array procesado
                 hourlyRate: psychologist.hourlyRate
             },
             price: price,
             videoUrl: videoUrl
         });
+    
     } catch (err) {
         console.error('Error creando cita:', err);
         res.status(500).json({ error: 'Error al crear cita' });
@@ -3192,17 +3230,17 @@ app.post('/api/appointments', authenticateJWT, async (req, res) => {
 // Ruta para cancelar una cita
 app.post('/api/appointments/:id/cancel', authenticateJWT, async (req, res) => {
     const { id } = req.params;
-    const { userId } = req.body;
+    const { patientId } = req.body;
 
     try {
         // Verificar que la cita pertenece al usuario
         const appointmentCheck = await executeQuery(`
             SELECT id, status, dateTime, psychologistId
             FROM Citas 
-            WHERE id = @id AND (patientId = @userId OR psychologistId = @userId)
+            WHERE id = @id AND (patientId = @patientId OR psychologistId = @patientId)
         `, [
-            { name: 'id', value: id },
-            { name: 'userId', value: userId }
+            { name: 'id', value: parseInt(id), type: sql.Int },
+            { name: 'patientId', value: parseInt(patientId), type: sql.Int }
         ]);
 
         if (appointmentCheck.recordset.length === 0) {
@@ -3234,7 +3272,7 @@ app.post('/api/appointments/:id/cancel', authenticateJWT, async (req, res) => {
             UPDATE Citas 
             SET status = 'cancelled', updatedAt = GETDATE() 
             WHERE id = @id
-        `, [{ name: 'id', value: id }]);
+        `, [{ name: 'id', value: parseInt(id), type: sql.Int }]);
 
         res.json({ success: true });
     } catch (err) {
@@ -3246,31 +3284,31 @@ app.post('/api/appointments/:id/cancel', authenticateJWT, async (req, res) => {
 // Ruta para reagendar una cita
 app.put('/api/appointments/:id/reschedule', authenticateJWT, async (req, res) => {
     const { id } = req.params;
-    const { dateTime, type, notes, userId } = req.body;
+    const { dateTime, type, notes, patientId } = req.body;
 
     try {
         // Validaciones básicas
-        if (!dateTime || !type) {
+        if (!dateTime || !type || !patientId) {
             return res.status(400).json({ error: 'Datos incompletos' });
         }
 
-        if (!['video', 'phone', 'in_person', 'chat', 'audio'].includes(type)) {
-            return res.status(400).json({ error: 'Tipo de cita no válido' });
-        }
-
-        const newAppointmentDate = new Date(dateTime);
-        if (isNaN(newAppointmentDate.getTime())) {
+        // Convertir el formato de fecha de JavaScript a formato SQL Server
+        const jsDate = new Date(dateTime);
+        if (isNaN(jsDate.getTime())) {
             return res.status(400).json({ error: 'Fecha no válida' });
         }
+
+        // Formatear fecha para SQL Server (YYYY-MM-DD HH:MM:SS)
+        const sqlDateTime = jsDate.toISOString().slice(0, 19).replace('T', ' ');
 
         // Verificar que la cita exista y pertenezca al usuario
         const appointmentCheck = await executeQuery(`
             SELECT psychologistId, status, dateTime 
             FROM Citas 
-            WHERE id = @id AND (patientId = @userId OR psychologistId = @userId)
+            WHERE id = @id AND (patientId = @patientId OR psychologistId = @patientId)
         `, [
-            { name: 'id', value: id },
-            { name: 'userId', value: userId }
+            { name: 'id', value: parseInt(id), type: sql.Int },
+            { name: 'patientId', value: parseInt(patientId), type: sql.Int }
         ]);
 
         if (appointmentCheck.recordset.length === 0) {
@@ -3296,9 +3334,9 @@ app.put('/api/appointments/:id/reschedule', authenticateJWT, async (req, res) =>
             AND dateTime BETWEEN DATEADD(MINUTE, -59, @dateTime) AND DATEADD(MINUTE, 59, @dateTime)
             AND status NOT IN ('cancelled')
         `, [
-            { name: 'psychologistId', value: appointment.psychologistId },
-            { name: 'id', value: id },
-            { name: 'dateTime', value: dateTime }
+            { name: 'psychologistId', value: appointment.psychologistId, type: sql.Int },
+            { name: 'id', value: parseInt(id), type: sql.Int },
+            { name: 'dateTime', value: sqlDateTime, type: sql.DateTime }
         ]);
 
         if (availabilityCheck.recordset.length > 0) {
@@ -3315,10 +3353,10 @@ app.put('/api/appointments/:id/reschedule', authenticateJWT, async (req, res) =>
                 updatedAt = GETDATE()
             WHERE id = @id
         `, [
-            { name: 'dateTime', value: dateTime },
-            { name: 'type', value: type },
-            { name: 'notes', value: notes || null },
-            { name: 'id', value: id }
+            { name: 'dateTime', value: sqlDateTime, type: sql.DateTime },
+            { name: 'type', value: type, type: sql.NVarChar },
+            { name: 'notes', value: notes || null, type: sql.NVarChar },
+            { name: 'id', value: parseInt(id), type: sql.Int }
         ]);
 
         // Generar nueva URL de videollamada si es necesario
@@ -3328,8 +3366,8 @@ app.put('/api/appointments/:id/reschedule', authenticateJWT, async (req, res) =>
             await executeQuery(`
                 UPDATE Citas SET videoUrl = @videoUrl WHERE id = @id
             `, [
-                { name: 'videoUrl', value: videoUrl },
-                { name: 'id', value: id }
+                { name: 'videoUrl', value: videoUrl, type: sql.NVarChar },
+                { name: 'id', value: parseInt(id), type: sql.Int }
             ]);
         }
 
@@ -4608,7 +4646,7 @@ app.get('/api/psychologists', async (req, res) => {
 
 
 // Iniciar el servidor
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
