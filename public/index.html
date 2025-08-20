@@ -32,6 +32,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"/>
     <link rel="stylesheet" href="css/index.css">
+    <link rel="manifest" href="manifest.json">
+
+    <script>
+       if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('sw.js')
+                .then(function(registration) {
+                    console.log('SW registered: ', registration);
+                })
+                .catch(function(registrationError) {
+                    console.log('SW registration failed: ', registrationError);
+                });
+        });}
+    </script>
+
   </head>
   <body class="bg-gray-50 min-h-screen flex flex-col">
     <header class="bg-white shadow-sm sticky top-0 z-50">
