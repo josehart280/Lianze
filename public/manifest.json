@@ -1,0 +1,26 @@
+{
+    
+    "short_name": "Lianze",
+    "name": "Lianze-platform",
+
+    
+    "icons": [
+        
+        {
+            "src": "img/logo.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+        
+    ],
+    "start_url": "/index.html",
+     "display": "standalone",
+     "background_color": "#ffffff",
+     "theme_color": "#667eea",
+     "orientation": "portrait",
+    "categories": [
+        "mental-health",
+        "ayuda",
+        "productivity"
+    ]
+}
